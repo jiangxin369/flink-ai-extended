@@ -39,6 +39,8 @@ if [[ ! -f "${AIRFLOW_HOME}/airflow.cfg" ]] ; then
         gsub(\"load_examples = True\", \"load_examples = False\"); \
         gsub(\"load_default_connections = True\", \"load_default_connections = False\"); \
         gsub(\"dag_dir_list_interval = 300\", \"dag_dir_list_interval = 3\"); \
+        gsub(\"executor = SequentialExecutor\", \"executor = LocalExecutor\"); \
+        gsub(\"dags_are_paused_at_creation = True\", \"dags_are_paused_at_creation = False\"); \
         print \$0}" airflow.cfg.tmpl > airflow.cfg
 
     # prepare the database

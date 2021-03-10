@@ -102,6 +102,7 @@ class EventBasedScheduler(LoggingMixin):
         while True:
             identified_message = self.mailbox.get_identified_message()
             event = identified_message.deserialize()
+            self.log.info("receiving a message , %s", event)
             with create_session() as session:
                 if isinstance(event, BaseEvent):
                     dagruns = self._find_dagruns_by_event(event, session)
@@ -431,7 +432,8 @@ class EventBasedSchedulerJob(BaseJob):
             self.task_event_manager.end()
 
             settings.Session.remove()  # type: ignore
-        except Exception:  # pylint: disable=broad-except
+        except Exception as e:  # pylint: disable=broad-except
+            self.log.error("Exception when executing scheduler, %s", str(e))
             self.log.exception("Exception when executing scheduler")
         finally:
             self.log.info("Exited execute loop")

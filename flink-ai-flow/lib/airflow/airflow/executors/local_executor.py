@@ -252,7 +252,9 @@ class LocalExecutor(BaseExecutor):
             if not self.executor.result_queue:
                 raise AirflowException("Executor should be started first")
             while not self.executor.result_queue.empty():
+                print("----------------sync-----------------")
                 results = self.executor.result_queue.get()
+                print("---------------------------------" + str(results))
                 self.executor.change_state(*results)
                 self.executor.send_message(results[0])
                 self.executor.workers_active -= 1
