@@ -133,6 +133,7 @@ class EventBasedScheduler(LoggingMixin):
                     self.log.error("can not handler the event {}".format(event))
                 identified_message.remove_handled_message()
                 session.expunge_all()
+        self.log.info("Quitinggggggggggggggggggg")
 
     def stop(self) -> None:
         self.mailbox.send_message(StopSchedulerEvent())
