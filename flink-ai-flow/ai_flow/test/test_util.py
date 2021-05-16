@@ -18,6 +18,7 @@
 #
 import os
 
+from ai_flow import SchedulerType
 from ai_flow.api.configuration import set_project_config_file, project_config
 from ai_flow.common import path_util
 
@@ -40,8 +41,11 @@ def get_project_config_file():
     return os.path.dirname(os.path.abspath(__file__)) + "/project.yaml"
 
 
-def get_master_config_file():
-    return os.path.dirname(os.path.abspath(__file__)) + "/master.yaml"
+def get_master_config_file(scheduler_type: SchedulerType = SchedulerType.AIFLOW):
+    if scheduler_type == SchedulerType.AIFLOW:
+        return os.path.dirname(os.path.abspath(__file__)) + "/master.yaml"
+    elif scheduler_type == SchedulerType.AIRFLOW:
+        return os.path.dirname(os.path.abspath(__file__)) + "/master_airflow.yaml"
 
 
 def get_workflow_config_file():

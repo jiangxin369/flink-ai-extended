@@ -62,8 +62,8 @@ run_tests 'ai_flow/test/model_center/'
 run_tests 'ai_flow/test/notification_service/'
 run_tests 'ai_flow/test/application_master/'
 run_tests 'ai_flow/test/project/'
+run_tests 'ai_flow/test/api/test_project_new.py'
 # run_tests 'ai_flow/test/deployer/'
-#run_tests 'ai_flow/test/api/'
 #
 #run_tests 'flink_ai_flow/tests/python_codes/'
 #
