@@ -36,7 +36,6 @@ from notification_service.master import NotificationMaster
 from notification_service.service import NotificationService
 
 PROJECT_NAME = 'test_project'
-temp_folder = None
 # dag_folder should be same as airflow_deploy_path in project.yaml
 dag_folder = "/tmp/airflow/unittest/dags"
 
@@ -45,8 +44,6 @@ class TestProject(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls) -> None:
-        cls.prepare_airflow_home()
-
         config_file = test_util.get_master_config_file(SchedulerType.AIRFLOW)
         config = MasterConfig()
         config.load_from_file(config_file)
@@ -64,35 +61,47 @@ class TestProject(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
-        cls.clear_temp_dir()
+        cls.master.stop()
+        cls.notification_master.stop()
 
     def setUp(self):
         af.default_graph().clear_graph()
-        TestProject.make_dir(parent=dag_folder)
+        self.__class__.make_dir(parent=dag_folder)
         unset_project_config()
         test_util.set_project_config(__file__)
+        self.clear_db()
 
     def tearDown(self):
         self.clear_dag_folder()
-        self.master._clear_db()
-        self.clear_db()
+        self.__class__.master._clear_db()
+        #self.clear_db()
 
     def run_with_airflow_scheduler(self, target):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
         self.start_scheduler(SchedulerType.AIRFLOW)
+        t.join()
+
+    def set_timeout(self):
+        def scheduler_timeout(timeout):
+            time.sleep(timeout)
+            self.__class__.stop_scheduler()
+        t = threading.Thread(target=scheduler_timeout)
+        t.setDaemon(True)
+        t.start()
 
     def test_run_project(self):
         self.run_with_airflow_scheduler(target=self.run_project)
 
     def run_project(self):
         from airflow.utils.state import State
+        print(sys._getframe().f_code.co_name)
         self.wait_for_scheduler_started()
         self.build_ai_graph(1)
-        self.submit_workflow(dag_id="PROJECT_NAME")
-        self.wait_for_task_execution(dag_id='PROJECT_NAME', state=State.SUCCESS, expected_num=3)
-        TestProject.stop_scheduler()
+        self.submit_workflow(workflow_name=PROJECT_NAME)
+        self.wait_for_task_execution(dag_id=PROJECT_NAME, state=State.SUCCESS, expected_num=3)
+        self.__class__.stop_scheduler()
 
     def test_stream_with_external_trigger(self):
         self.run_with_airflow_scheduler(target=self.stream_with_external_trigger)
@@ -113,26 +122,25 @@ class TestProject(unittest.TestCase):
                                           event_value='value', event_type='name', condition=MetCondition.NECESSARY
                                           , action=TaskAction.START, life=EventLife.ONCE,
                                           value_condition=MetValueCondition.EQUAL, namespace=DEFAULT_NAMESPACE)
-        self.submit_workflow(dag_id=PROJECT_NAME)
+        self.submit_workflow(workflow_name=PROJECT_NAME)
         self.wait_for_task_instance(dag_id=PROJECT_NAME, state=State.SCHEDULED, expected_num=1)
-        TestProject.publish_event(key='key', value='value', event_type='name', namespace=DEFAULT_NAMESPACE)
+        self.__class__.publish_event(key='key', value='value', event_type='name', namespace=DEFAULT_NAMESPACE)
         self.wait_for_task_execution(PROJECT_NAME, State.SUCCESS, 1)
 
         # SUCCESS dagrun will not be scheduled anymore, is it reasonable?
-        #TestProject.publish_event(key='key', value='value', event_type='name', namespace=DEFAULT_NAMESPACE)
+        #self.__class__.publish_event(key='key', value='value', event_type='name', namespace=DEFAULT_NAMESPACE)
         #self.wait_for_task_execution('test_project', State.SUCCESS, 2)
-        TestProject.stop_scheduler()
+        self.__class__.stop_scheduler()
 
-    def submit_workflow(self, dag_id):
-        print(sys._getframe().f_code.co_name)
+    def submit_workflow(self, workflow_name):
         try:
             project_desc = generate_project_desc()
             project_path = project_desc.project_path
-            airflow_file_path = af.submit(project_path=project_path, dag_id=dag_id)
-            self.assertEquals(os.path.join(project_desc.project_config.get_airflow_deploy_path(), dag_id + ".py"),
+            airflow_file_path = af.submit(project_path=project_path, dag_id=workflow_name)
+            self.assertEqual(os.path.join(project_desc.project_config.get_airflow_deploy_path(), workflow_name + ".py"),
                               airflow_file_path)
             from airflow.contrib.jobs.scheduler_client import ExecutionContext
-            context: ExecutionContext = af.run(project_path=project_path, dag_id=dag_id,
+            context: ExecutionContext = af.run(project_path=project_path, dag_id=workflow_name,
                                                scheduler_type=SchedulerType.AIRFLOW)
             self.assertIsNotNone(context.dagrun_id)
         except Exception as e:
@@ -167,17 +175,6 @@ class TestProject(unittest.TestCase):
         if not os.path.exists(temp_dir):
             os.makedirs(temp_dir)
         return temp_dir
-
-    @staticmethod
-    def prepare_airflow_home():
-        global temp_folder
-        temp_folder = TestProject.make_dir(dir_name='temp')
-        airflow_home = TestProject.make_dir(parent=temp_folder, dir_name='airflow')
-
-        os.environ['AIRFLOW_HOME'] = airflow_home
-        import shutil
-        airflow_cfg_file = os.path.join(os.environ['HOME'], 'airflow', 'airflow.cfg')
-        shutil.copy(airflow_cfg_file, os.path.join(airflow_home, 'airflow.cfg'))
 
     def start_scheduler(self, scheduler_type):
         from airflow.contrib.jobs.event_based_scheduler_job import EventBasedSchedulerJob
@@ -269,11 +266,6 @@ class TestProject(unittest.TestCase):
             session.query(TaskExecution).delete()
             session.query(Message).delete()
             session.query(DagCode).delete()
-
-    @staticmethod
-    def clear_temp_dir():
-        print(temp_folder)
-        shutil.rmtree(temp_folder)
 
     @staticmethod
     def clear_dag_folder():

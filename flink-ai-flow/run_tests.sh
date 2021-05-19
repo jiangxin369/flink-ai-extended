@@ -65,6 +65,6 @@ run_tests 'ai_flow/test/project/'
 run_tests 'ai_flow/test/api/test_project_new.py'
 # run_tests 'ai_flow/test/deployer/'
 #
-#run_tests 'flink_ai_flow/tests/python_codes/'
+run_tests 'flink_ai_flow/tests/python_codes/'
 #
 #run_tests 'python_ai_flow/test/python_codes/'

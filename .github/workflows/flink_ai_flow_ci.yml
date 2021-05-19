@@ -10,12 +10,12 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  build_and_itest:
 
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql:8.0
         env:
           MYSQL_USER: airflow
           MYSQL_PASSWORD: airflow
@@ -23,6 +23,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 3306
+        volumes:
+          - /$(pwd)/flink-ai-flow/scripts/mysql/conf.d:/etc/mysql/conf.d
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -33,6 +35,7 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
+        echo $PWD
         python -m pip install --upgrade pip
         pip install flake8 pytest
         pip install ./flink-ai-flow/lib/notification_service
