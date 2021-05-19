@@ -23,16 +23,18 @@ port=$1
 user=$2
 password=$3
 
-export AIRFLOW_HOME=${AIRFLOW_HOME:-~/airflow}
+export AIRFLOW_HOME=~/airflow
 MYSQL_CONN="mysql://${user}:${password}@127.0.0.1:${port}/airflow"
 
 # Airflow needs explicit_defaults_for_timestamp to be (1) in mysql
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "set global explicit_defaults_for_timestamp =1";
-
-mkdir ${AIRFLOW_HOME} >/dev/null 2>&1
-cd ${AIRFLOW_HOME}
+mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "set global explicit_defaults_for_timestamp=1";
+mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "SET @@GLOBAL.wait_timeout=28800"
+mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "ALTER DATABASE airflow CHARACTER SET UTF8mb3 COLLATE utf8_general_ci;"
+mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "show variables;"
 
 # prepare airflow configs and tables in mysql
+mkdir ${AIRFLOW_HOME} >/dev/null 2>&1
+cd ${AIRFLOW_HOME}
 airflow db init >/dev/null 2>&1 || true
 mv airflow.cfg airflow.cfg.tmpl
 awk "{gsub(\"sql_alchemy_conn = sqlite:///${AIRFLOW_HOME}/airflow.db\", \"sql_alchemy_conn = ${MYSQL_CONN}\"); \
@@ -58,3 +60,12 @@ airflow users create \
     --lastname admin \
     --role Admin \
     --email admin@example.org
+
+# start a local Flink cluster
+cd /tmp
+wget https://mirrors.bfsu.edu.cn/apache/flink/flink-1.13.0/flink-1.13.0-bin-scala_2.11.tgz
+chmod 755 flink-1.13.0-bin-scala_2.11.tgz
+tar -xzvf flink-1.13.0-bin-scala_2.11.tgz
+
+FLINK_HOME=/tmp/flink-1.13.0
+${FLINK_HOME}/bin/start-cluster.sh
