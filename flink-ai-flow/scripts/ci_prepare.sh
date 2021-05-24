@@ -26,9 +26,6 @@ password=$3
 export AIRFLOW_HOME=~/airflow
 MYSQL_CONN="mysql://${user}:${password}@127.0.0.1:${port}/airflow"
 
-# Airflow needs explicit_defaults_for_timestamp to be (1) in mysql
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "set global explicit_defaults_for_timestamp=1";
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "SET @@GLOBAL.wait_timeout=28800"
 mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "ALTER DATABASE airflow CHARACTER SET UTF8mb3 COLLATE utf8_general_ci;"
 mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "show variables;"
 
