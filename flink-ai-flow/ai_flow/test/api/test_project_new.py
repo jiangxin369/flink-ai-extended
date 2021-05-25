@@ -174,15 +174,18 @@ class TestProject(unittest.TestCase):
     def start_scheduler(self, scheduler_type):
         from airflow.contrib.jobs.event_based_scheduler_job import EventBasedSchedulerJob
         from airflow.executors.local_executor import LocalExecutor
-        if scheduler_type == SchedulerType.AIRFLOW:
-            scheduler = EventBasedSchedulerJob(
-                dag_directory=dag_folder,
-                server_uri=self.notification_uri,
-                executor=LocalExecutor(3),
-                max_runs=-1,
-                refresh_dag_dir_interval=1
-            )
-        scheduler.run()
+        try:
+            if scheduler_type == SchedulerType.AIRFLOW:
+                scheduler = EventBasedSchedulerJob(
+                    dag_directory=dag_folder,
+                    server_uri=self.notification_uri,
+                    executor=LocalExecutor(3),
+                    max_runs=-1,
+                    refresh_dag_dir_interval=1
+                )
+            scheduler.run()
+        except Exception as e:
+            print("Error occurred in scheduler, " + str(e))
 
     @classmethod
     def stop_scheduler(cls):
