@@ -217,8 +217,9 @@ class TestPyFlinkJob(unittest.TestCase):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
-        test_util.set_scheduler_timeout(notification_client, 180)
+        timeout_thread = test_util.set_scheduler_timeout(notification_client, 180)
         self.start_scheduler(SchedulerType.AIRFLOW)
+        timeout_thread.stop()
 
     @staticmethod
     def wait_for_scheduler_started():

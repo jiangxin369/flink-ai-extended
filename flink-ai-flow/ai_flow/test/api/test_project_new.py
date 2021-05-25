@@ -82,8 +82,9 @@ class TestProject(unittest.TestCase):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
-        test_util.set_scheduler_timeout(notification_client, timeout)
+        timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
+        timeout_thread.stop()
 
     def test_run_project(self):
         self.run_with_airflow_scheduler(target=self.run_project, timeout=120)

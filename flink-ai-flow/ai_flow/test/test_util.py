@@ -36,6 +36,21 @@ DEFAULT_MONGODB_HOST = ''
 DEFAULT_MONGODB_PORT = 27017
 
 
+class StoppableThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self,  *args, **kwargs):
+        super(StoppableThread, self).__init__(*args, **kwargs)
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
+
+
 def get_project_path():
     return os.path.dirname(os.path.abspath(__file__))
 
@@ -102,11 +117,12 @@ def get_mongodb_server_url():
     return 'mongodb://%s:%s@%s:%s' % (db_username, db_password, db_host, db_port)
 
 
-def set_scheduler_timeout(notification_client, secs):
+def set_scheduler_timeout(notification_client, secs) -> StoppableThread:
     def scheduler_timeout(seconds):
         time.sleep(seconds)
         from airflow.events.scheduler_events import StopSchedulerEvent
         notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
         raise Exception("Airflow scheduler timeout after {}s".format(seconds))
-    t = threading.Thread(target=scheduler_timeout, args=(secs,), daemon=True)
+    t = StoppableThread(target=scheduler_timeout, args=(secs,), daemon=True)
     t.start()
+    return t
