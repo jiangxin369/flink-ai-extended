@@ -19,7 +19,6 @@
 import os
 import shutil
 import sys
-import threading
 import time
 import unittest
 import ai_flow as af
@@ -79,12 +78,13 @@ class TestProject(unittest.TestCase):
         self.clear_db()
 
     def run_with_airflow_scheduler(self, target, timeout):
-        t = threading.Thread(target=target)
-        t.setDaemon(True)
+        from airflow.contrib.jobs.dag_trigger import StoppableThread
+        t = StoppableThread(target=target, daemon=True)
         t.start()
         timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
         timeout_thread.stop()
+        t.stop()
 
     def test_run_project(self):
         self.run_with_airflow_scheduler(target=self.run_project, timeout=120)
