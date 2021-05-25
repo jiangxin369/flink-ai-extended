@@ -141,8 +141,7 @@ class TestPyFlinkJob(unittest.TestCase):
                                       data_format="csv")
         flink_config = faf.LocalFlinkJobConfig()
         flink_config.local_mode = 'cluster'
-        #flink_config.flink_home = os.environ.get('FLINK_HOME')
-        flink_config.flink_home = '/tmp/flink-1.13.0'
+        flink_config.flink_home = os.environ.get('FLINK_HOME')
         flink_config.set_table_env_create_func(TableEnvCreator())
         with af.config(flink_config):
             input_example = af.read_example(example_info=example_1,
@@ -183,8 +182,7 @@ class TestPyFlinkJob(unittest.TestCase):
                                       data_format="csv")
         flink_config = faf.LocalFlinkJobConfig()
         flink_config.local_mode = 'cluster'
-        #flink_config.flink_home = os.environ.get('FLINK_HOME')
-        flink_config.flink_home = '/tmp/flink-1.13.0'
+        flink_config.flink_home = os.environ.get('FLINK_HOME')
         flink_config.set_table_env_create_func(TableEnvCreator())
         with af.config(flink_config):
             input_example = af.read_example(example_info=example_1,
