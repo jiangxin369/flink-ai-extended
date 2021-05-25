@@ -42,6 +42,7 @@ import os
 
 # dag_folder should be same as airflow_deploy_path in project.yaml
 dag_folder = "/tmp/airflow/"
+notification_client = None
 
 
 class Transformer(Executor):
@@ -95,8 +96,9 @@ class TestPyFlinkJob(unittest.TestCase):
         storage = DbEventStorage('sqlite:///aiflow.db', create_table_if_not_exists=True)
         cls.notification_master = NotificationMaster(NotificationService(storage), notification_port)
         cls.notification_master.run()
-        cls.notification_client = NotificationClient(server_uri=cls.notification_uri,
-                                                     default_namespace="test_namespace")
+        global notification_client
+        notification_client = NotificationClient(server_uri=cls.notification_uri,
+                                                 default_namespace="test_namespace")
         cls.master = AIFlowMaster(config_file=config_file)
         cls.master.start()
         project_config_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "project.yaml")
@@ -215,7 +217,7 @@ class TestPyFlinkJob(unittest.TestCase):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
-        test_util.set_scheduler_timeout(TestPyFlinkJob.notification_client, 180)
+        test_util.set_scheduler_timeout(notification_client, 180)
         self.start_scheduler(SchedulerType.AIRFLOW)
 
     @staticmethod
@@ -264,7 +266,7 @@ class TestPyFlinkJob(unittest.TestCase):
     @classmethod
     def stop_scheduler(cls):
         from airflow.events.scheduler_events import StopSchedulerEvent
-        cls.notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
 
     @staticmethod
     def clear_db():

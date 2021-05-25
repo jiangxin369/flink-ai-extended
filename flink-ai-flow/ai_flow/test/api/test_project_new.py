@@ -38,6 +38,7 @@ from notification_service.service import NotificationService
 PROJECT_NAME = 'test_project'
 # dag_folder should be same as airflow_deploy_path in project.yaml
 dag_folder = "/tmp/airflow/unittest/dags"
+notification_client = None
 
 
 class TestProject(unittest.TestCase):
@@ -53,9 +54,10 @@ class TestProject(unittest.TestCase):
         storage = DbEventStorage('sqlite:///aiflow.db', create_table_if_not_exists=True)
         cls.notification_master = NotificationMaster(NotificationService(storage), notification_port)
         cls.notification_master.run()
-        cls.notification_client = NotificationClient(server_uri=cls.notification_uri,
-                                                     default_namespace="test_namespace")
 
+        global notification_client
+        notification_client = NotificationClient(server_uri=cls.notification_uri,
+                                                 default_namespace="test_namespace")
         cls.master = AIFlowMaster(config_file=config_file)
         cls.master.start()
 
@@ -74,24 +76,14 @@ class TestProject(unittest.TestCase):
     def tearDown(self):
         self.clear_dag_folder()
         self.__class__.master._clear_db()
-        #self.clear_db()
-
-    def set_scheduler_timeout(self, secs):
-        def scheduler_timeout(seconds):
-            time.sleep(seconds)
-            from airflow.events.scheduler_events import StopSchedulerEvent
-            self.client.send_event(StopSchedulerEvent(job_id=0).to_event())
-            raise Exception("Airflow scheduler timeout after {}s".format(seconds))
-        t = threading.Thread(target=scheduler_timeout, args=(secs,), daemon=True)
-        t.start()
+        self.clear_db()
 
     def run_with_airflow_scheduler(self, target, timeout):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
-        self.set_scheduler_timeout(secs=timeout)
+        test_util.set_scheduler_timeout(notification_client, timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
-        t.join()
 
     def test_run_project(self):
         self.run_with_airflow_scheduler(target=self.run_project, timeout=120)
@@ -151,10 +143,10 @@ class TestProject(unittest.TestCase):
     @classmethod
     def publish_event(cls, key, value, event_type, namespace=DEFAULT_NAMESPACE):
         try:
-            cls.notification_client.send_event(BaseEvent(key=key,
-                                                         value=value,
-                                                         event_type=event_type,
-                                                         namespace=namespace))
+            notification_client.send_event(BaseEvent(key=key,
+                                                     value=value,
+                                                     event_type=event_type,
+                                                     namespace=namespace))
         except Exception as e:
             print(e)
 
@@ -194,7 +186,7 @@ class TestProject(unittest.TestCase):
     @classmethod
     def stop_scheduler(cls):
         from airflow.events.scheduler_events import StopSchedulerEvent
-        cls.notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
 
     def wait_for_task_execution(self, dag_id, state, expected_num):
         result = False
