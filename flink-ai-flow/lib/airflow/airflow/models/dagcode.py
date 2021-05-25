@@ -207,6 +207,8 @@ class DagCode(Base):
     @provide_session
     def recover_lost_dag_code(cls, session):
         lost_dags: List[DagCode] = []
+        cnt = session.query(cls).count()
+        print("dag_code count is : " + str(cnt))
         dag_codes_from_db = session.query(cls).all()
         for dag in dag_codes_from_db:
             if not os.path.exists(dag.fileloc):

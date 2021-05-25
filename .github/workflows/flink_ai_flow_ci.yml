@@ -50,4 +50,6 @@ jobs:
     - name: run ci test
       run: |
         /bin/bash flink-ai-flow/run_tests.sh
-
+    - name: read log
+      run: |
+        cat /var/log/syslog

@@ -17,10 +17,13 @@
 # under the License.
 #
 import os
+import threading
+import time
 
 from ai_flow import SchedulerType
 from ai_flow.api.configuration import set_project_config_file, project_config
 from ai_flow.common import path_util
+from airflow.executors.local_executor import LocalExecutor
 
 DEFAULT_MYSQL_USERNAME = ''
 DEFAULT_MYSQL_PASSWORD = ''
@@ -97,3 +100,13 @@ def get_mongodb_server_url():
             "specify MONGODB host via MONGODB_TEST_HOST and specify MONGODB port "
             "via MONGODB_TEST_PORT.")
     return 'mongodb://%s:%s@%s:%s' % (db_username, db_password, db_host, db_port)
+
+
+def set_scheduler_timeout(notification_client, secs):
+    def scheduler_timeout(seconds):
+        time.sleep(seconds)
+        from airflow.events.scheduler_events import StopSchedulerEvent
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        raise Exception("Airflow scheduler timeout after {}s".format(seconds))
+    t = threading.Thread(target=scheduler_timeout, args=(secs,), daemon=True)
+    t.start()

@@ -76,23 +76,25 @@ class TestProject(unittest.TestCase):
         self.__class__.master._clear_db()
         #self.clear_db()
 
-    def run_with_airflow_scheduler(self, target):
+    def set_scheduler_timeout(self, secs):
+        def scheduler_timeout(seconds):
+            time.sleep(seconds)
+            from airflow.events.scheduler_events import StopSchedulerEvent
+            self.client.send_event(StopSchedulerEvent(job_id=0).to_event())
+            raise Exception("Airflow scheduler timeout after {}s".format(seconds))
+        t = threading.Thread(target=scheduler_timeout, args=(secs,), daemon=True)
+        t.start()
+
+    def run_with_airflow_scheduler(self, target, timeout):
         t = threading.Thread(target=target)
         t.setDaemon(True)
         t.start()
+        self.set_scheduler_timeout(secs=timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
         t.join()
 
-    def set_timeout(self):
-        def scheduler_timeout(timeout):
-            time.sleep(timeout)
-            self.__class__.stop_scheduler()
-        t = threading.Thread(target=scheduler_timeout)
-        t.setDaemon(True)
-        t.start()
-
     def test_run_project(self):
-        self.run_with_airflow_scheduler(target=self.run_project)
+        self.run_with_airflow_scheduler(target=self.run_project, timeout=120)
 
     def run_project(self):
         from airflow.utils.state import State
@@ -104,7 +106,7 @@ class TestProject(unittest.TestCase):
         self.__class__.stop_scheduler()
 
     def test_stream_with_external_trigger(self):
-        self.run_with_airflow_scheduler(target=self.stream_with_external_trigger)
+        self.run_with_airflow_scheduler(target=self.stream_with_external_trigger, timeout=120)
 
     def stream_with_external_trigger(self):
         from airflow.utils.state import State

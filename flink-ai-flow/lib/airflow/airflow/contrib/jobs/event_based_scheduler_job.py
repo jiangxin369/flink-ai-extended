@@ -198,6 +198,8 @@ class EventBasedScheduler(LoggingMixin):
     @staticmethod
     def get_unprocessed_message(last_scheduling_id: int) -> List[IdentifiedMessage]:
         with create_session() as session:
+            cnt = session.query(MSG).count()
+            print("unprocesed_messge count is " + str(cnt))
             results: List[MSG] = session.query(MSG).filter(
                 MSG.scheduling_job_id == last_scheduling_id,
                 MSG.state == MessageState.QUEUED
