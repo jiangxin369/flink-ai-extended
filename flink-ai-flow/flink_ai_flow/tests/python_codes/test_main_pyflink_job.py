@@ -214,12 +214,14 @@ class TestPyFlinkJob(unittest.TestCase):
             print(e)
 
     def run_with_airflow_scheduler(self, target):
-        t = threading.Thread(target=target)
-        t.setDaemon(True)
+
+        from airflow.contrib.jobs.dag_trigger import StoppableThread
+        t = StoppableThread(target=target, daemon=True)
         t.start()
-        timeout_thread = test_util.set_scheduler_timeout(notification_client, 180)
+        #timeout_thread = test_util.set_scheduler_timeout(notification_client, 180)
         self.start_scheduler(SchedulerType.AIRFLOW)
-        timeout_thread.stop()
+        #timeout_thread.stop()
+        t.stop()
 
     @staticmethod
     def wait_for_scheduler_started():

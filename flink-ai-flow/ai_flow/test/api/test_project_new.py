@@ -81,9 +81,9 @@ class TestProject(unittest.TestCase):
         from airflow.contrib.jobs.dag_trigger import StoppableThread
         t = StoppableThread(target=target, daemon=True)
         t.start()
-        timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
+        #timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
-        timeout_thread.stop()
+        #timeout_thread.stop()
         t.stop()
 
     def test_run_project(self):
