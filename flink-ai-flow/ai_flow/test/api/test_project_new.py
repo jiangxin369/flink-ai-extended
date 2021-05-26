@@ -56,7 +56,7 @@ class TestProject(unittest.TestCase):
 
         global notification_client
         notification_client = NotificationClient(server_uri=cls.notification_uri,
-                                                 default_namespace="test_namespace")
+                                                 default_namespace=DEFAULT_NAMESPACE)
         cls.master = AIFlowMaster(config_file=config_file)
         cls.master.start()
 
