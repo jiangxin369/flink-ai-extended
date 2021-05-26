@@ -108,6 +108,8 @@ class TestPyFlinkJob(unittest.TestCase):
     def tearDownClass(cls) -> None:
         cls.master.stop()
         cls.notification_master.stop()
+        notification_client.stop_listen_events()
+        notification_client.stop_listen_event()
         af.unset_project_config()
 
     def setUp(self) -> None:
@@ -215,7 +217,7 @@ class TestPyFlinkJob(unittest.TestCase):
 
     def run_with_airflow_scheduler(self, target):
 
-        from airflow.contrib.jobs.dag_trigger import StoppableThread
+        from ai_flow.test.test_util import StoppableThread
         t = StoppableThread(target=target, daemon=True)
         t.start()
         #timeout_thread = test_util.set_scheduler_timeout(notification_client, 180)

@@ -64,6 +64,8 @@ class TestProject(unittest.TestCase):
     def tearDownClass(cls) -> None:
         cls.master.stop()
         cls.notification_master.stop()
+        notification_client.stop_listen_events()
+        notification_client.stop_listen_event()
 
     def setUp(self):
         af.default_graph().clear_graph()
@@ -78,7 +80,7 @@ class TestProject(unittest.TestCase):
         self.clear_db()
 
     def run_with_airflow_scheduler(self, target, timeout):
-        from airflow.contrib.jobs.dag_trigger import StoppableThread
+        from ai_flow.test.test_util import StoppableThread
         t = StoppableThread(target=target, daemon=True)
         t.start()
         #timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
