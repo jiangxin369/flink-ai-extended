@@ -221,7 +221,9 @@ class TestPyFlinkJob(unittest.TestCase):
         #timeout_thread = test_util.set_scheduler_timeout(notification_client, 180)
         self.start_scheduler(SchedulerType.AIRFLOW)
         #timeout_thread.stop()
-        t.stop()
+        while not t.stopped():
+            print("thread " + str(t) + " not stopped")
+            t.stop()
 
     @staticmethod
     def wait_for_scheduler_started():
