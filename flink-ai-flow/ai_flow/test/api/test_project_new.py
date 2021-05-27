@@ -86,6 +86,7 @@ class TestProject(unittest.TestCase):
         #timeout_thread = test_util.set_scheduler_timeout(notification_client, timeout)
         self.start_scheduler(SchedulerType.AIRFLOW)
         #timeout_thread.stop()
+        self.__class__.stop_scheduler()
         while not t.stopped():
             print("thread " + str(t) + " not stopped")
             t.stop()

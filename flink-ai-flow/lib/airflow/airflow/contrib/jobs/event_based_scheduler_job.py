@@ -630,16 +630,15 @@ class EventBasedSchedulerJob(BaseJob):
             self.scheduler.recover(self.last_scheduling_id)
             self.scheduler.schedule()
 
+        except Exception as e:  # pylint: disable=broad-except
+            self.log.exception("Exception when executing scheduler, %s", e)
+        finally:
             self.executor.end()
             self.periodic_manager.shutdown()
             self.dag_trigger.end()
             self.task_event_manager.end()
             self._stop_listen_events()
-
             settings.Session.remove()  # type: ignore
-        except Exception as e:  # pylint: disable=broad-except
-            self.log.exception("Exception when executing scheduler, %s", e)
-        finally:
             self.log.info("Exited execute loop")
 
     def _start_listen_events(self):
