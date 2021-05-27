@@ -54,5 +54,8 @@ jobs:
       run: |
         /bin/bash flink-ai-flow/run_tests.sh
     - name: read log
+      if: ${{ always() }}
       run: |
-        cat /var/log/syslog
+        cat /tmp/mysql_error.log
+        echo "--------------------"
+        cat /tmp/mysql_general.log
