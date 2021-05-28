@@ -59,3 +59,5 @@ jobs:
         cat /tmp/mysql_error.log || true
         echo "--------------------"
         cat /tmp/mysql_general.log || true
+        echo "--------------------"
+        mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "show databases;"
