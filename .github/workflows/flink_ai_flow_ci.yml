@@ -30,6 +30,8 @@ jobs:
             -e MYSQL_DATABASE=airflow \
             --health-cmd='mysqladmin ping' \
             -v /$(pwd)/flink-ai-flow/scripts/mysql/conf.d:/etc/mysql/conf.d \
+            -v /tmp:/tmp \
+            -v /$(pwd)/flink-ai-flow/scripts/mysql:/var/log/syslog \
             -d \
             -p 3306:3306 \
             mysql:8.0 \
@@ -56,8 +58,12 @@ jobs:
     - name: read log
       if: ${{ always() }}
       run: |
-        cat /tmp/mysql_error.log || true
         echo "--------------------"
-        cat /tmp/mysql_general.log || true
+        sudo cat /tmp/mysql_error.log || true
+        echo "--------------------"
+        sudo cat /tmp/mysql_general.log || true
+        echo "--------------------"
+        cat /var/log/syslog || true
         echo "--------------------"
         mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "show databases;"
+        mysql --host 127.0.0.1 --port 3306 -uroot -ppassword -e "SHOW GLOBAL STATUS LIKE  'Aborted_connects';"
