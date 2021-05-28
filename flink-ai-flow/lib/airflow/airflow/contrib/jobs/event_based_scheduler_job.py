@@ -186,7 +186,7 @@ class EventBasedScheduler(LoggingMixin):
     def recover(self, last_scheduling_id):
         lost_dag_codes = DagCode.recover_lost_dag_code()
         self.log.info("Found %s dags not exists in DAG folder, recovered from DB. Dags' path: %s",
-                      len(lost_dag_codes), lost_dag_codes)
+                      ltest_pyflink_joben(lost_dag_codes), lost_dag_codes)
         self.log.info("Waiting for executor recovery...")
         self.executor.recover_state()
         unprocessed_messages = self.get_unprocessed_message(last_scheduling_id)
