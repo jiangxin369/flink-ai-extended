@@ -60,9 +60,9 @@ airflow users create \
 
 # start a local Flink cluster
 cd /tmp
-wget https://mirrors.bfsu.edu.cn/apache/flink/flink-1.13.0/flink-1.13.0-bin-scala_2.11.tgz
-chmod 755 flink-1.13.0-bin-scala_2.11.tgz
-tar -xzvf flink-1.13.0-bin-scala_2.11.tgz
+wget https://downloads.apache.org/flink/flink-1.13.1/flink-1.13.1-bin-scala_2.11.tgz
+chmod 755 flink-1.13.1-bin-scala_2.11.tgz
+tar -xzvf flink-1.13.1-bin-scala_2.11.tgz
 
-FLINK_HOME=/tmp/flink-1.13.0
+FLINK_HOME=/tmp/flink-1.13.1
 ${FLINK_HOME}/bin/start-cluster.sh

@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     env:
-      FLINK_HOME: /tmp/flink-1.13.0
+      FLINK_HOME: /tmp/flink-1.13.1
       AIRFLOW_HOME: ~/airflow
     steps:
     - uses: actions/checkout@v2
