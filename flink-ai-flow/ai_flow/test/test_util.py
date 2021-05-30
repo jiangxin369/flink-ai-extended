@@ -17,9 +17,13 @@
 # under the License.
 #
 import os
+import threading
+import time
 
+from ai_flow import SchedulerType
 from ai_flow.api.configuration import set_project_config_file, project_config
 from ai_flow.common import path_util
+from airflow.executors.local_executor import LocalExecutor
 
 DEFAULT_MYSQL_USERNAME = ''
 DEFAULT_MYSQL_PASSWORD = ''
@@ -32,6 +36,21 @@ DEFAULT_MONGODB_HOST = ''
 DEFAULT_MONGODB_PORT = 27017
 
 
+class StoppableThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self,  *args, **kwargs):
+        super(StoppableThread, self).__init__(*args, **kwargs)
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
+
+
 def get_project_path():
     return os.path.dirname(os.path.abspath(__file__))
 
@@ -40,8 +59,11 @@ def get_project_config_file():
     return os.path.dirname(os.path.abspath(__file__)) + "/project.yaml"
 
 
-def get_master_config_file():
-    return os.path.dirname(os.path.abspath(__file__)) + "/master.yaml"
+def get_master_config_file(scheduler_type: SchedulerType = SchedulerType.AIFLOW):
+    if scheduler_type == SchedulerType.AIFLOW:
+        return os.path.dirname(os.path.abspath(__file__)) + "/master.yaml"
+    elif scheduler_type == SchedulerType.AIRFLOW:
+        return os.path.dirname(os.path.abspath(__file__)) + "/master_airflow.yaml"
 
 
 def get_workflow_config_file():
@@ -93,3 +115,14 @@ def get_mongodb_server_url():
             "specify MONGODB host via MONGODB_TEST_HOST and specify MONGODB port "
             "via MONGODB_TEST_PORT.")
     return 'mongodb://%s:%s@%s:%s' % (db_username, db_password, db_host, db_port)
+
+
+def set_scheduler_timeout(notification_client, secs) -> StoppableThread:
+    def scheduler_timeout(seconds):
+        time.sleep(seconds)
+        from airflow.events.scheduler_events import StopSchedulerEvent
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        raise Exception("Airflow scheduler timeout after {}s".format(seconds))
+    t = StoppableThread(target=scheduler_timeout, args=(secs,), daemon=True)
+    t.start()
+    return t

@@ -143,4 +143,4 @@ def submit_flink_job(exec_env, t_env: TableEnvironment, statement_set: Statement
             logging.info('workflow execution id: {}, job uuid: {}, Flink job id: {}'.format(
                 flink_job.job_context.workflow_execution_id, flink_job.instance_id, job_client.get_job_id()))
             f.write(str(job_client.get_job_id()))
-        job_client.get_job_execution_result(user_class_loader=None).result()
+        job_client.get_job_execution_result().result()

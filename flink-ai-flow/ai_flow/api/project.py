@@ -208,7 +208,7 @@ def deploy_to_airflow(project_path: Text = None,
     deploy_path = project_desc.project_config.get_airflow_deploy_path()
     if deploy_path is None:
         raise Exception("airflow_deploy_path config not set!")
-    airflow_file_path = deploy_path + '/' + dag_id + '.py'
+    airflow_file_path = os.path.join(deploy_path, dag_id + '.py')
     if os.path.exists(airflow_file_path):
         os.remove(airflow_file_path)
     generated_code = _generate_airflow_file_text(ai_graph=default_graph(),
