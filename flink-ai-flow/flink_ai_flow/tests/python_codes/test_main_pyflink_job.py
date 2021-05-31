@@ -16,7 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-import threading
+import queue
 import time
 import unittest
 
@@ -42,6 +42,7 @@ import os
 
 # dag_folder should be same as airflow_deploy_path in project.yaml
 dag_folder = "/tmp/airflow/"
+notification_client = None
 
 
 class Transformer(Executor):
@@ -95,8 +96,9 @@ class TestPyFlinkJob(unittest.TestCase):
         storage = DbEventStorage('sqlite:///aiflow.db', create_table_if_not_exists=True)
         cls.notification_master = NotificationMaster(NotificationService(storage), notification_port)
         cls.notification_master.run()
-        cls.notification_client = NotificationClient(server_uri=cls.notification_uri,
-                                                     default_namespace="test_namespace")
+        global notification_client
+        notification_client = NotificationClient(server_uri=cls.notification_uri,
+                                                 default_namespace="test_namespace")
         cls.master = AIFlowMaster(config_file=config_file)
         cls.master.start()
         project_config_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), "project.yaml")
@@ -104,6 +106,8 @@ class TestPyFlinkJob(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls) -> None:
+        notification_client.stop_listen_events()
+        notification_client.stop_listen_event()
         cls.master.stop()
         cls.notification_master.stop()
         af.unset_project_config()
@@ -122,7 +126,6 @@ class TestPyFlinkJob(unittest.TestCase):
 
     def test_run_pyflink_job(self):
         project_path = os.path.dirname(os.path.dirname(__file__))
-        #af.set_project_config_file(project_path + "project.yaml")
         input_file = project_path + '/resources/word_count.txt'
         output_file = get_file_dir(__file__) + "/word_count_output.csv"
         if os.path.exists(output_file):
@@ -141,8 +144,7 @@ class TestPyFlinkJob(unittest.TestCase):
                                       data_format="csv")
         flink_config = faf.LocalFlinkJobConfig()
         flink_config.local_mode = 'cluster'
-        #flink_config.flink_home = os.environ.get('FLINK_HOME')
-        flink_config.flink_home = '/tmp/flink-1.13.0'
+        flink_config.flink_home = os.environ.get('FLINK_HOME')
         flink_config.set_table_env_create_func(TableEnvCreator())
         with af.config(flink_config):
             input_example = af.read_example(example_info=example_1,
@@ -183,8 +185,7 @@ class TestPyFlinkJob(unittest.TestCase):
                                       data_format="csv")
         flink_config = faf.LocalFlinkJobConfig()
         flink_config.local_mode = 'cluster'
-        #flink_config.flink_home = os.environ.get('FLINK_HOME')
-        flink_config.flink_home = '/tmp/flink-1.13.0'
+        flink_config.flink_home = os.environ.get('FLINK_HOME')
         flink_config.set_table_env_create_func(TableEnvCreator())
         with af.config(flink_config):
             input_example = af.read_example(example_info=example_1,
@@ -213,16 +214,25 @@ class TestPyFlinkJob(unittest.TestCase):
         except Exception as e:
             print(e)
 
-    def run_with_airflow_scheduler(self, target):
-        t = threading.Thread(target=target)
-        t.setDaemon(True)
+    def run_with_airflow_scheduler(self, target, timeout=120):
+        from ai_flow.test.test_util import StoppableThread
+        signal_queue = queue.Queue()
+        t = StoppableThread(target=target, daemon=True)
         t.start()
+        timeout_thread = test_util.set_scheduler_timeout(notification_client=notification_client,
+                                                         secs=timeout,
+                                                         signal_queue=signal_queue)
         self.start_scheduler(SchedulerType.AIRFLOW)
+        t.stop()
+        timeout_thread.stop()
+        timeout_thread.join()
+        if signal_queue.qsize() > 0:
+            self.fail("Airflow scheduler timeout after {}s".format(timeout))
 
     @staticmethod
     def wait_for_scheduler_started():
-        """Just sleep 5 secs for now"""
-        time.sleep(5)
+        """Just sleep 10 secs for now"""
+        time.sleep(10)
 
     def wait_for_task_execution(self, dag_id, state, expected_num):
         result = False
@@ -252,20 +262,23 @@ class TestPyFlinkJob(unittest.TestCase):
     def start_scheduler(self, scheduler_type):
         from airflow.contrib.jobs.event_based_scheduler_job import EventBasedSchedulerJob
         from airflow.executors.local_executor import LocalExecutor
-        if scheduler_type == SchedulerType.AIRFLOW:
-            scheduler = EventBasedSchedulerJob(
-                dag_directory=dag_folder,
-                server_uri=self.notification_uri,
-                executor=LocalExecutor(3),
-                max_runs=-1,
-                refresh_dag_dir_interval=1
-            )
-        scheduler.run()
+        try:
+            if scheduler_type == SchedulerType.AIRFLOW:
+                scheduler = EventBasedSchedulerJob(
+                    dag_directory=dag_folder,
+                    server_uri=self.notification_uri,
+                    executor=LocalExecutor(3),
+                    max_runs=-1,
+                    refresh_dag_dir_interval=1
+                )
+            scheduler.run()
+        except Exception as e:
+            print(e)
 
     @classmethod
     def stop_scheduler(cls):
         from airflow.events.scheduler_events import StopSchedulerEvent
-        cls.notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
 
     @staticmethod
     def clear_db():

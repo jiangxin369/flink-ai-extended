@@ -251,7 +251,7 @@ def generate_project_desc(project_path: Text = None) -> ProjectDesc:
             os.makedirs(project_path + '/python_codes')
             os.makedirs(project_path + '/jar_dependencies')
             os.makedirs(project_path + '/resources')
-            open(project_path + '/python_codes/__init__.py', 'w')
+            #open(project_path + '/python_codes/__init__.py', 'w')
             fd, temp_file = tempfile.mkstemp(suffix='.py', dir=project_path + '/python_codes')
             with open(temp_file, 'w') as f:
                 f.write(code)

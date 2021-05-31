@@ -17,6 +17,8 @@
 # under the License.
 #
 import os
+import threading
+import time
 
 from ai_flow import SchedulerType
 from ai_flow.api.configuration import set_project_config_file, project_config
@@ -31,6 +33,22 @@ DEFAULT_MONGODB_USERNAME = ''
 DEFAULT_MONGODB_PASSWORD = ''
 DEFAULT_MONGODB_HOST = ''
 DEFAULT_MONGODB_PORT = 27017
+
+
+class StoppableThread(threading.Thread):
+    """Thread class with a stop() method. The thread itself has to check
+    regularly for the stopped() condition."""
+
+    def __init__(self,  *args, **kwargs):
+        super(StoppableThread, self).__init__(*args, **kwargs)
+        self._stop_event = threading.Event()
+
+    def stop(self):
+        while not self.stopped():
+            self._stop_event.set()
+
+    def stopped(self):
+        return self._stop_event.is_set()
 
 
 def get_project_path():
@@ -97,3 +115,26 @@ def get_mongodb_server_url():
             "specify MONGODB host via MONGODB_TEST_HOST and specify MONGODB port "
             "via MONGODB_TEST_PORT.")
     return 'mongodb://%s:%s@%s:%s' % (db_username, db_password, db_host, db_port)
+
+
+def set_scheduler_timeout(notification_client, secs, signal_queue) -> StoppableThread:
+    def scheduler_timeout(seconds):
+        times = 0
+        from airflow.events.scheduler_events import StopSchedulerEvent
+        from airflow.utils.session import create_session
+        while True:
+            with create_session() as session:
+                from airflow.jobs.base_job import BaseJob
+                job = session.query(BaseJob).filter(BaseJob.job_type == 'EventBasedSchedulerJob').first()
+                if job and job.state == 'success':
+                    break
+                else:
+                    time.sleep(1)
+                    if times >= seconds:
+                        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+                        signal_queue.put('TIMEOUT')
+                        break
+            times = times + 1
+    t = StoppableThread(target=scheduler_timeout, args=(secs,), daemon=True)
+    t.start()
+    return t
