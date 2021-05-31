@@ -1083,10 +1083,6 @@ class DagFileProcessorManager(LoggingMixin):  # pylint: disable=too-many-instanc
         """Start more processors if we have enough slots and files to process"""
         while self._parallelism - len(self._processors) > 0 and self._file_path_queue:
             file_path = self._file_path_queue.pop(0)
-            # wait until the processor end
-            if file_path in self._processors:
-                self._file_path_queue.append(file_path)
-                continue
             callback_to_execute_for_file = self._callback_to_execute[file_path]
             processor = self._processor_factory(
                 file_path, callback_to_execute_for_file, self._dag_ids, self._pickle_dags

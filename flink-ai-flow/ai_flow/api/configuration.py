@@ -64,7 +64,6 @@ def set_project_config_file(config_file: Text):
     else:
         _default_project_config.load_from_file(config_file)
         _default_project_config_set_flag = True
-    ensure_project_registered()
 
 
 def set_default_project_config(config: ProjectConfig):
@@ -75,7 +74,6 @@ def set_default_project_config(config: ProjectConfig):
         _default_project_config.clear()
         _default_project_config.update(config)
         _default_project_config_set_flag = True
-    ensure_project_registered()
 
 
 def get_default_project_config():

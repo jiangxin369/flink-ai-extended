@@ -126,12 +126,8 @@ class DAGGenerator(object):
         return DAGTemplate.UPSTREAM_OP.format(op_1, op_2)
 
     def generate_event_deps(self, op, from_task_id, met_config):
-        if met_config.sender is not None and '' != met_config.sender:
-            sender = met_config.sender
-        else:
-            sender = job_name_to_task_id(from_task_id)
         return DAGTemplate.EVENT_DEPS.format(op, met_config.event_key, met_config.event_type,
-                                             met_config.namespace, sender)
+                                             met_config.namespace, from_task_id)
 
     def generate_handler(self, op, configs: List[MetConfig]):
         return DAGTemplate.MET_HANDLER.format(op, json_utils.dumps(configs))
@@ -190,14 +186,13 @@ class DAGGenerator(object):
                     met_config: MetConfig = edge.met_config
 
                     def reset_met_config():
-                        if met_config.sender is None or '' == met_config.sender:
-                            target_node_id = edge.target_node_id
-                            if target_node_id is not None and '' != target_node_id:
-                                target_job: BaseJob = workflow.jobs.get(target_node_id)
-                                if target_job.job_name is not None:
-                                    met_config.sender = job_name_to_task_id(target_job.job_name)
-                            else:
-                                met_config.sender = '*'
+                        target_node_id = edge.target_node_id
+                        if target_node_id is not None and '' != target_node_id:
+                            target_job: BaseJob = workflow.jobs.get(target_node_id)
+                            if target_job.job_name is not None:
+                                met_config.sender = target_job.job_name
+                        else:
+                            met_config.sender = '*'
                     reset_met_config()
 
                     if match_stop_before_config(met_config):

@@ -117,7 +117,7 @@ class MetConfig(Jsonable):
                  life: EventLife = EventLife.ONCE,
                  value_condition: MetValueCondition = MetValueCondition.EQUAL,
                  namespace: Text = DEFAULT_NAMESPACE,
-                 sender: Text = None
+                 sender: Text = ANY_CONDITION
                  ):
         self.event_type = event_type
         self.event_key = event_key
@@ -127,7 +127,10 @@ class MetConfig(Jsonable):
         self.life = life
         self.value_condition = value_condition
         self.namespace = namespace
-        self.sender = sender
+        if sender is None or '' == sender:
+            self.sender = ANY_CONDITION
+        else:
+            self.sender = sender
 
 
 def generate_job_status_key(target_id) -> str:
@@ -142,7 +145,8 @@ class ControlEdge(Edge):
     def generate_met_config(self) -> MetConfig:
         return MetConfig(event_key=generate_job_status_key(self.target_node_id),
                          event_value="FINISHED",
-                         namespace=self.namespace)
+                         namespace=self.namespace,
+                         sender=self.target_node_id)
 
 
 class UserDefineControlEdge(ControlEdge):
@@ -151,13 +155,12 @@ class UserDefineControlEdge(ControlEdge):
                  source_node_id: Text,
                  event_key: Text,
                  event_value: Text,
-                 event_type: Text = UNDEFINED_EVENT_TYPE,
+                 event_type: Text = None,
                  condition: MetCondition = MetCondition.NECESSARY,
                  action: TaskAction = TaskAction.START,
                  life: EventLife = EventLife.ONCE,
                  value_condition: MetValueCondition = MetValueCondition.EQUAL,
-                 namespace: Text = DEFAULT_NAMESPACE,
-                 sender: Text = None
+                 namespace: Text = DEFAULT_NAMESPACE
                  ) -> None:
         super().__init__(target_node_id, source_node_id, namespace)
         self.event_key = event_key
@@ -167,7 +170,6 @@ class UserDefineControlEdge(ControlEdge):
         self.action = action
         self.life = life
         self.value_condition = value_condition
-        self.sender = sender
 
     def generate_met_config(self) -> MetConfig:
         return MetConfig(event_key=self.event_key,
@@ -178,7 +180,7 @@ class UserDefineControlEdge(ControlEdge):
                          life=self.life,
                          value_condition=self.value_condition,
                          namespace=self.namespace,
-                         sender=self.sender)
+                         sender=self.target_node_id)
 
 
 class JobControlEdge(Edge):
@@ -208,7 +210,7 @@ class StartBeforeControlEdge(ControlEdge):
 
     def generate_met_config(self) -> MetConfig:
         return MetConfig(event_key=generate_job_status_key(self.target_node_id),
-                         event_value="STARTING", namespace=self.namespace)
+                         event_value="STARTING", namespace=self.namespace, sender=self.target_node_id)
 
 
 class StopBeforeControlEdge(ControlEdge):
@@ -220,7 +222,8 @@ class RestartBeforeControlEdge(ControlEdge):
         return MetConfig(event_key=generate_job_status_key(self.target_node_id),
                          event_value="FINISHED",
                          namespace=self.namespace,
-                         action=TaskAction.RESTART)
+                         action=TaskAction.RESTART,
+                         sender=self.target_node_id)
 
 
 class ModelVersionControlEdge(ControlEdge):
@@ -241,8 +244,7 @@ class ModelVersionControlEdge(ControlEdge):
                          life=EventLife.ONCE,
                          value_condition=MetValueCondition.UPDATE,
                          condition=MetCondition.SUFFICIENT,
-                         namespace=self.namespace,
-                         sender=ANY_CONDITION)
+                         namespace=self.namespace)
 
 
 class ExampleControlEdge(ControlEdge):
@@ -254,7 +256,4 @@ class ExampleControlEdge(ControlEdge):
         self.example_name = example_name
 
     def generate_met_config(self) -> MetConfig:
-        return MetConfig(event_key="example." + self.example_name,
-                         event_value="created",
-                         namespace=self.namespace,
-                         sender=ANY_CONDITION)
+        return MetConfig(event_key="example." + self.example_name, event_value="created", namespace=self.namespace)
