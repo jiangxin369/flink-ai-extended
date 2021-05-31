@@ -766,11 +766,13 @@ class DagFileProcessorManager(LoggingMixin):  # pylint: disable=too-many-instanc
             else:
                 wait_time = 1.0
             if self.notification_service_uri is not None and len(self.message_buffer) > 0:
+                self.log.info("[parse_error] message_buffer is larger than 0")
                 self._process_and_send_response()
                 self.collect_results()
                 time.sleep(wait_time)
 
             if self.signal_queue.qsize() > 0:
+                self.log.info("[parse_error] adding file to queue...")
                 self._add_file_to_queue()
 
     def _process_and_send_response(self):
@@ -778,12 +780,15 @@ class DagFileProcessorManager(LoggingMixin):  # pylint: disable=too-many-instanc
             file_path = event.value
             finish_process_time = self.get_last_finish_time(file_path)
             duration = self.get_last_runtime(file_path)
+            self.log.info("[parse_error] file_path: %s, finish_process_time: %s, duration: %s", file_path, finish_process_time, duration)
             if not finish_process_time or not duration:
                 continue
             start_process_time = finish_process_time - timedelta(seconds=duration)
+            self.log.info("[parse_error] start_process_time: %s, process_time: %s", start_process_time, process_time)
             self.log.debug('Check dag processor start_process_time {} process_time {} file_path {}'
                            .format(start_process_time, process_time, file_path))
             if start_process_time > process_time:
+                self.log.info("[parse_error] sending parse_dag_response event...")
                 self.ns_client.send_event(BaseEvent(key=event.key,
                                                     value=file_path,
                                                     event_type=SchedulerInnerEventType.PARSE_DAG_RESPONSE.value))
@@ -797,6 +802,7 @@ class DagFileProcessorManager(LoggingMixin):  # pylint: disable=too-many-instanc
                 self._file_path_queue.remove(file_path)
             self._file_path_queue.insert(0, file_path)
             self.message_buffer[file_path] = (message, process_time)
+            self.log.info("[parse_error] after add file, message_buffer is %s", self.message_buffer)
 
     def _add_callback_to_queue(self, request: CallbackRequest):
         self._callback_to_execute[request.full_filepath].append(request)

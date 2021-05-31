@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+import logging
 import os
 import queue
 import shutil
@@ -197,7 +198,7 @@ class TestProject(unittest.TestCase):
                 )
             scheduler.run()
         except Exception as e:
-            print("Error occurred in scheduler, " + str(e))
+            logging.exception("Error occurred in scheduler, %s", e)
 
     @classmethod
     def stop_scheduler(cls):

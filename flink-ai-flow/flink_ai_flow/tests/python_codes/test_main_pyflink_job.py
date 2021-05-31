@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+import logging
 import queue
 import time
 import unittest
@@ -273,7 +274,7 @@ class TestPyFlinkJob(unittest.TestCase):
                 )
             scheduler.run()
         except Exception as e:
-            print(e)
+            logging.exception("Error occurred in scheduler, %s", e)
 
     @classmethod
     def stop_scheduler(cls):

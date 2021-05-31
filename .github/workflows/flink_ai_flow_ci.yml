@@ -54,3 +54,7 @@ jobs:
     - name: run ci test
       run: |
         /bin/bash flink-ai-flow/run_tests.sh
+    - name: cat log
+      if: ${{ always() }}
+      run: |
+        cat ~/airflow/logs/dag_processor_manager/dag_processor_manager.log | grep 'parse_error'

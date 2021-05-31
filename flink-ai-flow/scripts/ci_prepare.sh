@@ -43,6 +43,7 @@ awk "{gsub(\"sql_alchemy_conn = sqlite:///${AIRFLOW_HOME}/airflow.db\", \"sql_al
       gsub(\"# mp_start_method =\", \"mp_start_method = forkserver\"); \
       gsub(\"execute_tasks_new_python_interpreter = False\", \"execute_tasks_new_python_interpreter = True\"); \
       gsub(\"min_serialized_dag_update_interval = 30\", \"min_serialized_dag_update_interval = 0\"); \
+      gsub(\"logging_level = INFO\", \"logging_level = DEBUG\"); \
       print \$0}" airflow.cfg.tmpl > airflow.cfg
 rm airflow.cfg.tmpl >/dev/null 2>&1
 
