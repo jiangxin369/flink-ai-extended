@@ -323,7 +323,7 @@ class EventBasedScheduler(LoggingMixin):
 
     def _find_dagruns_by_event(self, event, session) -> Optional[List[DagRun]]:
         affect_dag_runs = []
-        event_key = EventKey(event.key, event.event_type, event.namespace, event.sender)
+        event_key = EventKey(event.key, event.event_type, event.namespace)
         dag_runs = session \
             .query(DagRun).filter(DagRun.state == State.RUNNING).all()
         self.log.debug('dag_runs {}'.format(len(dag_runs)))
