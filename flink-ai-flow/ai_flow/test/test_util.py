@@ -126,7 +126,8 @@ def set_scheduler_timeout(notification_client, secs, signal_queue) -> StoppableT
             with create_session() as session:
                 from airflow.jobs.base_job import BaseJob
                 job = session.query(BaseJob).filter(BaseJob.job_type == 'EventBasedSchedulerJob').first()
-                if job and job.state == 'success':
+                from airflow.utils.state import State
+                if job and job.state in State.finished:
                     break
                 else:
                     time.sleep(1)
