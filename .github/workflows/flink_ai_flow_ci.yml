@@ -27,8 +27,8 @@ jobs:
             -e MYSQL_ROOT_PASSWORD=root \
             --health-cmd='mysqladmin ping' \
             --health-interval=1s \
-            --health-timeout=3s \
-            --health-retries=10 \
+            --health-timeout=1s \
+            --health-retries=20 \
             -v /$(pwd)/flink-ai-flow/scripts/mysql/conf.d:/etc/mysql/conf.d \
             --cap-add=sys_nice \
             -d \

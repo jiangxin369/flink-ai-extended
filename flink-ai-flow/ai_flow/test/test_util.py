@@ -119,7 +119,7 @@ def get_mongodb_server_url():
 
 def set_scheduler_timeout(notification_client, secs, signal_queue) -> StoppableThread:
     def scheduler_timeout(seconds):
-        times = 0
+        cnt = 0
         from airflow.events.scheduler_events import StopSchedulerEvent
         from airflow.utils.session import create_session
         while True:
@@ -127,15 +127,19 @@ def set_scheduler_timeout(notification_client, secs, signal_queue) -> StoppableT
                 from airflow.jobs.base_job import BaseJob
                 job = session.query(BaseJob).filter(BaseJob.job_type == 'EventBasedSchedulerJob').first()
                 from airflow.utils.state import State
-                if job and job.state in State.finished:
+                if not job:
+                    continue
+                elif job.state == State.SUCCESS:
                     break
-                else:
-                    time.sleep(1)
-                    if times >= seconds:
-                        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
-                        signal_queue.put('TIMEOUT')
-                        break
-            times = times + 1
+                elif job.state == State.FAILED:
+                    signal_queue.put('FAILED')
+                    break
+                elif job.state == State.RUNNING and cnt >= seconds:
+                    notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+                    signal_queue.put('TIMEOUT')
+                    break
+            time.sleep(1)
+            cnt = cnt + 1
     t = StoppableThread(target=scheduler_timeout, args=(secs,), daemon=True)
     t.start()
     return t
