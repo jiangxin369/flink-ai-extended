@@ -41,7 +41,7 @@ from airflow.models.dagbag import DagBag
 from airflow.models.dagrun import DagRun
 from airflow.models.eventhandler import EventKey
 from airflow.models.serialized_dag import SerializedDagModel
-from airflow.models.taskinstance import TaskInstanceKey
+from airflow.models.taskinstance import TaskInstanceKey, TaskInstance
 from airflow.stats import Stats
 from airflow.utils import timezone
 from airflow.utils.log.logging_mixin import LoggingMixin
@@ -117,6 +117,13 @@ class EventBasedScheduler(LoggingMixin):
     def submit_sync_thread(self):
         threading.Thread(target=self.sync).start()
 
+    def print_airflow_db(self, session: Session):
+        print("[print airflow] dags: {}".format(session.query(DagModel).all()))
+        print("[print airflow] dag_runs: {}".format(session.query(DagRun).all()))
+        print("[print airflow] task_instances: {}".format(session.query(TaskInstance).all()))
+        from airflow.models.taskexecution import TaskExecution
+        print("[print airflow] task_executions: {}".format(session.query(TaskExecution).all()))
+
     def schedule(self):
         self.log.info("Starting the scheduler.")
         self._restore_unfinished_dag_run()
@@ -129,6 +136,7 @@ class EventBasedScheduler(LoggingMixin):
             else:
                 event = origin_event
             with create_session() as session:
+                self.print_airflow_db(session)
                 if isinstance(event, BaseEvent):
                     dagruns = self._find_dagruns_by_event(event, session)
                     for dagrun in dagruns:
@@ -627,18 +635,14 @@ class EventBasedSchedulerJob(BaseJob):
             self.scheduler.submit_sync_thread()
             self.scheduler.recover(self.last_scheduling_id)
             self.scheduler.schedule()
-
-            self.executor.end()
+        finally:
+            self.log.info("Exited execute loop")
+            self._stop_listen_events()
             self.periodic_manager.shutdown()
             self.dag_trigger.end()
             self.task_event_manager.end()
-            self._stop_listen_events()
-
+            self.executor.end()
             settings.Session.remove()  # type: ignore
-        except Exception as e:  # pylint: disable=broad-except
-            self.log.exception("Exception when executing scheduler, %s", e)
-        finally:
-            self.log.info("Exited execute loop")
 
     def _start_listen_events(self):
         watcher = SchedulerEventWatcher(self.mailbox)
