@@ -41,7 +41,7 @@ from airflow.models.dagbag import DagBag
 from airflow.models.dagrun import DagRun
 from airflow.models.eventhandler import EventKey
 from airflow.models.serialized_dag import SerializedDagModel
-from airflow.models.taskinstance import TaskInstanceKey
+from airflow.models.taskinstance import TaskInstanceKey, TaskInstance
 from airflow.stats import Stats
 from airflow.utils import timezone
 from airflow.utils.log.logging_mixin import LoggingMixin

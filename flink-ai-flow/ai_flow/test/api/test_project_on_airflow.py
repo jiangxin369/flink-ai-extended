@@ -16,10 +16,11 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+import logging
 import os
+import queue
 import shutil
 import sys
-import threading
 import time
 import unittest
 import ai_flow as af
@@ -29,6 +30,7 @@ from ai_flow.application_master.master_config import MasterConfig
 from ai_flow.executor.executor import CmdExecutor
 from ai_flow.graph.edge import MetCondition, TaskAction, EventLife, MetValueCondition, DEFAULT_NAMESPACE
 from ai_flow.test import test_util
+from ai_flow.test.test_util import set_scheduler_timeout
 from notification_service.base_notification import BaseEvent
 from notification_service.client import NotificationClient
 from notification_service.event_storage import DbEventStorage
@@ -38,6 +40,7 @@ from notification_service.service import NotificationService
 PROJECT_NAME = 'test_project'
 # dag_folder should be same as airflow_deploy_path in project.yaml
 dag_folder = "/tmp/airflow/unittest/dags"
+notification_client = None
 
 
 class TestProject(unittest.TestCase):
@@ -53,16 +56,20 @@ class TestProject(unittest.TestCase):
         storage = DbEventStorage('sqlite:///aiflow.db', create_table_if_not_exists=True)
         cls.notification_master = NotificationMaster(NotificationService(storage), notification_port)
         cls.notification_master.run()
-        cls.notification_client = NotificationClient(server_uri=cls.notification_uri,
-                                                     default_namespace="test_namespace")
 
+        global notification_client
+        notification_client = NotificationClient(server_uri=cls.notification_uri,
+                                                 default_namespace=DEFAULT_NAMESPACE)
         cls.master = AIFlowMaster(config_file=config_file)
         cls.master.start()
 
     @classmethod
     def tearDownClass(cls) -> None:
+        notification_client.stop_listen_events()
+        notification_client.stop_listen_event()
         cls.master.stop()
         cls.notification_master.stop()
+        af.unset_project_config()
 
     def setUp(self):
         af.default_graph().clear_graph()
@@ -74,22 +81,23 @@ class TestProject(unittest.TestCase):
     def tearDown(self):
         self.clear_dag_folder()
         self.__class__.master._clear_db()
-        #self.clear_db()
+        self.clear_db()
 
-    def run_with_airflow_scheduler(self, target):
-        t = threading.Thread(target=target)
-        t.setDaemon(True)
+    def run_with_airflow_scheduler(self, target, timeout=150):
+        from ai_flow.test.test_util import StoppableThread
+        signal_queue = queue.Queue()
+        t = StoppableThread(target=target, daemon=True)
         t.start()
+        timeout_thread = set_scheduler_timeout(notification_client=notification_client,
+                                               secs=timeout,
+                                               signal_queue=signal_queue)
         self.start_scheduler(SchedulerType.AIRFLOW)
-        t.join()
-
-    def set_timeout(self):
-        def scheduler_timeout(timeout):
-            time.sleep(timeout)
-            self.__class__.stop_scheduler()
-        t = threading.Thread(target=scheduler_timeout)
-        t.setDaemon(True)
-        t.start()
+        print("scheculer stopped")
+        t.stop()
+        timeout_thread.stop()
+        timeout_thread.join()
+        if signal_queue.qsize() > 0:
+            self.fail("Airflow scheduler timeout after {}s".format(timeout))
 
     def test_run_project(self):
         self.run_with_airflow_scheduler(target=self.run_project)
@@ -121,7 +129,7 @@ class TestProject(unittest.TestCase):
         af.user_define_control_dependency(src=cmd_executor, dependency=trigger, event_key='key',
                                           event_value='value', event_type='name', condition=MetCondition.NECESSARY
                                           , action=TaskAction.START, life=EventLife.ONCE,
-                                          value_condition=MetValueCondition.EQUAL, namespace=DEFAULT_NAMESPACE)
+                                          value_condition=MetValueCondition.EQUAL, namespace=DEFAULT_NAMESPACE, sender='*')
         self.submit_workflow(workflow_name=PROJECT_NAME)
         self.wait_for_task_instance(dag_id=PROJECT_NAME, state=State.SCHEDULED, expected_num=1)
         self.__class__.publish_event(key='key', value='value', event_type='name', namespace=DEFAULT_NAMESPACE)
@@ -133,28 +141,23 @@ class TestProject(unittest.TestCase):
         self.__class__.stop_scheduler()
 
     def submit_workflow(self, workflow_name):
-        try:
-            project_desc = generate_project_desc()
-            project_path = project_desc.project_path
-            airflow_file_path = af.submit(project_path=project_path, dag_id=workflow_name)
-            self.assertEqual(os.path.join(project_desc.project_config.get_airflow_deploy_path(), workflow_name + ".py"),
-                              airflow_file_path)
-            from airflow.contrib.jobs.scheduler_client import ExecutionContext
-            context: ExecutionContext = af.run(project_path=project_path, dag_id=workflow_name,
-                                               scheduler_type=SchedulerType.AIRFLOW)
-            self.assertIsNotNone(context.dagrun_id)
-        except Exception as e:
-            print(e)
+        project_desc = generate_project_desc()
+        project_path = project_desc.project_path
+        airflow_file_path = af.submit(project_path=project_path, dag_id=workflow_name)
+        self.assertEqual(os.path.join(project_desc.project_config.get_airflow_deploy_path(), workflow_name + ".py"),
+                         airflow_file_path)
+        from airflow.contrib.jobs.scheduler_client import ExecutionContext
+        context: ExecutionContext = af.run(project_path=project_path, dag_id=workflow_name,
+                                           scheduler_type=SchedulerType.AIRFLOW)
+        self.assertIsNotNone(context.dagrun_id)
+
 
     @classmethod
     def publish_event(cls, key, value, event_type, namespace=DEFAULT_NAMESPACE):
-        try:
-            cls.notification_client.send_event(BaseEvent(key=key,
-                                                         value=value,
-                                                         event_type=event_type,
-                                                         namespace=namespace))
-        except Exception as e:
-            print(e)
+        notification_client.send_event(BaseEvent(key=key,
+                                                 value=value,
+                                                 event_type=event_type,
+                                                 namespace=namespace))
 
     @staticmethod
     def build_ai_graph(sleep_time: int):
@@ -192,7 +195,7 @@ class TestProject(unittest.TestCase):
     @classmethod
     def stop_scheduler(cls):
         from airflow.events.scheduler_events import StopSchedulerEvent
-        cls.notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        notification_client.send_event(StopSchedulerEvent(job_id=0).to_event())
 
     def wait_for_task_execution(self, dag_id, state, expected_num):
         result = False
@@ -220,8 +223,8 @@ class TestProject(unittest.TestCase):
 
     @staticmethod
     def wait_for_scheduler_started():
-        """Just sleep 5 secs for now"""
-        time.sleep(5)
+        """Just sleep 10 secs for now"""
+        time.sleep(10)
 
     @staticmethod
     def get_task_execution(dag_id, state):

@@ -26,11 +26,8 @@ password=$3
 export AIRFLOW_HOME=~/airflow
 MYSQL_CONN="mysql://${user}:${password}@127.0.0.1:${port}/airflow"
 
-# Airflow needs explicit_defaults_for_timestamp to be (1) in mysql
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "set global explicit_defaults_for_timestamp=1";
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "SET @@GLOBAL.wait_timeout=28800"
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "ALTER DATABASE airflow CHARACTER SET UTF8mb3 COLLATE utf8_general_ci;"
-mysql --host 127.0.0.1 --port $1 -uroot -ppassword -e "show variables;"
+mysql -h127.0.0.1 --port=${port} -u${user} -p${password} -e "CREATE DATABASE airflow CHARACTER SET UTF8mb3 COLLATE utf8_general_ci;"
+mysql -h127.0.0.1 --port=${port} -u${user} -p${password} -e "show databases;"
 
 # prepare airflow configs and tables in mysql
 mkdir ${AIRFLOW_HOME} >/dev/null 2>&1
@@ -46,6 +43,7 @@ awk "{gsub(\"sql_alchemy_conn = sqlite:///${AIRFLOW_HOME}/airflow.db\", \"sql_al
       gsub(\"# mp_start_method =\", \"mp_start_method = forkserver\"); \
       gsub(\"execute_tasks_new_python_interpreter = False\", \"execute_tasks_new_python_interpreter = True\"); \
       gsub(\"min_serialized_dag_update_interval = 30\", \"min_serialized_dag_update_interval = 0\"); \
+      gsub(\"logging_level = INFO\", \"logging_level = DEBUG\"); \
       print \$0}" airflow.cfg.tmpl > airflow.cfg
 rm airflow.cfg.tmpl >/dev/null 2>&1
 
@@ -63,9 +61,9 @@ airflow users create \
 
 # start a local Flink cluster
 cd /tmp
-wget https://mirrors.bfsu.edu.cn/apache/flink/flink-1.13.0/flink-1.13.0-bin-scala_2.11.tgz
-chmod 755 flink-1.13.0-bin-scala_2.11.tgz
-tar -xzvf flink-1.13.0-bin-scala_2.11.tgz
+wget https://downloads.apache.org/flink/flink-1.13.1/flink-1.13.1-bin-scala_2.11.tgz
+chmod 755 flink-1.13.1-bin-scala_2.11.tgz
+tar -xzvf flink-1.13.1-bin-scala_2.11.tgz
 
-FLINK_HOME=/tmp/flink-1.13.0
+FLINK_HOME=/tmp/flink-1.13.1
 ${FLINK_HOME}/bin/start-cluster.sh
