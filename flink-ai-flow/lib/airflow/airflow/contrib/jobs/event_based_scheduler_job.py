@@ -41,7 +41,7 @@ from airflow.models.dagbag import DagBag
 from airflow.models.dagrun import DagRun
 from airflow.models.eventhandler import EventKey
 from airflow.models.serialized_dag import SerializedDagModel
-from airflow.models.taskinstance import TaskInstanceKey
+from airflow.models.taskinstance import TaskInstanceKey, TaskInstance
 from airflow.stats import Stats
 from airflow.utils import timezone
 from airflow.utils.log.logging_mixin import LoggingMixin
@@ -315,7 +315,7 @@ class EventBasedScheduler(LoggingMixin):
 
     def _find_dagruns_by_event(self, event, session) -> Optional[List[DagRun]]:
         affect_dag_runs = []
-        event_key = EventKey(event.key, event.event_type, event.namespace)
+        event_key = EventKey(event.key, event.event_type, event.namespace, event.sender)
         dag_runs = session \
             .query(DagRun).filter(DagRun.state == State.RUNNING).all()
         self.log.debug('dag_runs {}'.format(len(dag_runs)))
@@ -444,7 +444,7 @@ class EventBasedScheduler(LoggingMixin):
         dag_run.verify_integrity(session=session)
 
     def _send_scheduling_task_event(self, ti: Optional[TI], action: SchedulingAction):
-        if ti is None:
+        if ti is None or action == SchedulingAction.NONE:
             return
         task_scheduling_event = TaskSchedulingEvent(
             ti.task_id,
@@ -627,18 +627,14 @@ class EventBasedSchedulerJob(BaseJob):
             self.scheduler.submit_sync_thread()
             self.scheduler.recover(self.last_scheduling_id)
             self.scheduler.schedule()
-
-            self.executor.end()
+        finally:
+            self.log.info("Exited execute loop")
+            self._stop_listen_events()
             self.periodic_manager.shutdown()
             self.dag_trigger.end()
             self.task_event_manager.end()
-            self._stop_listen_events()
-
+            self.executor.end()
             settings.Session.remove()  # type: ignore
-        except Exception as e:  # pylint: disable=broad-except
-            self.log.exception("Exception when executing scheduler, %s", e)
-        finally:
-            self.log.info("Exited execute loop")
 
     def _start_listen_events(self):
         watcher = SchedulerEventWatcher(self.mailbox)

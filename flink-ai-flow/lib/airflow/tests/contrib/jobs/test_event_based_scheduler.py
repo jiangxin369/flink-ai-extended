@@ -167,6 +167,14 @@ class TestEventBasedScheduler(unittest.TestCase):
         print("scheduler starting")
         self.scheduler.run()
 
+    def wait_for_running(self):
+        while True:
+            if self.scheduler is not None:
+                time.sleep(5)
+                break
+            else:
+                time.sleep(1)
+
     def wait_for_task_execution(self, dag_id, task_id, expected_num):
         result = False
         check_nums = 100
@@ -301,7 +309,7 @@ class TestEventBasedScheduler(unittest.TestCase):
                 tes = session.query(TaskExecution).filter(TaskExecution.dag_id == 'trigger_task',
                                                           TaskExecution.task_id == 'task_1').all()
                 if len(tes) > 0:
-                    client.schedule_task('task_2', SchedulingAction.START, execution_context)
+                    client.schedule_task('trigger_task', 'task_2', SchedulingAction.START, execution_context)
                     while True:
                         with create_session() as session_2:
                             tes_2 = session_2.query(TaskExecution).filter(TaskExecution.dag_id == 'trigger_task',
@@ -326,11 +334,12 @@ class TestEventBasedScheduler(unittest.TestCase):
 
     def run_ai_flow_function(self):
         client = NotificationClient(server_uri="localhost:{}".format(self.port),
-                                    default_namespace="default")
+                                    default_namespace="default",
+                                    sender='1-job-name')
         while True:
             with create_session() as session:
                 tes = session.query(TaskExecution).filter(TaskExecution.dag_id == 'workflow_1',
-                                                          TaskExecution.task_id == '0_job').all()
+                                                          TaskExecution.task_id == '1-job-name').all()
                 if len(tes) > 0:
                     time.sleep(5)
                     client.send_event(BaseEvent(key='key_1', value='value_1', event_type='UNDEFINED'))
@@ -354,7 +363,7 @@ class TestEventBasedScheduler(unittest.TestCase):
         t.setDaemon(True)
         t.start()
         self.start_scheduler('../../dags/test_aiflow_dag.py')
-        tes: List[TaskExecution] = self.get_task_execution("workflow_1", "1_job")
+        tes: List[TaskExecution] = self.get_task_execution("workflow_1", "1-job-name")
         self.assertEqual(len(tes), 1)
 
     def stop_dag_function(self):
@@ -407,3 +416,24 @@ class TestEventBasedScheduler(unittest.TestCase):
         self.start_scheduler('../../dags/test_periodic_task_dag.py')
         tes: List[TaskExecution] = self.get_task_execution("single", "task_1")
         self.assertGreater(len(tes), 1)
+
+    def run_one_task_function(self):
+        self.wait_for_running()
+        self.client.send_event(BaseEvent(key='a', value='a'))
+        time.sleep(5)
+        self.client.send_event(BaseEvent(key='a', value='a'))
+        while True:
+            with create_session() as session:
+                tes = session.query(TaskExecution).filter(TaskExecution.dag_id == 'single',
+                                                          TaskExecution.task_id == 'task_1').all()
+                if len(tes) >= 2:
+                    break
+                else:
+                    time.sleep(1)
+        self.client.send_event(StopSchedulerEvent(job_id=0).to_event())
+
+    def test_run_one_task(self):
+        t = threading.Thread(target=self.run_one_task_function, args=())
+        t.setDaemon(True)
+        t.start()
+        self.start_scheduler('../../dags/test_multiple_trigger_task_dag.py')

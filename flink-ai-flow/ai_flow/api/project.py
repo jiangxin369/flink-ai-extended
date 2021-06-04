@@ -21,6 +21,7 @@ import os
 import sys
 import tempfile
 import time
+import shutil
 from typing import Optional, Tuple, Text
 from tempfile import NamedTemporaryFile
 from ai_flow.airflow.dag_generator import DAGGenerator
@@ -208,7 +209,7 @@ def deploy_to_airflow(project_path: Text = None,
     deploy_path = project_desc.project_config.get_airflow_deploy_path()
     if deploy_path is None:
         raise Exception("airflow_deploy_path config not set!")
-    airflow_file_path = deploy_path + '/' + dag_id + '.py'
+    airflow_file_path = os.path.join(deploy_path, dag_id + '.py')
     if os.path.exists(airflow_file_path):
         os.remove(airflow_file_path)
     generated_code = _generate_airflow_file_text(ai_graph=default_graph(),
@@ -217,7 +218,7 @@ def deploy_to_airflow(project_path: Text = None,
                                                  default_args=default_args)
     with NamedTemporaryFile(mode='w+t', prefix=dag_id, suffix='.py', dir='/tmp', delete=False) as f:
         f.write(generated_code)
-    os.rename(f.name, airflow_file_path)
+    shutil.move(f.name, airflow_file_path)
     return airflow_file_path
 
 
@@ -250,7 +251,7 @@ def generate_project_desc(project_path: Text = None) -> ProjectDesc:
             os.makedirs(project_path + '/python_codes')
             os.makedirs(project_path + '/jar_dependencies')
             os.makedirs(project_path + '/resources')
-            open(project_path + '/python_codes/__init__.py', 'w')
+            #open(project_path + '/python_codes/__init__.py', 'w')
             fd, temp_file = tempfile.mkstemp(suffix='.py', dir=project_path + '/python_codes')
             with open(temp_file, 'w') as f:
                 f.write(code)

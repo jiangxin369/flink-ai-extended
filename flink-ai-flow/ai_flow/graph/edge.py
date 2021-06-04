@@ -20,7 +20,7 @@ from enum import Enum
 from typing import Text
 
 from ai_flow.common.json_utils import Jsonable
-from notification_service.base_notification import UNDEFINED_EVENT_TYPE
+from notification_service.base_notification import UNDEFINED_EVENT_TYPE, ANY_CONDITION, DEFAULT_NAMESPACE
 
 
 class Edge(Jsonable):
@@ -107,9 +107,6 @@ class MetValueCondition(str, Enum):
     UPDATE = "UPDATE"
 
 
-DEFAULT_NAMESPACE = 'default'
-
-
 class MetConfig(Jsonable):
     def __init__(self,
                  event_key: Text,
@@ -119,7 +116,8 @@ class MetConfig(Jsonable):
                  action: TaskAction = TaskAction.START,
                  life: EventLife = EventLife.ONCE,
                  value_condition: MetValueCondition = MetValueCondition.EQUAL,
-                 namespace: Text = DEFAULT_NAMESPACE
+                 namespace: Text = DEFAULT_NAMESPACE,
+                 sender: Text = None
                  ):
         self.event_type = event_type
         self.event_key = event_key
@@ -129,6 +127,7 @@ class MetConfig(Jsonable):
         self.life = life
         self.value_condition = value_condition
         self.namespace = namespace
+        self.sender = sender
 
 
 def generate_job_status_key(target_id) -> str:
@@ -152,12 +151,13 @@ class UserDefineControlEdge(ControlEdge):
                  source_node_id: Text,
                  event_key: Text,
                  event_value: Text,
-                 event_type: Text = None,
+                 event_type: Text = UNDEFINED_EVENT_TYPE,
                  condition: MetCondition = MetCondition.NECESSARY,
                  action: TaskAction = TaskAction.START,
                  life: EventLife = EventLife.ONCE,
                  value_condition: MetValueCondition = MetValueCondition.EQUAL,
-                 namespace: Text = DEFAULT_NAMESPACE
+                 namespace: Text = DEFAULT_NAMESPACE,
+                 sender: Text = None
                  ) -> None:
         super().__init__(target_node_id, source_node_id, namespace)
         self.event_key = event_key
@@ -167,6 +167,7 @@ class UserDefineControlEdge(ControlEdge):
         self.action = action
         self.life = life
         self.value_condition = value_condition
+        self.sender = sender
 
     def generate_met_config(self) -> MetConfig:
         return MetConfig(event_key=self.event_key,
@@ -176,7 +177,8 @@ class UserDefineControlEdge(ControlEdge):
                          action=self.action,
                          life=self.life,
                          value_condition=self.value_condition,
-                         namespace=self.namespace)
+                         namespace=self.namespace,
+                         sender=self.sender)
 
 
 class JobControlEdge(Edge):
@@ -190,7 +192,8 @@ class JobControlEdge(Edge):
         if met_config is None:
             self.met_config = MetConfig(event_key=generate_job_status_key(target_node_id),
                                         event_value="FINISHED",
-                                        namespace=namespace)
+                                        namespace=namespace,
+                                        sender=target_node_id)
         else:
             self.met_config = met_config
 
@@ -238,7 +241,8 @@ class ModelVersionControlEdge(ControlEdge):
                          life=EventLife.ONCE,
                          value_condition=MetValueCondition.UPDATE,
                          condition=MetCondition.SUFFICIENT,
-                         namespace=self.namespace)
+                         namespace=self.namespace,
+                         sender=ANY_CONDITION)
 
 
 class ExampleControlEdge(ControlEdge):
@@ -250,4 +254,7 @@ class ExampleControlEdge(ControlEdge):
         self.example_name = example_name
 
     def generate_met_config(self) -> MetConfig:
-        return MetConfig(event_key="example." + self.example_name, event_value="created", namespace=self.namespace)
+        return MetConfig(event_key="example." + self.example_name,
+                         event_value="created",
+                         namespace=self.namespace,
+                         sender=ANY_CONDITION)
