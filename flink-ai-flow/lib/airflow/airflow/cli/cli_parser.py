@@ -154,6 +154,22 @@ ARG_SERVER_URI = Arg(
     ),
     default='localhost:50052'
 )
+ARG_EVENT_START_TIME = Arg(
+    ("--event-start-time",),
+    help=(
+        "Set the milliseconds since Unix epoch since when the event scheduler start consume events."
+        "By default, it will be set to current timestamp when scheduler started."
+    ),
+    default=None
+)
+ARG_RECOVER_EVENTS = Arg(
+    ("--recover-events",),
+    help=(
+        "If True, start consuming events since scheduler last finished."
+        "--start-listen-event-time option would be ignored."
+    ),
+    default=False
+)
 ARG_START_DATE = Arg(("-s", "--start-date"), help="Override start_date YYYY-MM-DD", type=parsedate)
 ARG_END_DATE = Arg(("-e", "--end-date"), help="Override end_date YYYY-MM-DD", type=parsedate)
 ARG_OUTPUT_PATH = Arg(
@@ -1454,6 +1470,8 @@ airflow_commands: List[CLICommand] = [
         args=(
             ARG_SUBDIR,
             ARG_SERVER_URI,
+            ARG_EVENT_START_TIME,
+            ARG_RECOVER_EVENTS,
             ARG_NUM_RUNS,
             ARG_DO_PICKLE,
             ARG_PID,

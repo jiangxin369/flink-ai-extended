@@ -156,9 +156,10 @@ class TestEventBasedScheduler(unittest.TestCase):
     def get_latest_job_id(self, session):
         return session.query(BaseJob).order_by(sqlalchemy.desc(BaseJob.id)).first().id
 
-    def start_scheduler(self, file_path):
+    def start_scheduler(self, file_path, event_start_time):
         self.scheduler = EventBasedSchedulerJob(
             dag_directory=file_path,
+            event_start_time=event_start_time,
             server_uri="localhost:{}".format(self.port),
             executor=LocalExecutor(3),
             max_runs=-1,
@@ -437,3 +438,24 @@ class TestEventBasedScheduler(unittest.TestCase):
         t.setDaemon(True)
         t.start()
         self.start_scheduler('../../dags/test_multiple_trigger_task_dag.py')
+
+    def test_recover_events(self):
+        t = threading.Thread(target=self.stop_scheduler_for_recover_events, args=())
+        t.setDaemon(True)
+        t.start()
+        self.start_scheduler(file_path='../../dags/test_event_task_dag.py.py',
+                             event_start_time=int(time.time()*1000))
+        time.sleep(2)
+        last_run = EventBasedSchedulerJob.most_recent_job()
+        event_start_time = int(last_run.end_date.timestamp() * 1000)
+        self.client.send_event(BaseEvent(key='start', value='start'))
+        self.start_scheduler(file_path='../../dags/test_event_task_dag.py',
+                             event_start_time=event_start_time)
+
+    def stop_scheduler_for_recover_events(self):
+        self.wait_for_running()
+        self.client.send_event(StopSchedulerEvent(job_id=0).to_event())
+        self.scheduler = None
+        self.wait_for_running()
+        self.wait_for_task('event_dag', 'task_1', State.SUCCESS)
+        self.client.send_event(StopSchedulerEvent(job_id=0).to_event())

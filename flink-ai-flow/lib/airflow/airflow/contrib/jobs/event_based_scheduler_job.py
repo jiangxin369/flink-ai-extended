@@ -563,6 +563,7 @@ class EventBasedSchedulerJob(BaseJob):
 
     def __init__(self, dag_directory,
                  server_uri=None,
+                 event_start_time=None,
                  max_runs=-1,
                  refresh_dag_dir_interval=conf.getint('scheduler', 'refresh_dag_dir_interval', fallback=1),
                  *args, **kwargs):
@@ -592,6 +593,7 @@ class EventBasedSchedulerJob(BaseJob):
             self.periodic_manager
         )
         self.last_scheduling_id = self._last_scheduler_job_id()
+        self.event_start_time = event_start_time
 
     @staticmethod
     def _last_scheduler_job_id():
@@ -611,7 +613,6 @@ class EventBasedSchedulerJob(BaseJob):
         try:
             self.mailbox.set_scheduling_job_id(self.id)
             self.scheduler.id = self.id
-            self._start_listen_events()
             self.dag_trigger.start()
             self.task_event_manager.start()
             self.executor.job_id = self.id
@@ -626,6 +627,7 @@ class EventBasedSchedulerJob(BaseJob):
 
             self.scheduler.submit_sync_thread()
             self.scheduler.recover(self.last_scheduling_id)
+            self._start_listen_events()
             self.scheduler.schedule()
 
             self._stop_listen_events()
@@ -633,7 +635,7 @@ class EventBasedSchedulerJob(BaseJob):
             self.dag_trigger.end()
             self.task_event_manager.end()
             self.executor.end()
-            
+
             settings.Session.remove()  # type: ignore
         except Exception as e:  # pylint: disable=broad-except
             self.log.exception("Exception when executing scheduler, %s", e)
@@ -641,12 +643,14 @@ class EventBasedSchedulerJob(BaseJob):
             self.log.info("Exited execute loop")
 
     def _start_listen_events(self):
+        event_start_time = int(time.time() * 1000) if not self.event_start_time else self.event_start_time
         watcher = SchedulerEventWatcher(self.mailbox)
         self.notification_client.start_listen_events(
             watcher=watcher,
-            start_time=int(time.time() * 1000),
+            start_time=event_start_time,
             version=None
         )
+        self.log.info("Start listen events since %s", event_start_time)
 
     def _stop_listen_events(self):
         self.notification_client.stop_listen_events()

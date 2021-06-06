@@ -31,9 +31,19 @@ from airflow.utils.cli import process_subdir, setup_locations, setup_logging, si
 def event_based_scheduler(args):
     """Starts Airflow Event-based Scheduler"""
     print(settings.HEADER)
+
+    import time
+    start_time = int(time.time() * 1000)
+    if args.recover_events:
+        last_run = EventBasedSchedulerJob.most_recent_job()
+        if last_run:
+            start_time = int(last_run.start_date.timestamp() * 1000)
+    elif args.event_start_time:
+        start_time = args.event_start_time
     job = EventBasedSchedulerJob(
         dag_directory=process_subdir(args.subdir),
         server_uri=args.server_uri,
+        event_start_time=start_time
     )
 
     if args.daemon:
