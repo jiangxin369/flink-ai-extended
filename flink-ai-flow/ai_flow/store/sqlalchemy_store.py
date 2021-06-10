@@ -453,9 +453,6 @@ class SqlAlchemyStore(AbstractStore):
         :param name: the name of the project
         :param uri: the uri of the project
         :param properties: the properties of the project
-        :param user: the user of the project
-        :param password: the password of the project
-        :param project_type: the project type of the project
         :return: A single :py:class:`ai_flow.meta.project.ProjectMeta` object.
         """
         before_project = self.get_project_by_name(project_name=name)
