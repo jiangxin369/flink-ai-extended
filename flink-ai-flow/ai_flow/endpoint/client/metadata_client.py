@@ -834,8 +834,7 @@ class MetadataClient(BaseClient):
         response = self.metadata_store_stub.getProjectByName(request)
         return _unwrap_project_response(response)
 
-    def register_project(self, name, uri: Text = None, properties: Properties = None,
-                         user: Text = None, password: Text = None, project_type: Text = None) -> ProjectMeta:
+    def register_project(self, name, uri: Text = None, properties: Properties = None) -> ProjectMeta:
         """
         register a project in metadata store.
 
@@ -847,15 +846,12 @@ class MetadataClient(BaseClient):
         :param project_type: the project type of the project
         :return: A single :py:class:`ai_flow.meta.project.ProjectMeta` object.
         """
-        project_request = ProjectProto(name=name, uri=stringValue(uri), properties=properties,
-                                       user=stringValue(user), password=stringValue(password),
-                                       project_type=stringValue(project_type))
+        project_request = ProjectProto(name=name, uri=stringValue(uri), properties=properties)
         request = metadata_service_pb2.RegisterProjectRequest(project=project_request)
         response = self.metadata_store_stub.registerProject(request)
         return _unwrap_project_response(response)
 
-    def update_project(self, project_name: Text, uri: Text = None, properties: Properties = None,
-                       user: Text = None, password: Text = None, project_type: Text = None) -> Optional[ProjectMeta]:
+    def update_project(self, project_name: Text, uri: Text = None, properties: Properties = None) -> Optional[ProjectMeta]:
         """
         update project in metadata store.
 
@@ -868,9 +864,7 @@ class MetadataClient(BaseClient):
         :return: A single :py:class:`ai_flow.meta.project.ProjectMeta` object if update successfully.
         """
         request = metadata_service_pb2.UpdateProjectRequest(name=project_name, uri=stringValue(uri),
-                                                            properties=properties,
-                                                            user=stringValue(user), password=stringValue(password),
-                                                            project_type=stringValue(project_type))
+                                                            properties=properties)
         response = self.metadata_store_stub.updateProject(request)
         return _unwrap_project_response(response)
 
