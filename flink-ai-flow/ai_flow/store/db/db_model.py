@@ -73,15 +73,11 @@ class SqlProject(base, Base):
 
     name = Column(String(255), unique=True)
     properties = Column(String(1000))
-    project_type = Column(String(1000))
-    user = Column(String(1000))
-    password = Column(String(1000))
     uri = Column(String(1000))
     is_deleted = Column(String(256), default='False')
 
     def __repr__(self):
-        return '<project ({}, {}, {}, {}, {}, {}, {})>'.format(self.uuid, self.name, self.properties, self.project_type,
-                                                               self.user, self.password, self.uri)
+        return '<project ({}, {}, {}, {})>'.format(self.uuid, self.name, self.properties, self.uri)
 
 
 class SqlModelRelation(base, Base):
@@ -548,9 +544,6 @@ class MongoProject(Document):
     uuid = SequenceField(db_alias=MONGO_DB_ALIAS_META_SERVICE)
     name = StringField(max_length=255, required=True, unique=True)
     properties = StringField(max_length=1000)
-    project_type = StringField(max_length=1000)
-    user = StringField(max_length=1000)
-    password = StringField(max_length=1000)
     uri = StringField(max_length=1000)
     is_deleted = BooleanField(default=False)
 
@@ -560,13 +553,10 @@ class MongoProject(Document):
     meta = {'db_alias': MONGO_DB_ALIAS_META_SERVICE}
 
     def __repr__(self):
-        return '<Document Project ({}, {}, {}, {}, {}, {}, {})>'.format(
+        return '<Document Project ({}, {}, {}, {})>'.format(
             self.uuid,
             self.name,
             self.properties,
-            self.project_type,
-            self.user,
-            self.password,
             self.uri)
 
 

@@ -260,9 +260,7 @@ class AbstractStore(object):
         pass
 
     @abstractmethod
-    def register_project(self, name, uri,
-                         properties, user,
-                         password, project_type):
+    def register_project(self, name, uri, properties):
         """
         register a project in metadata store.
 
