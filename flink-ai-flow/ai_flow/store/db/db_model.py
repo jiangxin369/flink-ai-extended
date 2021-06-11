@@ -32,19 +32,16 @@ from ai_flow.store import MONGO_DB_ALIAS_META_SERVICE
 from ai_flow.store.db.base_model import base, Base
 
 
-class SqlExample(base, Base):
+class SqlDataset(base, Base):
     """
-    SQL table of example in metadata backend storage.
+    SQL table of dataset in metadata backend storage.
     """
-    __tablename__ = 'example'
+    __tablename__ = 'dataset'
 
     name = Column(String(255), unique=True, nullable=False)
-    support_type = Column(String(256), nullable=False)
-    data_type = Column(String(256))
     format = Column(String(256))
     description = Column(String(1000))
-    batch_uri = Column(String(1000))
-    stream_uri = Column(String(1000))
+    uri = Column(String(1000))
     create_time = Column(BigInteger)
     update_time = Column(BigInteger)
     properties = Column(String(1000))
@@ -54,15 +51,13 @@ class SqlExample(base, Base):
     catalog_type = Column(String(1000))
     catalog_database = Column(String(1000))
     catalog_connection_uri = Column(String(1000))
-    catalog_version = Column(String(1000))
     catalog_table = Column(String(1000))
     is_deleted = Column(String(256), default='False')
 
     def __repr__(self):
-        return '<example ({}, {}, {}, {}, {}, {}, {}, {}, {})>'.format(self.uuid, self.name, self.properties,
-                                                                       self.support_type, self.name_list,
-                                                                       self.type_list,
-                                                                       self.format, self.batch_uri, self.stream_uri)
+        return '<dataset ({}, {}, {}, {}, {}, {}, {})>'.format(self.uuid, self.name, self.properties,
+                                                                       self.name_list, self.type_list,
+                                                                       self.format, self.uri)
 
 
 class SqlProject(base, Base):
@@ -376,19 +371,16 @@ class SqlMember(base):
             self.id, self.version, self.server_uri, self.update_time, self.uuid)
 
 
-class MongoExample(Document):
+class MongoDataset(Document):
     """
-    Document of example in metadata backend storage.
+    Document of dataset in metadata backend storage.
     """
 
     uuid = SequenceField(db_alias=MONGO_DB_ALIAS_META_SERVICE)
     name = StringField(max_length=255, required=True, unique=True)
-    support_type = StringField(max_length=256, required=True)
-    data_type = StringField(max_length=256)
     format = StringField(max_length=256)
     description = StringField(max_length=1000)
-    batch_uri = StringField(max_length=1000)
-    stream_uri = StringField(max_length=1000)
+    uri = StringField(max_length=1000)
     create_time = LongField()
     update_time = LongField()
     properties = StringField(max_length=1000)
@@ -398,23 +390,20 @@ class MongoExample(Document):
     catalog_type = StringField(max_length=1000)
     catalog_database = StringField(max_length=1000)
     catalog_connection_uri = StringField(max_length=1000)
-    catalog_version = StringField(max_length=1000)
     catalog_table = StringField(max_length=1000)
     is_deleted = BooleanField(default=False)
 
     meta = {'db_alias': MONGO_DB_ALIAS_META_SERVICE}
 
     def __repr__(self):
-        return '<Document Example ({}, {}, {}, {}, {}, {}, {}, {}, {})>'.format(
+        return '<Document dataset ({}, {}, {}, {}, {}, {}, {})>'.format(
             self.uuid,
             self.name,
             self.properties,
-            self.support_type,
             self.name_list,
             self.type_list,
             self.format,
-            self.batch_uri,
-            self.stream_uri)
+            self.uri)
 
 
 class MongoModelVersionRelation(Document):

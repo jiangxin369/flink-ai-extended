@@ -153,84 +153,79 @@ class AbstractStore(object):
         pass
 
     '''
-        example api
+        dataset api
     '''
 
     @abstractmethod
-    def get_example_by_id(self, example_id):
+    def get_dataset_by_id(self, dataset_id):
         """
-        get an specific example in metadata store by example id.
+        get an specific dataset in metadata store by dataset id.
 
-        :param example_id: the example id
-        :return: A single :py:class:`ai_flow.meta.example_meta.ExampleMeta` object if the example exists,
-                 Otherwise, returns None if the example does not exist.
-        """
-        pass
-
-    @abstractmethod
-    def get_example_by_name(self, example_name):
-        """
-        get an specific example in metadata store by example name.
-
-        :param example_name: the example name
-        :return: A single :py:class:`ai_flow.meta.example_meta.ExampleMeta` object if the example exists,,
-                 Otherwise, returns None if the example does not exist.
+        :param dataset_id: the dataset id
+        :return: A single :py:class:`ai_flow.meta.dataset_meta.DatasetMeta` object if the dataset exists,
+                 Otherwise, returns None if the dataset does not exist.
         """
         pass
 
     @abstractmethod
-    def list_example(self, page_size, offset):
+    def get_dataset_by_name(self, dataset_name):
         """
-        List registered examples in metadata store.
+        get an specific dataset in metadata store by dataset name.
 
-        :param page_size: the limitation of the listed examples.
-        :param offset: the offset of listed examples.
-        :return: List of :py:class:`ai_flow.meta.example_meta.ExampleMeta` objects,
-                 return None if no examples to be listed.
+        :param dataset_name: the dataset name
+        :return: A single :py:class:`ai_flow.meta.dataset_meta.DatasetMeta` object if the dataset exists,,
+                 Otherwise, returns None if the dataset does not exist.
         """
         pass
 
     @abstractmethod
-    def register_example(self, name, support_type, data_format,
-                         description, batch_uri, stream_uri,
+    def list_datasets(self, page_size, offset):
+        """
+        List registered datasets in metadata store.
+
+        :param page_size: the limitation of the listed datasets.
+        :param offset: the offset of listed datasets.
+        :return: List of :py:class:`ai_flow.meta.dataset_meta.DatasetMeta` objects,
+                 return None if no datasets to be listed.
+        """
+        pass
+
+    @abstractmethod
+    def register_dataset(self, name, data_format,
+                         description, uri,
                          create_time, update_time, properties,
                          name_list, type_list):
         """
-        register an example in metadata store.
+        register an dataset in metadata store.
 
-        :param name: the name of the example
-        :param support_type: the example's support_type
-        :param data_format: the data_format of the example
-        :param description: the description of the example
-        :param batch_uri: the batch uri of the example
-        :param stream_uri: the stream uri of the example
-        :param create_time: the time when the example is created
-        :param update_time: the time when the example is updated
-        :param properties: the properties of the example
-        :param name_list: the name list of example's schema
-        :param type_list: the type list corresponded to the name list of example's schema
-        :param catalog_type: the catalog type of the example if example is stored in the external catalog
-        :param connection_config: the connection config of the example to the external catalog
-               if example is stored in the external catalog
-        :return: A single :py:class:`ai_flow.meta.example_meta.ExampleMeta` object.
+        :param name: the name of the dataset
+        :param data_format: the data_format of the dataset
+        :param description: the description of the dataset
+        :param uri: the uri of the dataset
+        :param create_time: the time when the dataset is created
+        :param update_time: the time when the dataset is updated
+        :param properties: the properties of the dataset
+        :param name_list: the name list of dataset's schema
+        :param type_list: the type list corresponded to the name list of dataset's schema
+        :return: A single :py:class:`ai_flow.meta.dataset_meta.DatasetMeta` object.
         """
         pass
 
-    def delete_example_by_id(self, example_id):
+    def delete_dataset_by_id(self, dataset_id):
         """
-        Delete the registered example by example id .
+        Delete the registered dataset by dataset id .
 
-        :param example_id: the example id
-        :return: Status.OK if the example is successfully deleted, Status.ERROR if the example does not exist otherwise.
+        :param dataset_id: the dataset id
+        :return: Status.OK if the dataset is successfully deleted, Status.ERROR if the dataset does not exist otherwise.
         """
         pass
 
-    def delete_example_by_name(self, example_name):
+    def delete_dataset_by_name(self, dataset_name):
         """
-        Delete the registered example by example name .
+        Delete the registered dataset by dataset name .
 
-        :param example_name: the example name
-        :return: Status.OK if the example is successfully deleted, Status.ERROR if the example does not exist otherwise.
+        :param dataset_name: the dataset name
+        :return: Status.OK if the dataset is successfully deleted, Status.ERROR if the dataset does not exist otherwise.
         """
         pass
 
