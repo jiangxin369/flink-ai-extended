@@ -34,9 +34,8 @@ class WorkflowExecutionMeta(Jsonable):
                  properties: Properties = None,
                  start_time: int = None,
                  end_time: int = None,
-                 log_uri: Text = None,
+                 workflow_web_uri: Text = None,
                  workflow_json=None,
-                 signature=None,
                  uuid: int = None
                  ) -> None:
         """

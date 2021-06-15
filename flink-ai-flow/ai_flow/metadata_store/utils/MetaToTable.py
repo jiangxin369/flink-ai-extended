@@ -20,11 +20,10 @@ from typing import List, Text
 
 from ai_flow.meta.dataset_meta import DatasetMeta
 from ai_flow.endpoint.server.exception import AIFlowException
-from ai_flow.store.db.db_model import SqlDataset, SqlProject, SqlJob, SqlWorkflowExecution, SqlModelRelation, \
+from ai_flow.store.db.db_model import SqlDataset, SqlProject, SqlModelRelation, \
     SqlModelVersionRelation, SqlArtifact
-from ai_flow.store.db.db_model import (MongoProject, MongoDataset, MongoJob,
-                                       MongoArtifact, MongoWorkflowExecution,
-                                       MongoModelRelation, MongoModelVersionRelation)
+from ai_flow.store.db.db_model import (MongoProject, MongoDataset,
+                                       MongoArtifact, MongoModelRelation, MongoModelVersionRelation)
 
 
 class MetaToTable:
@@ -104,19 +103,6 @@ class MetaToTable:
         return _class(name=name, properties=properties, uri=uri)
 
     @staticmethod
-    def job_meta_to_table(name, job_id, properties, start_time, end_time, job_state, log_uri,
-                          workflow_execution_id, signature, store_type='SqlAlchemyStore'):
-        if properties is not None:
-            properties = str(properties)
-        if store_type == 'MongoStore':
-            _class = MongoJob
-        else:
-            _class = SqlJob
-        return _class(job_id=job_id, name=name, properties=properties, start_time=start_time, end_time=end_time,
-                      job_state=job_state, log_uri=log_uri, workflow_execution_id=workflow_execution_id,
-                      signature=signature)
-
-    @staticmethod
     def artifact_meta_to_table(name, data_format, description, batch_uri, stream_uri,
                                create_time, update_time, properties, store_type='SqlAlchemyStore'):
         if properties is not None:
@@ -128,21 +114,6 @@ class MetaToTable:
         return _class(name=name, data_format=data_format, description=description, batch_uri=batch_uri,
                       stream_uri=stream_uri, create_time=create_time, update_time=update_time,
                       properties=properties)
-
-    @staticmethod
-    def workflow_execution_meta_to_table(name, properties, start_time, end_time,
-                                         execution_state, log_uri, workflow_json, signature,
-                                         project_id, store_type='SqlAlchemyStore'):
-        if properties is not None:
-            properties = str(properties)
-        if store_type == 'MongoStore':
-            _class = MongoWorkflowExecution
-        else:
-            _class = SqlWorkflowExecution
-        return _class(name=name, properties=properties, start_time=start_time, end_time=end_time,
-                      execution_state=execution_state, log_uri=log_uri,
-                      workflow_json=workflow_json,
-                      signature=signature, project_id=project_id)
 
     @staticmethod
     def model_relation_meta_to_table(name, project_id, store_type='SqlAlchemyStore'):
