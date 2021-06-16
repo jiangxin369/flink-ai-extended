@@ -902,20 +902,19 @@ public class MetadataClient {
     /**
      * Register a artifact in Metadata Store.
      *
-     * @param name        Name of artifact.
-     * @param dataFormat  Data format of artifact.
-     * @param description Description of artifact.
-     * @param batchUri    Batch uri of artifact.
-     * @param streamUri   Stream uri of artifact.
-     * @param createTime  Time when artifact is created.
-     * @param updateTime  Time when artifact is updated.
-     * @param properties  Properties of artifact.
+     * @param name         Name of artifact.
+     * @param artifactType Type of artifact.
+     * @param description  Description of artifact.
+     * @param uri          Uri of artifact.
+     * @param createTime   Time when artifact is created.
+     * @param updateTime   Time when artifact is updated.
+     * @param properties   Properties of artifact.
      * @return Single ArtifactMeta object registered in Metadata Store.
      */
-    public ArtifactMeta registerArtifact(String name, String dataFormat, String description, String batchUri, String streamUri,
+    public ArtifactMeta registerArtifact(String name, String artifactType, String description, String uri,
                                          Long createTime, Long updateTime, Map<String, String> properties) throws Exception {
-        ArtifactProto artifactProto = ArtifactProto.newBuilder().setName(name).setDataFormat(stringValue(dataFormat)).setDescription(stringValue(description))
-                .setBatchUri(stringValue(batchUri)).setStreamUri(stringValue(streamUri)).setCreateTime(int64Value(createTime)).setUpdateTime(int64Value(updateTime))
+        ArtifactProto artifactProto = ArtifactProto.newBuilder().setName(name).setArtifactType(stringValue(artifactType)).setDescription(stringValue(description))
+                .setUri(stringValue(uri)).setCreateTime(int64Value(createTime)).setUpdateTime(int64Value(updateTime))
                 .putAllProperties(properties).build();
         RegisterArtifactRequest request = RegisterArtifactRequest.newBuilder().setArtifact(artifactProto).build();
         Response response = metadataServiceStub.registerArtifact(request);
@@ -926,19 +925,18 @@ public class MetadataClient {
     /**
      * Update a artifact in Metadata Store.
      *
-     * @param name        Name of artifact.
-     * @param dataFormat  Data format of artifact.
-     * @param description Description of artifact.
-     * @param batchUri    Batch uri of artifact.
-     * @param streamUri   Stream uri of artifact.
-     * @param updateTime  Time when artifact is updated.
-     * @param properties  Properties of artifact.
+     * @param name         Name of artifact.
+     * @param artifactType Type of artifact.
+     * @param description  Description of artifact.
+     * @param uri          Uri of artifact.
+     * @param updateTime   Time when artifact is updated.
+     * @param properties   Properties of artifact.
      * @return Single ArtifactMeta object registered in Metadata Store.
      */
-    public ArtifactMeta updateArtifact(String name, String dataFormat, String description, String batchUri, String streamUri,
+    public ArtifactMeta updateArtifact(String name, String artifactType, String description, String uri,
                                        Long updateTime, Map<String, String> properties) throws Exception {
-        UpdateArtifactRequest.Builder artifactProto = UpdateArtifactRequest.newBuilder().setName(name).setDataFormat(stringValue(dataFormat)).setDescription(stringValue(description))
-                .setBatchUri(stringValue(batchUri)).setStreamUri(stringValue(streamUri)).setUpdateTime(int64Value(updateTime)).putAllProperties(properties);
+        UpdateArtifactRequest.Builder artifactProto = UpdateArtifactRequest.newBuilder().setName(name).setArtifactType(stringValue(artifactType)).setDescription(stringValue(description))
+                .setUri(stringValue(uri)).setUpdateTime(int64Value(updateTime)).putAllProperties(properties);
         UpdateArtifactRequest request = artifactProto.build();
         Response response = metadataServiceStub.updateArtifact(request);
         ArtifactProto.Builder builder = ArtifactProto.newBuilder();
