@@ -68,12 +68,12 @@ class MetadataService(metadata_service_pb2_grpc.MetadataServiceServicer):
     @catch_exception
     def registerDataset(self, request, context):
         dataset = transform_dataset_meta(request.dataset)
+        create_time = int(time.time() * 1000)
         dataset_meta = self.store.register_dataset(name=dataset.name,
                                                    data_format=dataset.data_format,
                                                    description=dataset.description,
                                                    uri=dataset.uri,
-                                                   create_time=dataset.create_time,
-                                                   update_time=dataset.update_time,
+                                                   create_time=create_time,
                                                    properties=dataset.properties,
                                                    name_list=dataset.schema.name_list,
                                                    type_list=dataset.schema.type_list)
@@ -109,14 +109,14 @@ class MetadataService(metadata_service_pb2_grpc.MetadataServiceServicer):
             data_type_list = []
             for data_type in type_list:
                 data_type_list.append(DataType(DataTypeProto.Name(data_type)))
+        update_time = int(time.time() * 1000)
         dataset_meta = self.store.update_dataset(dataset_name=request.name,
                                                  data_format=request.data_format.value if request.HasField(
                                                      'data_format') else None,
                                                  description=request.description.value if request.HasField(
                                                      'description') else None,
                                                  uri=request.uri.value if request.HasField('uri') else None,
-                                                 update_time=request.update_time.value if request.HasField(
-                                                     'update_time') else None,
+                                                 update_time=update_time,
                                                  properties=properties,
                                                  name_list=name_list,
                                                  type_list=data_type_list,

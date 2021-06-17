@@ -203,8 +203,8 @@ class AbstractStore(object):
         :param data_format: the data_format of the dataset
         :param description: the description of the dataset
         :param uri: the uri of the dataset
-        :param create_time: the time when the dataset is created
-        :param update_time: the time when the dataset is updated
+        :param create_time: the time when the dataset is created represented as milliseconds since epoch.
+        :param update_time: the time when the dataset is updated represented as milliseconds since epoch.
         :param properties: the properties of the dataset
         :param name_list: the name list of dataset's schema
         :param type_list: the type list corresponded to the name list of dataset's schema

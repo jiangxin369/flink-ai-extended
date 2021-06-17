@@ -54,8 +54,7 @@ class AIFlowClientTestCases(object):
 
     def test_save_dataset_get_dataset_by_id_and_name(self):
         dataset = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
-                                          uri='mysql://', create_time=None,
-                                          update_time=1000,
+                                          uri='mysql://',
                                           properties=Properties({'a': 'b'}), name_list=['a'],
                                           type_list=[DataType.INT32])
         dataset_id = client.get_dataset_by_id(2)
@@ -78,17 +77,16 @@ class AIFlowClientTestCases(object):
         self.assertEqual('/path/to/conf', dataset_name.catalog_connection_uri)
 
     def test_double_register_dataset(self):
-        dataset_1 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
-                                            uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                            type_list=[DataType.INT32])
-        dataset_2 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
-                                            uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                            type_list=[DataType.INT32])
-        self.assertEqual(dataset_1.uuid, dataset_2.uuid)
-        self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
+        client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
+                                uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
+                                type_list=[DataType.INT32])
+        self.assertRaises(AIFlowException, client.register_dataset, name='dataset', data_format='csv',
+                          description='it is mq data',
+                          uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
+                          type_list=[DataType.INT32])
         self.assertRaises(AIFlowException, client.register_dataset, name='dataset',
                           data_format='csv',
-                          description='it is mq data', uri='mysql://', create_time=round(time.time()),
+                          description='it is mq data', uri='mysql://',
                           properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INT32])
 
     def test_list_datasets(self):
@@ -128,7 +126,6 @@ class AIFlowClientTestCases(object):
                                           data_format='csv',
                                           description='it is mq data',
                                           uri='mysql://',
-                                          create_time=None, update_time=1000,
                                           properties=Properties({'a': 'b'}), name_list=['a'],
                                           type_list=[DataType.INT32])
         self.assertEqual(Status.OK, client.delete_dataset_by_name(dataset.name))
@@ -137,12 +134,14 @@ class AIFlowClientTestCases(object):
 
     def test_update_dataset(self):
         client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
-                                uri='mysql://', create_time=None, update_time=1000,
+                                uri='mysql://',
                                 properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INT32])
+        now = int(time.time() * 1000)
         update_dataset = client.update_dataset(dataset_name='dataset', data_format='npz',
                                                properties=Properties({'kafka': 'localhost:9092'}),
                                                name_list=['b'], type_list=[DataType.STRING])
         dataset = client.get_dataset_by_name('dataset')
+        self.assertTrue(dataset.update_time >= now)
         self.assertEqual(dataset.schema.name_list, update_dataset.schema.name_list)
         self.assertEqual(dataset.schema.type_list, update_dataset.schema.type_list)
         update_dataset_1 = client.update_dataset(dataset_name='dataset', catalog_type='hive', catalog_name='my_hive',
