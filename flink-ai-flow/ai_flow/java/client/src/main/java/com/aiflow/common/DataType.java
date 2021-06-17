@@ -21,19 +21,36 @@ package com.aiflow.common;
 import com.aiflow.proto.Message.DataTypeProto;
 
 public enum DataType {
-
-    INT32(DataTypeProto.INT32),
-    INT64(DataTypeProto.INT64),
-    FLOAT32(DataTypeProto.FLOAT32),
-    FLOAT64(DataTypeProto.FLOAT64),
-    STRING(DataTypeProto.STRING),
-    BYTES(DataTypeProto.BYTES),
-    INT32ARRAY(DataTypeProto.INT32ARRAY),
-    INT64ARRAY(DataTypeProto.INT64ARRAY),
-    FlOAT32ARRAY(DataTypeProto.FlOAT32ARRAY),
-    FLOAT64ARRAY(DataTypeProto.FLOAT64ARRAY),
-    STRINGARRAY(DataTypeProto.STRINGARRAY),
-    BYTESARRAY(DataTypeProto.BYTESARRAY);
+    BIT(DataTypeProto.BIT),
+    TINYINT(DataTypeProto.TINYINT),
+    SMALLINT(DataTypeProto.SMALLINT),
+    INTEGER(DataTypeProto.INTEGER),
+    BIGINT(DataTypeProto.BIGINT),
+    DECIMAL(DataTypeProto.DECIMAL),
+    NUMERIC(DataTypeProto.NUMERIC),
+    FLOAT(DataTypeProto.FLOAT),
+    REAL(DataTypeProto.REAL),
+    DATE(DataTypeProto.DATE),
+    TIME(DataTypeProto.TIME),
+    DATETIME(DataTypeProto.DATETIME),
+    TIMESTAMP(DataTypeProto.TIMESTAMP),
+    YEAR(DataTypeProto.YEAR),
+    CHAR(DataTypeProto.CHAR),
+    VARCHAR(DataTypeProto.VARCHAR),
+    LONGVARCHAR(DataTypeProto.LONGVARCHAR),
+    TEXT(DataTypeProto.TEXT),
+    NCHAR(DataTypeProto.NCHAR),
+    NVARCHAR(DataTypeProto.NVARCHAR),
+    LONGNVARCHAR(DataTypeProto.LONGNVARCHAR),
+    NTEXT(DataTypeProto.NTEXT),
+    BINARY(DataTypeProto.BINARY),
+    VARBINARY(DataTypeProto.VARBINARY),
+    LONGVARBINARY(DataTypeProto.LONGVARBINARY),
+    IMAGE(DataTypeProto.IMAGE),
+    CLOB(DataTypeProto.CLOB),
+    BLOB(DataTypeProto.BLOB),
+    XML(DataTypeProto.XML),
+    JSON(DataTypeProto.JSON);
 
     private DataTypeProto dataType;
 

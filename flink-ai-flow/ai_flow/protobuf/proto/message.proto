@@ -243,18 +243,36 @@ message ResultProto {
 
 enum DataTypeProto {
     DATA_TYPE_UNSPECIFIED = 0;
-    INT32 = 1;
-    INT64 = 2;
-    FLOAT32 = 3;
-    FLOAT64 = 4;
-    STRING = 5;
-    INT32ARRAY = 6;
-    INT64ARRAY = 7;
-    FlOAT32ARRAY = 8;
-    FLOAT64ARRAY = 9;
-    STRINGARRAY = 10;
-    BYTES = 11;
-    BYTESARRAY = 12;
+    BIT = 1;
+    TINYINT = 2;
+    SMALLINT = 3;
+    INTEGER = 4;
+    BIGINT = 5;
+    DECIMAL = 6;
+    NUMERIC = 7;
+    FLOAT = 8;
+    REAL = 9;
+    DATE = 10;
+    TIME = 11;
+    DATETIME = 12;
+    TIMESTAMP = 13;
+    YEAR = 14;
+    CHAR = 15;
+    VARCHAR = 16;
+    LONGVARCHAR = 17;
+    TEXT = 18;
+    NCHAR = 19;
+    NVARCHAR = 20;
+    LONGNVARCHAR = 21;
+    NTEXT = 22;
+    BINARY = 23;
+    VARBINARY = 24;
+    LONGVARBINARY = 25;
+    IMAGE = 26;
+    CLOB = 27;
+    BLOB = 28;
+    XML = 29;
+    JSON = 30;
 }
 
 enum StateProto {

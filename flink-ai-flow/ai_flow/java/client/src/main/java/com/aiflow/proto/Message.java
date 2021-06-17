@@ -538,53 +538,125 @@ public final class Message {
      */
     DATA_TYPE_UNSPECIFIED(0),
     /**
-     * <code>INT32 = 1;</code>
+     * <code>BIT = 1;</code>
      */
-    INT32(1),
+    BIT(1),
     /**
-     * <code>INT64 = 2;</code>
+     * <code>TINYINT = 2;</code>
      */
-    INT64(2),
+    TINYINT(2),
     /**
-     * <code>FLOAT32 = 3;</code>
+     * <code>SMALLINT = 3;</code>
      */
-    FLOAT32(3),
+    SMALLINT(3),
     /**
-     * <code>FLOAT64 = 4;</code>
+     * <code>INTEGER = 4;</code>
      */
-    FLOAT64(4),
+    INTEGER(4),
     /**
-     * <code>STRING = 5;</code>
+     * <code>BIGINT = 5;</code>
      */
-    STRING(5),
+    BIGINT(5),
     /**
-     * <code>INT32ARRAY = 6;</code>
+     * <code>DECIMAL = 6;</code>
      */
-    INT32ARRAY(6),
+    DECIMAL(6),
     /**
-     * <code>INT64ARRAY = 7;</code>
+     * <code>NUMERIC = 7;</code>
      */
-    INT64ARRAY(7),
+    NUMERIC(7),
     /**
-     * <code>FlOAT32ARRAY = 8;</code>
+     * <code>FLOAT = 8;</code>
      */
-    FlOAT32ARRAY(8),
+    FLOAT(8),
     /**
-     * <code>FLOAT64ARRAY = 9;</code>
+     * <code>REAL = 9;</code>
      */
-    FLOAT64ARRAY(9),
+    REAL(9),
     /**
-     * <code>STRINGARRAY = 10;</code>
+     * <code>DATE = 10;</code>
      */
-    STRINGARRAY(10),
+    DATE(10),
     /**
-     * <code>BYTES = 11;</code>
+     * <code>TIME = 11;</code>
      */
-    BYTES(11),
+    TIME(11),
     /**
-     * <code>BYTESARRAY = 12;</code>
+     * <code>DATETIME = 12;</code>
      */
-    BYTESARRAY(12),
+    DATETIME(12),
+    /**
+     * <code>TIMESTAMP = 13;</code>
+     */
+    TIMESTAMP(13),
+    /**
+     * <code>YEAR = 14;</code>
+     */
+    YEAR(14),
+    /**
+     * <code>CHAR = 15;</code>
+     */
+    CHAR(15),
+    /**
+     * <code>VARCHAR = 16;</code>
+     */
+    VARCHAR(16),
+    /**
+     * <code>LONGVARCHAR = 17;</code>
+     */
+    LONGVARCHAR(17),
+    /**
+     * <code>TEXT = 18;</code>
+     */
+    TEXT(18),
+    /**
+     * <code>NCHAR = 19;</code>
+     */
+    NCHAR(19),
+    /**
+     * <code>NVARCHAR = 20;</code>
+     */
+    NVARCHAR(20),
+    /**
+     * <code>LONGNVARCHAR = 21;</code>
+     */
+    LONGNVARCHAR(21),
+    /**
+     * <code>NTEXT = 22;</code>
+     */
+    NTEXT(22),
+    /**
+     * <code>BINARY = 23;</code>
+     */
+    BINARY(23),
+    /**
+     * <code>VARBINARY = 24;</code>
+     */
+    VARBINARY(24),
+    /**
+     * <code>LONGVARBINARY = 25;</code>
+     */
+    LONGVARBINARY(25),
+    /**
+     * <code>IMAGE = 26;</code>
+     */
+    IMAGE(26),
+    /**
+     * <code>CLOB = 27;</code>
+     */
+    CLOB(27),
+    /**
+     * <code>BLOB = 28;</code>
+     */
+    BLOB(28),
+    /**
+     * <code>XML = 29;</code>
+     */
+    XML(29),
+    /**
+     * <code>JSON = 30;</code>
+     */
+    JSON(30),
     UNRECOGNIZED(-1),
     ;
 
@@ -593,53 +665,125 @@ public final class Message {
      */
     public static final int DATA_TYPE_UNSPECIFIED_VALUE = 0;
     /**
-     * <code>INT32 = 1;</code>
+     * <code>BIT = 1;</code>
      */
-    public static final int INT32_VALUE = 1;
+    public static final int BIT_VALUE = 1;
     /**
-     * <code>INT64 = 2;</code>
+     * <code>TINYINT = 2;</code>
      */
-    public static final int INT64_VALUE = 2;
+    public static final int TINYINT_VALUE = 2;
     /**
-     * <code>FLOAT32 = 3;</code>
+     * <code>SMALLINT = 3;</code>
      */
-    public static final int FLOAT32_VALUE = 3;
+    public static final int SMALLINT_VALUE = 3;
     /**
-     * <code>FLOAT64 = 4;</code>
+     * <code>INTEGER = 4;</code>
      */
-    public static final int FLOAT64_VALUE = 4;
+    public static final int INTEGER_VALUE = 4;
     /**
-     * <code>STRING = 5;</code>
+     * <code>BIGINT = 5;</code>
      */
-    public static final int STRING_VALUE = 5;
+    public static final int BIGINT_VALUE = 5;
     /**
-     * <code>INT32ARRAY = 6;</code>
+     * <code>DECIMAL = 6;</code>
      */
-    public static final int INT32ARRAY_VALUE = 6;
+    public static final int DECIMAL_VALUE = 6;
     /**
-     * <code>INT64ARRAY = 7;</code>
+     * <code>NUMERIC = 7;</code>
      */
-    public static final int INT64ARRAY_VALUE = 7;
+    public static final int NUMERIC_VALUE = 7;
     /**
-     * <code>FlOAT32ARRAY = 8;</code>
+     * <code>FLOAT = 8;</code>
      */
-    public static final int FlOAT32ARRAY_VALUE = 8;
+    public static final int FLOAT_VALUE = 8;
     /**
-     * <code>FLOAT64ARRAY = 9;</code>
+     * <code>REAL = 9;</code>
      */
-    public static final int FLOAT64ARRAY_VALUE = 9;
+    public static final int REAL_VALUE = 9;
     /**
-     * <code>STRINGARRAY = 10;</code>
+     * <code>DATE = 10;</code>
      */
-    public static final int STRINGARRAY_VALUE = 10;
+    public static final int DATE_VALUE = 10;
     /**
-     * <code>BYTES = 11;</code>
+     * <code>TIME = 11;</code>
      */
-    public static final int BYTES_VALUE = 11;
+    public static final int TIME_VALUE = 11;
     /**
-     * <code>BYTESARRAY = 12;</code>
+     * <code>DATETIME = 12;</code>
      */
-    public static final int BYTESARRAY_VALUE = 12;
+    public static final int DATETIME_VALUE = 12;
+    /**
+     * <code>TIMESTAMP = 13;</code>
+     */
+    public static final int TIMESTAMP_VALUE = 13;
+    /**
+     * <code>YEAR = 14;</code>
+     */
+    public static final int YEAR_VALUE = 14;
+    /**
+     * <code>CHAR = 15;</code>
+     */
+    public static final int CHAR_VALUE = 15;
+    /**
+     * <code>VARCHAR = 16;</code>
+     */
+    public static final int VARCHAR_VALUE = 16;
+    /**
+     * <code>LONGVARCHAR = 17;</code>
+     */
+    public static final int LONGVARCHAR_VALUE = 17;
+    /**
+     * <code>TEXT = 18;</code>
+     */
+    public static final int TEXT_VALUE = 18;
+    /**
+     * <code>NCHAR = 19;</code>
+     */
+    public static final int NCHAR_VALUE = 19;
+    /**
+     * <code>NVARCHAR = 20;</code>
+     */
+    public static final int NVARCHAR_VALUE = 20;
+    /**
+     * <code>LONGNVARCHAR = 21;</code>
+     */
+    public static final int LONGNVARCHAR_VALUE = 21;
+    /**
+     * <code>NTEXT = 22;</code>
+     */
+    public static final int NTEXT_VALUE = 22;
+    /**
+     * <code>BINARY = 23;</code>
+     */
+    public static final int BINARY_VALUE = 23;
+    /**
+     * <code>VARBINARY = 24;</code>
+     */
+    public static final int VARBINARY_VALUE = 24;
+    /**
+     * <code>LONGVARBINARY = 25;</code>
+     */
+    public static final int LONGVARBINARY_VALUE = 25;
+    /**
+     * <code>IMAGE = 26;</code>
+     */
+    public static final int IMAGE_VALUE = 26;
+    /**
+     * <code>CLOB = 27;</code>
+     */
+    public static final int CLOB_VALUE = 27;
+    /**
+     * <code>BLOB = 28;</code>
+     */
+    public static final int BLOB_VALUE = 28;
+    /**
+     * <code>XML = 29;</code>
+     */
+    public static final int XML_VALUE = 29;
+    /**
+     * <code>JSON = 30;</code>
+     */
+    public static final int JSON_VALUE = 30;
 
 
     public final int getNumber() {
@@ -667,18 +811,36 @@ public final class Message {
     public static DataTypeProto forNumber(int value) {
       switch (value) {
         case 0: return DATA_TYPE_UNSPECIFIED;
-        case 1: return INT32;
-        case 2: return INT64;
-        case 3: return FLOAT32;
-        case 4: return FLOAT64;
-        case 5: return STRING;
-        case 6: return INT32ARRAY;
-        case 7: return INT64ARRAY;
-        case 8: return FlOAT32ARRAY;
-        case 9: return FLOAT64ARRAY;
-        case 10: return STRINGARRAY;
-        case 11: return BYTES;
-        case 12: return BYTESARRAY;
+        case 1: return BIT;
+        case 2: return TINYINT;
+        case 3: return SMALLINT;
+        case 4: return INTEGER;
+        case 5: return BIGINT;
+        case 6: return DECIMAL;
+        case 7: return NUMERIC;
+        case 8: return FLOAT;
+        case 9: return REAL;
+        case 10: return DATE;
+        case 11: return TIME;
+        case 12: return DATETIME;
+        case 13: return TIMESTAMP;
+        case 14: return YEAR;
+        case 15: return CHAR;
+        case 16: return VARCHAR;
+        case 17: return LONGVARCHAR;
+        case 18: return TEXT;
+        case 19: return NCHAR;
+        case 20: return NVARCHAR;
+        case 21: return LONGNVARCHAR;
+        case 22: return NTEXT;
+        case 23: return BINARY;
+        case 24: return VARBINARY;
+        case 25: return LONGVARBINARY;
+        case 26: return IMAGE;
+        case 27: return CLOB;
+        case 28: return BLOB;
+        case 29: return XML;
+        case 30: return JSON;
         default: return null;
       }
     }
@@ -33456,27 +33618,32 @@ public final class Message {
       "ADY_EXISTS\020\321\017\022\034\n\027RESOURCE_DOES_NOT_EXIST" +
       "\020\322\017\022\023\n\016QUOTA_EXCEEDED\020\271\027\022\034\n\027MAX_BLOCK_SI" +
       "ZE_EXCEEDED\020\272\027\022\033\n\026MAX_READ_SIZE_EXCEEDED" +
-      "\020\273\027* \n\013StatusProto\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*\326\001" +
+      "\020\273\027* \n\013StatusProto\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*\231\003" +
       "\n\rDataTypeProto\022\031\n\025DATA_TYPE_UNSPECIFIED" +
-      "\020\000\022\t\n\005INT32\020\001\022\t\n\005INT64\020\002\022\013\n\007FLOAT32\020\003\022\013\n" +
-      "\007FLOAT64\020\004\022\n\n\006STRING\020\005\022\016\n\nINT32ARRAY\020\006\022\016" +
-      "\n\nINT64ARRAY\020\007\022\020\n\014FlOAT32ARRAY\020\010\022\020\n\014FLOA" +
-      "T64ARRAY\020\t\022\017\n\013STRINGARRAY\020\n\022\t\n\005BYTES\020\013\022\016" +
-      "\n\nBYTESARRAY\020\014*{\n\nStateProto\022\025\n\021STATE_UN" +
-      "SPECIFIED\020\000\022\010\n\004INIT\020\001\022\014\n\010STARTING\020\002\022\013\n\007R" +
-      "UNNING\020\003\022\014\n\010FINISHED\020\004\022\n\n\006FAILED\020\005\022\013\n\007KI" +
-      "LLING\020\006\022\n\n\006KILLED\020\007*F\n\rExecutionMode\022\036\n\032" +
-      "EXECUTION_MODE_UNSPECIFIED\020\000\022\t\n\005BATCH\020\001\022" +
-      "\n\n\006STREAM\020\002*C\n\tModelType\022\r\n\tNONE_TYPE\020\000\022" +
-      "\016\n\nCHECKPOINT\020\001\022\017\n\013SAVED_MODEL\020\002\022\006\n\002H5\020\003" +
-      "*}\n\022ModelVersionStatus\022\030\n\024PENDING_REGIST" +
-      "RATION\020\000\022\027\n\023FAILED_REGISTRATION\020\001\022\t\n\005REA" +
-      "DY\020\003\022\024\n\020PENDING_DELETION\020\004\022\023\n\017FAILED_DEL" +
-      "ETION\020\005*\\\n\021ModelVersionStage\022\r\n\tGENERATE" +
-      "D\020\000\022\r\n\tVALIDATED\020\001\022\014\n\010DEPLOYED\020\002\022\016\n\nDEPR" +
-      "ECATED\020\003\022\013\n\007DELETED\020\004*)\n\017MetricTypeProto" +
-      "\022\013\n\007DATASET\020\000\022\t\n\005MODEL\020\001B\"\n\020com.aiflow.p" +
-      "rotoZ\010/ai_flow\210\001\001\220\001\001b\006proto3"
+      "\020\000\022\007\n\003BIT\020\001\022\013\n\007TINYINT\020\002\022\014\n\010SMALLINT\020\003\022\013" +
+      "\n\007INTEGER\020\004\022\n\n\006BIGINT\020\005\022\013\n\007DECIMAL\020\006\022\013\n\007" +
+      "NUMERIC\020\007\022\t\n\005FLOAT\020\010\022\010\n\004REAL\020\t\022\010\n\004DATE\020\n" +
+      "\022\010\n\004TIME\020\013\022\014\n\010DATETIME\020\014\022\r\n\tTIMESTAMP\020\r\022" +
+      "\010\n\004YEAR\020\016\022\010\n\004CHAR\020\017\022\013\n\007VARCHAR\020\020\022\017\n\013LONG" +
+      "VARCHAR\020\021\022\010\n\004TEXT\020\022\022\t\n\005NCHAR\020\023\022\014\n\010NVARCH" +
+      "AR\020\024\022\020\n\014LONGNVARCHAR\020\025\022\t\n\005NTEXT\020\026\022\n\n\006BIN" +
+      "ARY\020\027\022\r\n\tVARBINARY\020\030\022\021\n\rLONGVARBINARY\020\031\022" +
+      "\t\n\005IMAGE\020\032\022\010\n\004CLOB\020\033\022\010\n\004BLOB\020\034\022\007\n\003XML\020\035\022" +
+      "\010\n\004JSON\020\036*{\n\nStateProto\022\025\n\021STATE_UNSPECI" +
+      "FIED\020\000\022\010\n\004INIT\020\001\022\014\n\010STARTING\020\002\022\013\n\007RUNNIN" +
+      "G\020\003\022\014\n\010FINISHED\020\004\022\n\n\006FAILED\020\005\022\013\n\007KILLING" +
+      "\020\006\022\n\n\006KILLED\020\007*F\n\rExecutionMode\022\036\n\032EXECU" +
+      "TION_MODE_UNSPECIFIED\020\000\022\t\n\005BATCH\020\001\022\n\n\006ST" +
+      "REAM\020\002*C\n\tModelType\022\r\n\tNONE_TYPE\020\000\022\016\n\nCH" +
+      "ECKPOINT\020\001\022\017\n\013SAVED_MODEL\020\002\022\006\n\002H5\020\003*}\n\022M" +
+      "odelVersionStatus\022\030\n\024PENDING_REGISTRATIO" +
+      "N\020\000\022\027\n\023FAILED_REGISTRATION\020\001\022\t\n\005READY\020\003\022" +
+      "\024\n\020PENDING_DELETION\020\004\022\023\n\017FAILED_DELETION" +
+      "\020\005*\\\n\021ModelVersionStage\022\r\n\tGENERATED\020\000\022\r" +
+      "\n\tVALIDATED\020\001\022\014\n\010DEPLOYED\020\002\022\016\n\nDEPRECATE" +
+      "D\020\003\022\013\n\007DELETED\020\004*)\n\017MetricTypeProto\022\013\n\007D" +
+      "ATASET\020\000\022\t\n\005MODEL\020\001B\"\n\020com.aiflow.protoZ" +
+      "\010/ai_flow\210\001\001\220\001\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

@@ -39,7 +39,7 @@ class AbstractTestStore(object):
     def test_save_dataset_get_dataset_by_id_and_name(self):
         response = self.store.register_dataset(name='dataset', data_format='csv',
                                                properties=Properties({'a': 'b'}),
-                                               name_list=['a'], type_list=[DataType.STRING])
+                                               name_list=['a'], type_list=[DataType.TEXT])
         self.assertEqual(response.name, 'dataset')
         response_id = self.store.get_dataset_by_id(response.uuid)
         self.assertEqual('dataset', response_id.name)
@@ -60,16 +60,16 @@ class AbstractTestStore(object):
 
     def test_double_register_dataset(self):
         dataset_1 = self.store.register_dataset(name='dataset', data_format='csv', properties=Properties({'a': 'b'}),
-                                                name_list=['a'], type_list=[DataType.STRING])
+                                                name_list=['a'], type_list=[DataType.TEXT])
         dataset_2 = self.store.register_dataset(name='dataset', data_format='csv', properties=Properties({'a': 'b'}),
-                                                name_list=['a'], type_list=[DataType.STRING])
+                                                name_list=['a'], type_list=[DataType.TEXT])
         self.assertEqual(dataset_1.uuid, dataset_2.uuid)
         self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
         self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
         self.assertRaises(AIFlowException, self.store.register_dataset, name='dataset',
                           data_format='txt',
                           properties=Properties({'a': 'b'}),
-                          name_list=['a'], type_list=[DataType.STRING])
+                          name_list=['a'], type_list=[DataType.TEXT])
 
     def test_double_register_dataset_with_catalog(self):
         dataset_1 = self.store.register_dataset_with_catalog(name='dataset',
@@ -85,15 +85,15 @@ class AbstractTestStore(object):
         self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
         self.assertRaises(AIFlowException, self.store.register_dataset, name='dataset',
                           data_format='csv', properties=Properties({'a': 'b'}),
-                          name_list=['a'], type_list=[DataType.STRING])
+                          name_list=['a'], type_list=[DataType.TEXT])
 
     def test_list_datasets(self):
         self.store.register_dataset(name='dataset_1', data_format='csv', description='it is mq data',
                                     uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                    type_list=[DataType.INT32])
+                                    type_list=[DataType.INTEGER])
         self.store.register_dataset(name='dataset_2', data_format='npz', description='it is',
                                     uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                    type_list=[DataType.INT32])
+                                    type_list=[DataType.INTEGER])
         response_list = self.store.list_datasets(5, 0)
         self.assertEqual(len(response_list), 2)
         self.assertEqual('dataset_1', response_list[0].name)
@@ -101,7 +101,7 @@ class AbstractTestStore(object):
 
     def test_save_datasets_list_datasets(self):
         schema = Schema(name_list=['a'],
-                        type_list=[DataType.STRING])
+                        type_list=[DataType.TEXT])
         dataset_1 = DatasetMeta(name='dataset1', data_format='csv',
                                 properties=Properties({'a': 'b'}), schema=schema)
         dataset_2 = DatasetMeta(name='dataset2')
@@ -138,7 +138,7 @@ class AbstractTestStore(object):
                                                    data_format='json',
                                                    description='it is a training dataset',
                                                    properties=Properties({'title': 'iris_training'}),
-                                                   name_list=['a'], type_list=[DataType.FLOAT32])
+                                                   name_list=['a'], type_list=[DataType.FLOAT])
         self.store.register_dataset_with_catalog(name='dataset_withcatalog',
                                                  catalog_name='my_hive', catalog_database='default',
                                                  catalog_connection_uri='/path/to/conf', catalog_type='hive',

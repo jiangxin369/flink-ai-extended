@@ -56,7 +56,7 @@ class AIFlowClientTestCases(object):
         dataset = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
                                           uri='mysql://',
                                           properties=Properties({'a': 'b'}), name_list=['a'],
-                                          type_list=[DataType.INT32])
+                                          type_list=[DataType.INTEGER])
         dataset_id = client.get_dataset_by_id(2)
         self.assertIsNone(dataset_id)
         dataset_name = client.get_dataset_by_name('dataset')
@@ -79,25 +79,24 @@ class AIFlowClientTestCases(object):
     def test_double_register_dataset(self):
         dataset_1 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
                                             uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                            type_list=[DataType.INT32])
-
+                                            type_list=[DataType.INTEGER])
         dataset_2 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
                                             uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                            type_list=[DataType.INT32])
+                                            type_list=[DataType.INTEGER])
         self.assertEqual(dataset_1.uuid, dataset_2.uuid)
         self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
         self.assertRaises(AIFlowException, client.register_dataset, name='dataset',
                           data_format='csv',
                           description='it is not mq data', uri='mysql://',
-                          properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INT32])
+                          properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INTEGER])
 
     def test_list_datasets(self):
         client.register_dataset(name='dataset_1', data_format='csv', description='it is mq data',
                                 uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                type_list=[DataType.INT32])
+                                type_list=[DataType.INTEGER])
         client.register_dataset(name='dataset_2', data_format='npz', description='it is',
                                 uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                type_list=[DataType.INT32])
+                                type_list=[DataType.INTEGER])
         response_list = client.list_datasets(5, 0)
         self.assertEqual(len(response_list), 2)
         self.assertEqual('dataset_1', response_list[0].name)
@@ -109,7 +108,7 @@ class AIFlowClientTestCases(object):
                                 create_time=None, update_time=1000,
                                 properties=Properties({'a': 'b'}))
         schema = Schema(name_list=['a', 'b'],
-                        type_list=[DataType.STRING, DataType.INT32])
+                        type_list=[DataType.TEXT, DataType.INTEGER])
         dataset_2 = DatasetMeta(name='dataset2',
                                 data_format='csv',
                                 create_time=None, update_time=1000,
@@ -129,7 +128,7 @@ class AIFlowClientTestCases(object):
                                           description='it is mq data',
                                           uri='mysql://',
                                           properties=Properties({'a': 'b'}), name_list=['a'],
-                                          type_list=[DataType.INT32])
+                                          type_list=[DataType.INTEGER])
         self.assertEqual(Status.OK, client.delete_dataset_by_name(dataset.name))
         self.assertIsNone(client.get_dataset_by_name(dataset.name))
         self.assertIsNone(client.list_datasets(1, 0))
@@ -137,11 +136,11 @@ class AIFlowClientTestCases(object):
     def test_update_dataset(self):
         client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
                                 uri='mysql://',
-                                properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INT32])
+                                properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INTEGER])
         now = int(time.time() * 1000)
         update_dataset = client.update_dataset(dataset_name='dataset', data_format='npz',
                                                properties=Properties({'kafka': 'localhost:9092'}),
-                                               name_list=['b'], type_list=[DataType.STRING])
+                                               name_list=['b'], type_list=[DataType.TEXT])
         dataset = client.get_dataset_by_name('dataset')
         self.assertTrue(dataset.update_time >= now)
         self.assertEqual(dataset.schema.name_list, update_dataset.schema.name_list)
