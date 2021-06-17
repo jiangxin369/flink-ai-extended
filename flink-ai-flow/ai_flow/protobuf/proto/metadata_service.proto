@@ -600,7 +600,6 @@ message UpdateArtifactRequest {
     google.protobuf.StringValue artifact_type = 3;
     google.protobuf.StringValue uri = 4;
     google.protobuf.StringValue description = 5;
-    google.protobuf.Int64Value update_time = 6;
 }
 
 message ArtifactListProto {

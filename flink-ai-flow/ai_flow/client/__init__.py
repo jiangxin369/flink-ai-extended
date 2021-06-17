@@ -309,17 +309,14 @@ def get_artifact_by_name(artifact_name) -> Optional[ArtifactMeta]:
 
 def register_artifact(name: Text, artifact_type: Text = None, description: Text = None,
                       uri: Text = None,
-                      create_time: int = None, update_time: int = None,
                       properties: Properties = None) -> ArtifactMeta:
-    return get_ai_flow_client().register_artifact(name, artifact_type, description, uri, create_time,
-                                                  update_time, properties)
+    return get_ai_flow_client().register_artifact(name, artifact_type, description, uri, properties)
 
 
-def update_artifact(artifact_name: Text, artifact_type: Text = None, description: Text = None,
-                    uri: Text = None,
-                    update_time: int = None, properties: Properties = None) -> Optional[ArtifactMeta]:
-    return get_ai_flow_client().update_artifact(artifact_name, artifact_type, description, uri,
-                                                update_time, properties)
+def update_artifact(artifact_name: Text, artifact_type: Text = None,
+                    description: Text = None, uri: Text = None,
+                    properties: Properties = None) -> Optional[ArtifactMeta]:
+    return get_ai_flow_client().update_artifact(artifact_name, artifact_type, description, uri, properties)
 
 
 def list_artifact(page_size, offset) -> Optional[List[ArtifactMeta]]:

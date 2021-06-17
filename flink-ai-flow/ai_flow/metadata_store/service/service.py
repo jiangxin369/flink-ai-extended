@@ -16,6 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+import time
+
 from ai_flow.common.status import Status
 from ai_flow.meta.dataset_meta import DataType
 from ai_flow.meta.job_meta import State
@@ -515,16 +517,18 @@ class MetadataService(metadata_service_pb2_grpc.MetadataServiceServicer):
     @catch_exception
     def registerArtifact(self, request, context):
         artifact = transform_artifact_meta(request.artifact)
+        create_time = int(time.time() * 1000)
         response = self.store.register_artifact(name=artifact.name, artifact_type=artifact.artifact_type,
                                                 description=artifact.description,
                                                 uri=artifact.uri,
-                                                create_time=artifact.create_time,
-                                                update_time=artifact.update_time, properties=artifact.properties)
+                                                create_time=create_time,
+                                                properties=artifact.properties)
         return _wrap_meta_response(MetaToProto.artifact_meta_to_proto(response))
 
     @catch_exception
     def updateArtifact(self, request, context):
         properties = None if request.properties == {} else request.properties
+        updata_time = int(time.time() * 1000)
         artifact = self.store.update_artifact(name=request.name,
                                               artifact_type=request.artifact_type.value if request.HasField(
                                                   'artifact_type') else None,
@@ -532,8 +536,7 @@ class MetadataService(metadata_service_pb2_grpc.MetadataServiceServicer):
                                               description=request.description.value if request.HasField(
                                                   'description') else None,
                                               uri=request.uri.value if request.HasField('uri') else None,
-                                              update_time=request.update_time.value if request.HasField(
-                                                  'update_time') else None
+                                              update_time=updata_time
                                               )
         return _wrap_meta_response(MetaToProto.artifact_meta_to_proto(artifact))
 

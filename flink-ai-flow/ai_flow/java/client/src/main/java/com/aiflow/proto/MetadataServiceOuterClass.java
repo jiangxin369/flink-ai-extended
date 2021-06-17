@@ -27405,21 +27405,6 @@ public final class MetadataServiceOuterClass {
      * <code>.google.protobuf.StringValue description = 5;</code>
      */
     com.google.protobuf.StringValueOrBuilder getDescriptionOrBuilder();
-
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     * @return Whether the updateTime field is set.
-     */
-    boolean hasUpdateTime();
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     * @return The updateTime.
-     */
-    com.google.protobuf.Int64Value getUpdateTime();
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     */
-    com.google.protobuf.Int64ValueOrBuilder getUpdateTimeOrBuilder();
   }
   /**
    * Protobuf type {@code ai_flow.UpdateArtifactRequest}
@@ -27522,19 +27507,6 @@ public final class MetadataServiceOuterClass {
               if (subBuilder != null) {
                 subBuilder.mergeFrom(description_);
                 description_ = subBuilder.buildPartial();
-              }
-
-              break;
-            }
-            case 50: {
-              com.google.protobuf.Int64Value.Builder subBuilder = null;
-              if (updateTime_ != null) {
-                subBuilder = updateTime_.toBuilder();
-              }
-              updateTime_ = input.readMessage(com.google.protobuf.Int64Value.parser(), extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(updateTime_);
-                updateTime_ = subBuilder.buildPartial();
               }
 
               break;
@@ -27780,32 +27752,6 @@ public final class MetadataServiceOuterClass {
       return getDescription();
     }
 
-    public static final int UPDATE_TIME_FIELD_NUMBER = 6;
-    private com.google.protobuf.Int64Value updateTime_;
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     * @return Whether the updateTime field is set.
-     */
-    @java.lang.Override
-    public boolean hasUpdateTime() {
-      return updateTime_ != null;
-    }
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     * @return The updateTime.
-     */
-    @java.lang.Override
-    public com.google.protobuf.Int64Value getUpdateTime() {
-      return updateTime_ == null ? com.google.protobuf.Int64Value.getDefaultInstance() : updateTime_;
-    }
-    /**
-     * <code>.google.protobuf.Int64Value update_time = 6;</code>
-     */
-    @java.lang.Override
-    public com.google.protobuf.Int64ValueOrBuilder getUpdateTimeOrBuilder() {
-      return getUpdateTime();
-    }
-
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -27837,9 +27783,6 @@ public final class MetadataServiceOuterClass {
       }
       if (description_ != null) {
         output.writeMessage(5, getDescription());
-      }
-      if (updateTime_ != null) {
-        output.writeMessage(6, getUpdateTime());
       }
       unknownFields.writeTo(output);
     }
@@ -27875,10 +27818,6 @@ public final class MetadataServiceOuterClass {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, getDescription());
       }
-      if (updateTime_ != null) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, getUpdateTime());
-      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -27913,11 +27852,6 @@ public final class MetadataServiceOuterClass {
         if (!getDescription()
             .equals(other.getDescription())) return false;
       }
-      if (hasUpdateTime() != other.hasUpdateTime()) return false;
-      if (hasUpdateTime()) {
-        if (!getUpdateTime()
-            .equals(other.getUpdateTime())) return false;
-      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -27946,10 +27880,6 @@ public final class MetadataServiceOuterClass {
       if (hasDescription()) {
         hash = (37 * hash) + DESCRIPTION_FIELD_NUMBER;
         hash = (53 * hash) + getDescription().hashCode();
-      }
-      if (hasUpdateTime()) {
-        hash = (37 * hash) + UPDATE_TIME_FIELD_NUMBER;
-        hash = (53 * hash) + getUpdateTime().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -28127,12 +28057,6 @@ public final class MetadataServiceOuterClass {
           description_ = null;
           descriptionBuilder_ = null;
         }
-        if (updateTimeBuilder_ == null) {
-          updateTime_ = null;
-        } else {
-          updateTime_ = null;
-          updateTimeBuilder_ = null;
-        }
         return this;
       }
 
@@ -28177,11 +28101,6 @@ public final class MetadataServiceOuterClass {
           result.description_ = description_;
         } else {
           result.description_ = descriptionBuilder_.build();
-        }
-        if (updateTimeBuilder_ == null) {
-          result.updateTime_ = updateTime_;
-        } else {
-          result.updateTime_ = updateTimeBuilder_.build();
         }
         onBuilt();
         return result;
@@ -28245,9 +28164,6 @@ public final class MetadataServiceOuterClass {
         }
         if (other.hasDescription()) {
           mergeDescription(other.getDescription());
-        }
-        if (other.hasUpdateTime()) {
-          mergeUpdateTime(other.getUpdateTime());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -28838,125 +28754,6 @@ public final class MetadataServiceOuterClass {
           description_ = null;
         }
         return descriptionBuilder_;
-      }
-
-      private com.google.protobuf.Int64Value updateTime_;
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder> updateTimeBuilder_;
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       * @return Whether the updateTime field is set.
-       */
-      public boolean hasUpdateTime() {
-        return updateTimeBuilder_ != null || updateTime_ != null;
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       * @return The updateTime.
-       */
-      public com.google.protobuf.Int64Value getUpdateTime() {
-        if (updateTimeBuilder_ == null) {
-          return updateTime_ == null ? com.google.protobuf.Int64Value.getDefaultInstance() : updateTime_;
-        } else {
-          return updateTimeBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public Builder setUpdateTime(com.google.protobuf.Int64Value value) {
-        if (updateTimeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          updateTime_ = value;
-          onChanged();
-        } else {
-          updateTimeBuilder_.setMessage(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public Builder setUpdateTime(
-          com.google.protobuf.Int64Value.Builder builderForValue) {
-        if (updateTimeBuilder_ == null) {
-          updateTime_ = builderForValue.build();
-          onChanged();
-        } else {
-          updateTimeBuilder_.setMessage(builderForValue.build());
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public Builder mergeUpdateTime(com.google.protobuf.Int64Value value) {
-        if (updateTimeBuilder_ == null) {
-          if (updateTime_ != null) {
-            updateTime_ =
-              com.google.protobuf.Int64Value.newBuilder(updateTime_).mergeFrom(value).buildPartial();
-          } else {
-            updateTime_ = value;
-          }
-          onChanged();
-        } else {
-          updateTimeBuilder_.mergeFrom(value);
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public Builder clearUpdateTime() {
-        if (updateTimeBuilder_ == null) {
-          updateTime_ = null;
-          onChanged();
-        } else {
-          updateTime_ = null;
-          updateTimeBuilder_ = null;
-        }
-
-        return this;
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public com.google.protobuf.Int64Value.Builder getUpdateTimeBuilder() {
-        
-        onChanged();
-        return getUpdateTimeFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      public com.google.protobuf.Int64ValueOrBuilder getUpdateTimeOrBuilder() {
-        if (updateTimeBuilder_ != null) {
-          return updateTimeBuilder_.getMessageOrBuilder();
-        } else {
-          return updateTime_ == null ?
-              com.google.protobuf.Int64Value.getDefaultInstance() : updateTime_;
-        }
-      }
-      /**
-       * <code>.google.protobuf.Int64Value update_time = 6;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilderV3<
-          com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder> 
-          getUpdateTimeFieldBuilder() {
-        if (updateTimeBuilder_ == null) {
-          updateTimeBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
-              com.google.protobuf.Int64Value, com.google.protobuf.Int64Value.Builder, com.google.protobuf.Int64ValueOrBuilder>(
-                  getUpdateTime(),
-                  getParentForChildren(),
-                  isClean());
-          updateTime_ = null;
-        }
-        return updateTimeBuilder_;
       }
       @java.lang.Override
       public final Builder setUnknownFields(
@@ -34738,213 +34535,212 @@ public final class MetadataServiceOuterClass {
       "alue\030\002 \001(\t:\0028\001\";\n\020ProjectListProto\022\'\n\010pr" +
       "ojects\030\001 \003(\0132\025.ai_flow.ProjectProto\"C\n\027R" +
       "egisterArtifactRequest\022(\n\010artifact\030\001 \001(\013" +
-      "2\026.ai_flow.ArtifactProto\"\341\002\n\025UpdateArtif" +
+      "2\026.ai_flow.ArtifactProto\"\257\002\n\025UpdateArtif" +
       "actRequest\022\014\n\004name\030\001 \001(\t\022B\n\nproperties\030\002" +
       " \003(\0132..ai_flow.UpdateArtifactRequest.Pro" +
       "pertiesEntry\0223\n\rartifact_type\030\003 \001(\0132\034.go" +
       "ogle.protobuf.StringValue\022)\n\003uri\030\004 \001(\0132\034" +
       ".google.protobuf.StringValue\0221\n\013descript" +
-      "ion\030\005 \001(\0132\034.google.protobuf.StringValue\022" +
-      "0\n\013update_time\030\006 \001(\0132\033.google.protobuf.I" +
-      "nt64Value\0321\n\017PropertiesEntry\022\013\n\003key\030\001 \001(" +
-      "\t\022\r\n\005value\030\002 \001(\t:\0028\001\">\n\021ArtifactListProt" +
-      "o\022)\n\tartifacts\030\001 \003(\0132\026.ai_flow.ArtifactP" +
-      "roto2\351<\n\017MetadataService\022i\n\016getDatasetBy" +
-      "Id\022\022.ai_flow.IdRequest\032\021.ai_flow.Respons" +
-      "e\"0\202\323\344\223\002*\"%/aiflow/metadata_store/datase" +
-      "t/get/id:\001*\022o\n\020getDatasetByName\022\024.ai_flo" +
-      "w.NameRequest\032\021.ai_flow.Response\"2\202\323\344\223\002," +
-      "\"\'/aiflow/metadata_store/dataset/get/nam" +
-      "e:\001*\022g\n\014listDatasets\022\024.ai_flow.ListReque" +
-      "st\032\021.ai_flow.Response\".\202\323\344\223\002(\"#/aiflow/m" +
-      "etadata_store/dataset/list:\001*\022u\n\017registe" +
-      "rDataset\022\037.ai_flow.RegisterDatasetReques" +
-      "t\032\021.ai_flow.Response\".\202\323\344\223\002(\"#/aiflow/me" +
-      "tadata_store/dataset/save:\001*\022\215\001\n\032registe" +
-      "rDatasetWithCatalog\022\037.ai_flow.RegisterDa" +
-      "tasetRequest\032\021.ai_flow.Response\";\202\323\344\223\0025\"" +
-      "0/aiflow/metadata_store/dataset/save_wit" +
-      "h_catalog:\001*\022w\n\020registerDatasets\022 .ai_fl" +
-      "ow.RegisterDatasetsRequest\032\021.ai_flow.Res" +
-      "ponse\".\202\323\344\223\002(\"#/aiflow/metadata_store/da" +
-      "taset/save:\001*\022s\n\rupdateDataset\022\035.ai_flow" +
-      ".UpdateDatasetRequest\032\021.ai_flow.Response" +
-      "\"0\202\323\344\223\002*\"%/aiflow/metadata_store/dataset" +
-      "/update:\001*\022o\n\021deleteDatasetById\022\022.ai_flo" +
-      "w.IdRequest\032\021.ai_flow.Response\"3\202\323\344\223\002-\"(" +
-      "/aiflow/metadata_store/dataset/delete/id" +
-      ":\001*\022u\n\023deleteDatasetByName\022\024.ai_flow.Nam" +
-      "eRequest\032\021.ai_flow.Response\"5\202\323\344\223\002/\"*/ai" +
-      "flow/metadata_store/dataset/delete/name:" +
-      "\001*\022v\n\024getModelRelationById\022\022.ai_flow.IdR" +
-      "equest\032\021.ai_flow.Response\"7\202\323\344\223\0021\",/aifl" +
-      "ow/metadata_store/model_relation/get/id:" +
-      "\001*\022|\n\026getModelRelationByName\022\024.ai_flow.N" +
-      "ameRequest\032\021.ai_flow.Response\"9\202\323\344\223\0023\"./" +
-      "aiflow/metadata_store/model_relation/get" +
-      "/name:\001*\022s\n\021listModelRelation\022\024.ai_flow." +
-      "ListRequest\032\021.ai_flow.Response\"5\202\323\344\223\002/\"*" +
-      "/aiflow/metadata_store/model_relation/li" +
-      "st:\001*\022\210\001\n\025registerModelRelation\022%.ai_flo" +
-      "w.RegisterModelRelationRequest\032\021.ai_flow" +
-      ".Response\"5\202\323\344\223\002/\"*/aiflow/metadata_stor" +
-      "e/model_relation/save:\001*\022|\n\027deleteModelR" +
-      "elationById\022\022.ai_flow.IdRequest\032\021.ai_flo" +
-      "w.Response\":\202\323\344\223\0024\"//aiflow/metadata_sto" +
-      "re/model_relation/delete/id:\001*\022\202\001\n\031delet" +
-      "eModelRelationByName\022\024.ai_flow.NameReque" +
-      "st\032\021.ai_flow.Response\"<\202\323\344\223\0026\"1/aiflow/m" +
-      "etadata_store/model_relation/delete/name" +
-      ":\001*\022e\n\014getModelById\022\022.ai_flow.IdRequest\032" +
-      "\021.ai_flow.Response\".\202\323\344\223\002(\"#/aiflow/meta" +
-      "data_store/model/get/id:\001*\022k\n\016getModelBy" +
-      "Name\022\024.ai_flow.NameRequest\032\021.ai_flow.Res" +
-      "ponse\"0\202\323\344\223\002*\"%/aiflow/metadata_store/mo" +
-      "del/get/name:\001*\022o\n\rregisterModel\022\035.ai_fl" +
-      "ow.RegisterModelRequest\032\021.ai_flow.Respon" +
-      "se\",\202\323\344\223\002&\"!/aiflow/metadata_store/model" +
-      "/save:\001*\022k\n\017deleteModelById\022\022.ai_flow.Id" +
-      "Request\032\021.ai_flow.Response\"1\202\323\344\223\002+\"&/aif" +
-      "low/metadata_store/model/delete/id:\001*\022q\n" +
-      "\021deleteModelByName\022\024.ai_flow.NameRequest" +
-      "\032\021.ai_flow.Response\"3\202\323\344\223\002-\"(/aiflow/met" +
-      "adata_store/model/delete/name:\001*\022\234\001\n get" +
-      "ModelVersionRelationByVersion\022 .ai_flow." +
-      "ModelVersionNameRequest\032\021.ai_flow.Respon" +
-      "se\"C\202\323\344\223\002=\"8/aiflow/metadata_store/model" +
-      "Version_relation/get/version:\001*\022\225\001\n\030list" +
-      "ModelVersionRelation\022(.ai_flow.ListModel" +
-      "VersionRelationRequest\032\021.ai_flow.Respons" +
-      "e\"<\202\323\344\223\0026\"1/aiflow/metadata_store/modelV" +
-      "ersion_relation/list:\001*\022\235\001\n\034registerMode" +
-      "lVersionRelation\022,.ai_flow.RegisterModel" +
-      "VersionRelationRequest\032\021.ai_flow.Respons" +
-      "e\"<\202\323\344\223\0026\"1/aiflow/metadata_store/modelV" +
-      "ersion_relation/save:\001*\022\242\001\n#deleteModelV" +
-      "ersionRelationByVersion\022 .ai_flow.ModelV" +
-      "ersionNameRequest\032\021.ai_flow.Response\"F\202\323" +
-      "\344\223\002@\";/aiflow/metadata_store/modelVersio" +
-      "n_relation/delete/version:\001*\022\213\001\n\030getMode" +
-      "lVersionByVersion\022 .ai_flow.ModelVersion" +
-      "NameRequest\032\021.ai_flow.Response\":\202\323\344\223\0024\"/" +
-      "/aiflow/metadata_store/modelVersion/get/" +
-      "version:\001*\022\204\001\n\024registerModelVersion\022$.ai" +
-      "_flow.RegisterModelVersionRequest\032\021.ai_f" +
-      "low.Response\"3\202\323\344\223\002-\"(/aiflow/metadata_s" +
-      "tore/modelVersion/save:\001*\022\221\001\n\033deleteMode" +
-      "lVersionByVersion\022 .ai_flow.ModelVersion" +
-      "NameRequest\032\021.ai_flow.Response\"=\202\323\344\223\0027\"2" +
-      "/aiflow/metadata_store/modelVersion/dele" +
-      "te/version:\001*\022\213\001\n\027getDeployedModelVersio" +
-      "n\022\031.ai_flow.ModelNameRequest\032\021.ai_flow.R" +
-      "esponse\"B\202\323\344\223\002<\"7/aiflow/metadata_store/" +
-      "modelVersion/get_serving_version:\001*\022\241\001\n\036" +
-      "getLatestValidatedModelVersion\022\031.ai_flow" +
-      ".ModelNameRequest\032\021.ai_flow.Response\"Q\202\323" +
-      "\344\223\002K\"F/aiflow/metadata_store/modelVersio" +
-      "n/get_latest_validated_model_version:\001*\022" +
-      "\241\001\n\036getLatestGeneratedModelVersion\022\031.ai_" +
-      "flow.ModelNameRequest\032\021.ai_flow.Response" +
-      "\"Q\202\323\344\223\002K\"F/aiflow/metadata_store/modelVe" +
-      "rsion/get_latest_generated_model_version" +
-      ":\001*\022}\n\030getWorkFlowExecutionById\022\022.ai_flo" +
-      "w.IdRequest\032\021.ai_flow.Response\":\202\323\344\223\0024\"/" +
-      "/aiflow/metadata_store/workflowExecution" +
-      "/get/id:\001*\022\203\001\n\032getWorkFlowExecutionByNam" +
-      "e\022\024.ai_flow.NameRequest\032\021.ai_flow.Respon" +
-      "se\"<\202\323\344\223\0026\"1/aiflow/metadata_store/workf" +
-      "lowExecution/get/name:\001*\022z\n\025listWorkFlow" +
-      "Execution\022\024.ai_flow.ListRequest\032\021.ai_flo" +
-      "w.Response\"8\202\323\344\223\0022\"-/aiflow/metadata_sto" +
-      "re/workflowExecution/list:\001*\022\223\001\n\031registe" +
-      "rWorkFlowExecution\022).ai_flow.RegisterWor" +
-      "kFlowExecutionRequest\032\021.ai_flow.Response" +
-      "\"8\202\323\344\223\0022\"-/aiflow/metadata_store/workflo" +
-      "wExecution/save:\001*\022\221\001\n\027updateWorkflowExe" +
-      "cution\022\'.ai_flow.UpdateWorkflowExecution" +
-      "Request\032\021.ai_flow.Response\":\202\323\344\223\0024\"//aif" +
-      "low/metadata_store/workflowExecution/upd" +
-      "ate:\001*\022\203\001\n\033deleteWorkflowExecutionById\022\022" +
-      ".ai_flow.IdRequest\032\021.ai_flow.Response\"=\202" +
-      "\323\344\223\0027\"2/aiflow/metadata_store/workflowEx" +
-      "ecution/delete/id:\001*\022\211\001\n\035deleteWorkflowE" +
-      "xecutionByName\022\024.ai_flow.NameRequest\032\021.a" +
-      "i_flow.Response\"?\202\323\344\223\0029\"4/aiflow/metadat" +
-      "a_store/workflowExecution/delete/name:\001*" +
-      "\022\250\001\n\036updateWorkflowExecutionEndTime\022..ai" +
-      "_flow.UpdateWorkflowExecutionEndTimeRequ" +
-      "est\032\021.ai_flow.Response\"C\202\323\344\223\002=\"8/aiflow/" +
-      "metadata_store/workflowExecution/update/" +
-      "end_time:\001*\022\241\001\n\034updateWorkflowExecutionS" +
-      "tate\022,.ai_flow.UpdateWorkflowExecutionSt" +
-      "ateRequest\032\021.ai_flow.Response\"@\202\323\344\223\002:\"5/" +
-      "aiflow/metadata_store/workflowExecution/" +
-      "update/state:\001*\022a\n\ngetJobById\022\022.ai_flow." +
-      "IdRequest\032\021.ai_flow.Response\",\202\323\344\223\002&\"!/a" +
-      "iflow/metadata_store/job/get/id:\001*\022g\n\014ge" +
-      "tJobByName\022\024.ai_flow.NameRequest\032\021.ai_fl" +
+      "ion\030\005 \001(\0132\034.google.protobuf.StringValue\032" +
+      "1\n\017PropertiesEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value" +
+      "\030\002 \001(\t:\0028\001\">\n\021ArtifactListProto\022)\n\tartif" +
+      "acts\030\001 \003(\0132\026.ai_flow.ArtifactProto2\351<\n\017M" +
+      "etadataService\022i\n\016getDatasetById\022\022.ai_fl" +
+      "ow.IdRequest\032\021.ai_flow.Response\"0\202\323\344\223\002*\"" +
+      "%/aiflow/metadata_store/dataset/get/id:\001" +
+      "*\022o\n\020getDatasetByName\022\024.ai_flow.NameRequ" +
+      "est\032\021.ai_flow.Response\"2\202\323\344\223\002,\"\'/aiflow/" +
+      "metadata_store/dataset/get/name:\001*\022g\n\014li" +
+      "stDatasets\022\024.ai_flow.ListRequest\032\021.ai_fl" +
       "ow.Response\".\202\323\344\223\002(\"#/aiflow/metadata_st" +
-      "ore/job/get/name:\001*\022^\n\007listJob\022\024.ai_flow" +
-      ".ListRequest\032\021.ai_flow.Response\"*\202\323\344\223\002$\"" +
-      "\037/aiflow/metadata_store/job/list:\001*\022i\n\013r" +
-      "egisterJob\022\033.ai_flow.RegisterJobRequest\032" +
-      "\021.ai_flow.Response\"*\202\323\344\223\002$\"\037/aiflow/meta" +
-      "data_store/job/save:\001*\022g\n\tupdateJob\022\031.ai" +
-      "_flow.UpdateJobRequest\032\021.ai_flow.Respons" +
-      "e\",\202\323\344\223\002&\"!/aiflow/metadata_store/job/up" +
-      "date:\001*\022w\n\016updateJobState\022\036.ai_flow.Upda" +
-      "teJobStateRequest\032\021.ai_flow.Response\"2\202\323" +
-      "\344\223\002,\"\'/aiflow/metadata_store/job/update/" +
-      "state:\001*\022~\n\020updateJobEndTime\022 .ai_flow.U" +
-      "pdateJobEndTimeRequest\032\021.ai_flow.Respons" +
-      "e\"5\202\323\344\223\002/\"*/aiflow/metadata_store/job/up" +
-      "date/end_time:\001*\022g\n\rdeleteJobById\022\022.ai_f" +
-      "low.IdRequest\032\021.ai_flow.Response\"/\202\323\344\223\002)" +
-      "\"$/aiflow/metadata_store/job/delete/id:\001" +
-      "*\022m\n\017deleteJobByName\022\024.ai_flow.NameReque" +
-      "st\032\021.ai_flow.Response\"1\202\323\344\223\002+\"&/aiflow/m" +
-      "etadata_store/job/delete/name:\001*\022i\n\016getP" +
-      "rojectById\022\022.ai_flow.IdRequest\032\021.ai_flow" +
-      ".Response\"0\202\323\344\223\002*\"%/aiflow/metadata_stor" +
-      "e/project/get/id:\001*\022o\n\020getProjectByName\022" +
-      "\024.ai_flow.NameRequest\032\021.ai_flow.Response" +
-      "\"2\202\323\344\223\002,\"\'/aiflow/metadata_store/project" +
-      "/get/name:\001*\022u\n\017registerProject\022\037.ai_flo" +
-      "w.RegisterProjectRequest\032\021.ai_flow.Respo" +
-      "nse\".\202\323\344\223\002(\"#/aiflow/metadata_store/proj" +
-      "ect/save:\001*\022s\n\rupdateProject\022\035.ai_flow.U" +
-      "pdateProjectRequest\032\021.ai_flow.Response\"0" +
-      "\202\323\344\223\002*\"%/aiflow/metadata_store/project/u" +
-      "pdate:\001*\022f\n\013listProject\022\024.ai_flow.ListRe" +
-      "quest\032\021.ai_flow.Response\".\202\323\344\223\002(\"#/aiflo" +
-      "w/metadata_store/project/list:\001*\022o\n\021dele" +
-      "teProjectById\022\022.ai_flow.IdRequest\032\021.ai_f" +
-      "low.Response\"3\202\323\344\223\002-\"(/aiflow/metadata_s" +
-      "tore/project/delete/id:\001*\022u\n\023deleteProje" +
-      "ctByName\022\024.ai_flow.NameRequest\032\021.ai_flow" +
-      ".Response\"5\202\323\344\223\002/\"*/aiflow/metadata_stor" +
-      "e/project/delete/name:\001*\022k\n\017getArtifactB" +
+      "ore/dataset/list:\001*\022u\n\017registerDataset\022\037" +
+      ".ai_flow.RegisterDatasetRequest\032\021.ai_flo" +
+      "w.Response\".\202\323\344\223\002(\"#/aiflow/metadata_sto" +
+      "re/dataset/save:\001*\022\215\001\n\032registerDatasetWi" +
+      "thCatalog\022\037.ai_flow.RegisterDatasetReque" +
+      "st\032\021.ai_flow.Response\";\202\323\344\223\0025\"0/aiflow/m" +
+      "etadata_store/dataset/save_with_catalog:" +
+      "\001*\022w\n\020registerDatasets\022 .ai_flow.Registe" +
+      "rDatasetsRequest\032\021.ai_flow.Response\".\202\323\344" +
+      "\223\002(\"#/aiflow/metadata_store/dataset/save" +
+      ":\001*\022s\n\rupdateDataset\022\035.ai_flow.UpdateDat" +
+      "asetRequest\032\021.ai_flow.Response\"0\202\323\344\223\002*\"%" +
+      "/aiflow/metadata_store/dataset/update:\001*" +
+      "\022o\n\021deleteDatasetById\022\022.ai_flow.IdReques" +
+      "t\032\021.ai_flow.Response\"3\202\323\344\223\002-\"(/aiflow/me" +
+      "tadata_store/dataset/delete/id:\001*\022u\n\023del" +
+      "eteDatasetByName\022\024.ai_flow.NameRequest\032\021" +
+      ".ai_flow.Response\"5\202\323\344\223\002/\"*/aiflow/metad" +
+      "ata_store/dataset/delete/name:\001*\022v\n\024getM" +
+      "odelRelationById\022\022.ai_flow.IdRequest\032\021.a" +
+      "i_flow.Response\"7\202\323\344\223\0021\",/aiflow/metadat" +
+      "a_store/model_relation/get/id:\001*\022|\n\026getM" +
+      "odelRelationByName\022\024.ai_flow.NameRequest" +
+      "\032\021.ai_flow.Response\"9\202\323\344\223\0023\"./aiflow/met" +
+      "adata_store/model_relation/get/name:\001*\022s" +
+      "\n\021listModelRelation\022\024.ai_flow.ListReques" +
+      "t\032\021.ai_flow.Response\"5\202\323\344\223\002/\"*/aiflow/me" +
+      "tadata_store/model_relation/list:\001*\022\210\001\n\025" +
+      "registerModelRelation\022%.ai_flow.Register" +
+      "ModelRelationRequest\032\021.ai_flow.Response\"" +
+      "5\202\323\344\223\002/\"*/aiflow/metadata_store/model_re" +
+      "lation/save:\001*\022|\n\027deleteModelRelationByI" +
+      "d\022\022.ai_flow.IdRequest\032\021.ai_flow.Response" +
+      "\":\202\323\344\223\0024\"//aiflow/metadata_store/model_r" +
+      "elation/delete/id:\001*\022\202\001\n\031deleteModelRela" +
+      "tionByName\022\024.ai_flow.NameRequest\032\021.ai_fl" +
+      "ow.Response\"<\202\323\344\223\0026\"1/aiflow/metadata_st" +
+      "ore/model_relation/delete/name:\001*\022e\n\014get" +
+      "ModelById\022\022.ai_flow.IdRequest\032\021.ai_flow." +
+      "Response\".\202\323\344\223\002(\"#/aiflow/metadata_store" +
+      "/model/get/id:\001*\022k\n\016getModelByName\022\024.ai_" +
+      "flow.NameRequest\032\021.ai_flow.Response\"0\202\323\344" +
+      "\223\002*\"%/aiflow/metadata_store/model/get/na" +
+      "me:\001*\022o\n\rregisterModel\022\035.ai_flow.Registe" +
+      "rModelRequest\032\021.ai_flow.Response\",\202\323\344\223\002&" +
+      "\"!/aiflow/metadata_store/model/save:\001*\022k" +
+      "\n\017deleteModelById\022\022.ai_flow.IdRequest\032\021." +
+      "ai_flow.Response\"1\202\323\344\223\002+\"&/aiflow/metada" +
+      "ta_store/model/delete/id:\001*\022q\n\021deleteMod" +
+      "elByName\022\024.ai_flow.NameRequest\032\021.ai_flow" +
+      ".Response\"3\202\323\344\223\002-\"(/aiflow/metadata_stor" +
+      "e/model/delete/name:\001*\022\234\001\n getModelVersi" +
+      "onRelationByVersion\022 .ai_flow.ModelVersi" +
+      "onNameRequest\032\021.ai_flow.Response\"C\202\323\344\223\002=" +
+      "\"8/aiflow/metadata_store/modelVersion_re" +
+      "lation/get/version:\001*\022\225\001\n\030listModelVersi" +
+      "onRelation\022(.ai_flow.ListModelVersionRel" +
+      "ationRequest\032\021.ai_flow.Response\"<\202\323\344\223\0026\"" +
+      "1/aiflow/metadata_store/modelVersion_rel" +
+      "ation/list:\001*\022\235\001\n\034registerModelVersionRe" +
+      "lation\022,.ai_flow.RegisterModelVersionRel" +
+      "ationRequest\032\021.ai_flow.Response\"<\202\323\344\223\0026\"" +
+      "1/aiflow/metadata_store/modelVersion_rel" +
+      "ation/save:\001*\022\242\001\n#deleteModelVersionRela" +
+      "tionByVersion\022 .ai_flow.ModelVersionName" +
+      "Request\032\021.ai_flow.Response\"F\202\323\344\223\002@\";/aif" +
+      "low/metadata_store/modelVersion_relation" +
+      "/delete/version:\001*\022\213\001\n\030getModelVersionBy" +
+      "Version\022 .ai_flow.ModelVersionNameReques" +
+      "t\032\021.ai_flow.Response\":\202\323\344\223\0024\"//aiflow/me" +
+      "tadata_store/modelVersion/get/version:\001*" +
+      "\022\204\001\n\024registerModelVersion\022$.ai_flow.Regi" +
+      "sterModelVersionRequest\032\021.ai_flow.Respon" +
+      "se\"3\202\323\344\223\002-\"(/aiflow/metadata_store/model" +
+      "Version/save:\001*\022\221\001\n\033deleteModelVersionBy" +
+      "Version\022 .ai_flow.ModelVersionNameReques" +
+      "t\032\021.ai_flow.Response\"=\202\323\344\223\0027\"2/aiflow/me" +
+      "tadata_store/modelVersion/delete/version" +
+      ":\001*\022\213\001\n\027getDeployedModelVersion\022\031.ai_flo" +
+      "w.ModelNameRequest\032\021.ai_flow.Response\"B\202" +
+      "\323\344\223\002<\"7/aiflow/metadata_store/modelVersi" +
+      "on/get_serving_version:\001*\022\241\001\n\036getLatestV" +
+      "alidatedModelVersion\022\031.ai_flow.ModelName" +
+      "Request\032\021.ai_flow.Response\"Q\202\323\344\223\002K\"F/aif" +
+      "low/metadata_store/modelVersion/get_late" +
+      "st_validated_model_version:\001*\022\241\001\n\036getLat" +
+      "estGeneratedModelVersion\022\031.ai_flow.Model" +
+      "NameRequest\032\021.ai_flow.Response\"Q\202\323\344\223\002K\"F" +
+      "/aiflow/metadata_store/modelVersion/get_" +
+      "latest_generated_model_version:\001*\022}\n\030get" +
+      "WorkFlowExecutionById\022\022.ai_flow.IdReques" +
+      "t\032\021.ai_flow.Response\":\202\323\344\223\0024\"//aiflow/me" +
+      "tadata_store/workflowExecution/get/id:\001*" +
+      "\022\203\001\n\032getWorkFlowExecutionByName\022\024.ai_flo" +
+      "w.NameRequest\032\021.ai_flow.Response\"<\202\323\344\223\0026" +
+      "\"1/aiflow/metadata_store/workflowExecuti" +
+      "on/get/name:\001*\022z\n\025listWorkFlowExecution\022" +
+      "\024.ai_flow.ListRequest\032\021.ai_flow.Response" +
+      "\"8\202\323\344\223\0022\"-/aiflow/metadata_store/workflo" +
+      "wExecution/list:\001*\022\223\001\n\031registerWorkFlowE" +
+      "xecution\022).ai_flow.RegisterWorkFlowExecu" +
+      "tionRequest\032\021.ai_flow.Response\"8\202\323\344\223\0022\"-" +
+      "/aiflow/metadata_store/workflowExecution" +
+      "/save:\001*\022\221\001\n\027updateWorkflowExecution\022\'.a" +
+      "i_flow.UpdateWorkflowExecutionRequest\032\021." +
+      "ai_flow.Response\":\202\323\344\223\0024\"//aiflow/metada" +
+      "ta_store/workflowExecution/update:\001*\022\203\001\n" +
+      "\033deleteWorkflowExecutionById\022\022.ai_flow.I" +
+      "dRequest\032\021.ai_flow.Response\"=\202\323\344\223\0027\"2/ai" +
+      "flow/metadata_store/workflowExecution/de" +
+      "lete/id:\001*\022\211\001\n\035deleteWorkflowExecutionBy" +
+      "Name\022\024.ai_flow.NameRequest\032\021.ai_flow.Res" +
+      "ponse\"?\202\323\344\223\0029\"4/aiflow/metadata_store/wo" +
+      "rkflowExecution/delete/name:\001*\022\250\001\n\036updat" +
+      "eWorkflowExecutionEndTime\022..ai_flow.Upda" +
+      "teWorkflowExecutionEndTimeRequest\032\021.ai_f" +
+      "low.Response\"C\202\323\344\223\002=\"8/aiflow/metadata_s" +
+      "tore/workflowExecution/update/end_time:\001" +
+      "*\022\241\001\n\034updateWorkflowExecutionState\022,.ai_" +
+      "flow.UpdateWorkflowExecutionStateRequest" +
+      "\032\021.ai_flow.Response\"@\202\323\344\223\002:\"5/aiflow/met" +
+      "adata_store/workflowExecution/update/sta" +
+      "te:\001*\022a\n\ngetJobById\022\022.ai_flow.IdRequest\032" +
+      "\021.ai_flow.Response\",\202\323\344\223\002&\"!/aiflow/meta" +
+      "data_store/job/get/id:\001*\022g\n\014getJobByName" +
+      "\022\024.ai_flow.NameRequest\032\021.ai_flow.Respons" +
+      "e\".\202\323\344\223\002(\"#/aiflow/metadata_store/job/ge" +
+      "t/name:\001*\022^\n\007listJob\022\024.ai_flow.ListReque" +
+      "st\032\021.ai_flow.Response\"*\202\323\344\223\002$\"\037/aiflow/m" +
+      "etadata_store/job/list:\001*\022i\n\013registerJob" +
+      "\022\033.ai_flow.RegisterJobRequest\032\021.ai_flow." +
+      "Response\"*\202\323\344\223\002$\"\037/aiflow/metadata_store" +
+      "/job/save:\001*\022g\n\tupdateJob\022\031.ai_flow.Upda" +
+      "teJobRequest\032\021.ai_flow.Response\",\202\323\344\223\002&\"" +
+      "!/aiflow/metadata_store/job/update:\001*\022w\n" +
+      "\016updateJobState\022\036.ai_flow.UpdateJobState" +
+      "Request\032\021.ai_flow.Response\"2\202\323\344\223\002,\"\'/aif" +
+      "low/metadata_store/job/update/state:\001*\022~" +
+      "\n\020updateJobEndTime\022 .ai_flow.UpdateJobEn" +
+      "dTimeRequest\032\021.ai_flow.Response\"5\202\323\344\223\002/\"" +
+      "*/aiflow/metadata_store/job/update/end_t" +
+      "ime:\001*\022g\n\rdeleteJobById\022\022.ai_flow.IdRequ" +
+      "est\032\021.ai_flow.Response\"/\202\323\344\223\002)\"$/aiflow/" +
+      "metadata_store/job/delete/id:\001*\022m\n\017delet" +
+      "eJobByName\022\024.ai_flow.NameRequest\032\021.ai_fl" +
+      "ow.Response\"1\202\323\344\223\002+\"&/aiflow/metadata_st" +
+      "ore/job/delete/name:\001*\022i\n\016getProjectById" +
+      "\022\022.ai_flow.IdRequest\032\021.ai_flow.Response\"" +
+      "0\202\323\344\223\002*\"%/aiflow/metadata_store/project/" +
+      "get/id:\001*\022o\n\020getProjectByName\022\024.ai_flow." +
+      "NameRequest\032\021.ai_flow.Response\"2\202\323\344\223\002,\"\'" +
+      "/aiflow/metadata_store/project/get/name:" +
+      "\001*\022u\n\017registerProject\022\037.ai_flow.Register" +
+      "ProjectRequest\032\021.ai_flow.Response\".\202\323\344\223\002" +
+      "(\"#/aiflow/metadata_store/project/save:\001" +
+      "*\022s\n\rupdateProject\022\035.ai_flow.UpdateProje" +
+      "ctRequest\032\021.ai_flow.Response\"0\202\323\344\223\002*\"%/a" +
+      "iflow/metadata_store/project/update:\001*\022f" +
+      "\n\013listProject\022\024.ai_flow.ListRequest\032\021.ai" +
+      "_flow.Response\".\202\323\344\223\002(\"#/aiflow/metadata" +
+      "_store/project/list:\001*\022o\n\021deleteProjectB" +
       "yId\022\022.ai_flow.IdRequest\032\021.ai_flow.Respon" +
-      "se\"1\202\323\344\223\002+\"&/aiflow/metadata_store/artif" +
-      "act/get/id:\001*\022q\n\021getArtifactByName\022\024.ai_" +
-      "flow.NameRequest\032\021.ai_flow.Response\"3\202\323\344" +
-      "\223\002-\"(/aiflow/metadata_store/artifact/get" +
-      "/name:\001*\022v\n\016updateArtifact\022\036.ai_flow.Upd" +
-      "ateArtifactRequest\032\021.ai_flow.Response\"1\202" +
-      "\323\344\223\002+\"&/aiflow/metadata_store/artifact/u" +
-      "pdate:\001*\022x\n\020registerArtifact\022 .ai_flow.R" +
-      "egisterArtifactRequest\032\021.ai_flow.Respons" +
-      "e\"/\202\323\344\223\002)\"$/aiflow/metadata_store/artifa" +
-      "ct/save:\001*\022h\n\014listArtifact\022\024.ai_flow.Lis" +
-      "tRequest\032\021.ai_flow.Response\"/\202\323\344\223\002)\"$/ai" +
-      "flow/metadata_store/artifact/list:\001*\022q\n\022" +
-      "deleteArtifactById\022\022.ai_flow.IdRequest\032\021" +
-      ".ai_flow.Response\"4\202\323\344\223\002.\")/aiflow/metad" +
-      "ata_store/artifact/delete/id:\001*\022w\n\024delet" +
-      "eArtifactByName\022\024.ai_flow.NameRequest\032\021." +
-      "ai_flow.Response\"6\202\323\344\223\0020\"+/aiflow/metada" +
-      "ta_store/artifact/delete/name:\001*B\"\n\020com." +
-      "aiflow.protoZ\010/ai_flow\210\001\001\220\001\001b\006proto3"
+      "se\"3\202\323\344\223\002-\"(/aiflow/metadata_store/proje" +
+      "ct/delete/id:\001*\022u\n\023deleteProjectByName\022\024" +
+      ".ai_flow.NameRequest\032\021.ai_flow.Response\"" +
+      "5\202\323\344\223\002/\"*/aiflow/metadata_store/project/" +
+      "delete/name:\001*\022k\n\017getArtifactById\022\022.ai_f" +
+      "low.IdRequest\032\021.ai_flow.Response\"1\202\323\344\223\002+" +
+      "\"&/aiflow/metadata_store/artifact/get/id" +
+      ":\001*\022q\n\021getArtifactByName\022\024.ai_flow.NameR" +
+      "equest\032\021.ai_flow.Response\"3\202\323\344\223\002-\"(/aifl" +
+      "ow/metadata_store/artifact/get/name:\001*\022v" +
+      "\n\016updateArtifact\022\036.ai_flow.UpdateArtifac" +
+      "tRequest\032\021.ai_flow.Response\"1\202\323\344\223\002+\"&/ai" +
+      "flow/metadata_store/artifact/update:\001*\022x" +
+      "\n\020registerArtifact\022 .ai_flow.RegisterArt" +
+      "ifactRequest\032\021.ai_flow.Response\"/\202\323\344\223\002)\"" +
+      "$/aiflow/metadata_store/artifact/save:\001*" +
+      "\022h\n\014listArtifact\022\024.ai_flow.ListRequest\032\021" +
+      ".ai_flow.Response\"/\202\323\344\223\002)\"$/aiflow/metad" +
+      "ata_store/artifact/list:\001*\022q\n\022deleteArti" +
+      "factById\022\022.ai_flow.IdRequest\032\021.ai_flow.R" +
+      "esponse\"4\202\323\344\223\002.\")/aiflow/metadata_store/" +
+      "artifact/delete/id:\001*\022w\n\024deleteArtifactB" +
+      "yName\022\024.ai_flow.NameRequest\032\021.ai_flow.Re" +
+      "sponse\"6\202\323\344\223\0020\"+/aiflow/metadata_store/a" +
+      "rtifact/delete/name:\001*B\"\n\020com.aiflow.pro" +
+      "toZ\010/ai_flow\210\001\001\220\001\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -35174,7 +34970,7 @@ public final class MetadataServiceOuterClass {
     internal_static_ai_flow_UpdateArtifactRequest_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ai_flow_UpdateArtifactRequest_descriptor,
-        new java.lang.String[] { "Name", "Properties", "ArtifactType", "Uri", "Description", "UpdateTime", });
+        new java.lang.String[] { "Name", "Properties", "ArtifactType", "Uri", "Description", });
     internal_static_ai_flow_UpdateArtifactRequest_PropertiesEntry_descriptor =
       internal_static_ai_flow_UpdateArtifactRequest_descriptor.getNestedTypes().get(0);
     internal_static_ai_flow_UpdateArtifactRequest_PropertiesEntry_fieldAccessorTable = new

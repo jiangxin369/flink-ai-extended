@@ -906,39 +906,34 @@ class MetadataClient(BaseClient):
         return _unwrap_artifact_response(response)
 
     def register_artifact(self, name: Text, artifact_type: Text = None, description: Text = None,
-                          uri: Text = None, create_time: int = None, update_time: int = None,
-                          properties: Properties = None) -> ArtifactMeta:
+                          uri: Text = None, properties: Properties = None) -> ArtifactMeta:
         """
         register an artifact in metadata store.
 
         :param name: the name of the artifact
-        :param artifact_type: the artifact_type of the artifact
+        :param artifact_type: the type of the artifact
         :param description: the description of the artifact
         :param uri: the uri of the artifact
-        :param create_time: the time when the artifact is created
-        :param update_time: the time when the artifact is updated
         :param properties: the properties of the artifact
         :return: A single :py:class:`ai_flow.meta.artifact_meta.py.ArtifactMeta` object.
         """
         artifact_request = ArtifactProto(name=name, artifact_type=stringValue(artifact_type),
                                          description=stringValue(description), uri=stringValue(uri),
-                                         create_time=int64Value(create_time),
-                                         update_time=int64Value(update_time), properties=properties)
+                                         properties=properties)
         request = metadata_service_pb2.RegisterArtifactRequest(artifact=artifact_request)
         response = self.metadata_store_stub.registerArtifact(request)
         return _unwrap_artifact_response(response)
 
     def update_artifact(self, artifact_name: Text, artifact_type: Text = None,
                         description: Text = None, uri: Text = None,
-                        update_time: int = None, properties: Properties = None) -> Optional[ArtifactMeta]:
+                        properties: Properties = None) -> Optional[ArtifactMeta]:
         """
         update artifact in metadata store.
 
         :param artifact_name: the name of the artifact
-        :param artifact_type: the artifact_type of the artifact
+        :param artifact_type: the type of the artifact
         :param description: the description of the artifact
         :param uri: the batch uri of the artifact
-        :param update_time: the time when the artifact is updated
         :param properties: the properties of the artifact
         :return: A single :py:class:`ai_flow.meta.artifact_meta.py.ArtifactMeta` object if update successfully.
         """
@@ -946,7 +941,6 @@ class MetadataClient(BaseClient):
                                                              artifact_type=stringValue(artifact_type),
                                                              description=stringValue(description),
                                                              uri=stringValue(uri),
-                                                             update_time=int64Value(update_time),
                                                              properties=properties)
         response = self.metadata_store_stub.updateArtifact(request)
         return _unwrap_artifact_response(response)

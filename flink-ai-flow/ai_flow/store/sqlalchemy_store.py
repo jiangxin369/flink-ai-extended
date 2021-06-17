@@ -1244,11 +1244,11 @@ class SqlAlchemyStore(AbstractStore):
         register an artifact in metadata store.
 
         :param name: the name of the artifact
-        :param artifact_type: the artifact_type of the artifact
+        :param artifact_type: the type of the artifact
         :param description: the description of the artifact
         :param uri: the uri of the artifact
-        :param create_time: the time when the artifact is created
-        :param update_time: the time when the artifact is updated
+        :param create_time: the time when the artifact is created represented as milliseconds since epoch.
+        :param update_time: the time when the artifact is updated represented as milliseconds since epoch.
         :param properties: the properties of the artifact
         :return: A single :py:class:`ai_flow.meta.artifact_meta.py.ArtifactMeta` object.
         """

@@ -879,8 +879,6 @@ public class AIFlowClient {
    * @param artifactType Data format of artifact.
    * @param description  Description of artifact.
    * @param uri          Uri of artifact.
-   * @param createTime   Time when artifact is created.
-   * @param updateTime   Time when artifact is updated.
    * @param properties   Properties of artifact.
    * @return Single ArtifactMeta object registered in Metadata Store.
    */
@@ -889,12 +887,10 @@ public class AIFlowClient {
       String artifactType,
       String description,
       String uri,
-      Long createTime,
-      Long updateTime,
       Map<String, String> properties)
       throws Exception {
     return this.metadataClient.registerArtifact(
-        name, artifactType, description, uri, createTime, updateTime, properties);
+        name, artifactType, description, uri, properties);
   }
 
   /**
@@ -903,7 +899,6 @@ public class AIFlowClient {
    * @param name Name of artifact.
    * @param artifactType Type of artifact.
    * @param uri          Uri of artifact.
-   * @param updateTime Time when artifact is updated.
    * @param properties Properties of artifact.
    * @return Single ArtifactMeta object registered in Metadata Store.
    */
@@ -912,11 +907,10 @@ public class AIFlowClient {
       String artifactType,
       String description,
       String uri,
-      Long updateTime,
       Map<String, String> properties)
       throws Exception {
     return this.metadataClient.updateArtifact(
-        name, artifactType, description, uri, updateTime, properties);
+        name, artifactType, description, uri, properties);
   }
 
   /**
