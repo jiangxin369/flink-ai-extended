@@ -77,16 +77,18 @@ class AIFlowClientTestCases(object):
         self.assertEqual('/path/to/conf', dataset_name.catalog_connection_uri)
 
     def test_double_register_dataset(self):
-        client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
-                                uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                                type_list=[DataType.INT32])
-        self.assertRaises(AIFlowException, client.register_dataset, name='dataset', data_format='csv',
-                          description='it is mq data',
-                          uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
-                          type_list=[DataType.INT32])
+        dataset_1 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
+                                            uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
+                                            type_list=[DataType.INT32])
+
+        dataset_2 = client.register_dataset(name='dataset', data_format='csv', description='it is mq data',
+                                            uri='mysql://', properties=Properties({'a': 'b'}), name_list=['a'],
+                                            type_list=[DataType.INT32])
+        self.assertEqual(dataset_1.uuid, dataset_2.uuid)
+        self.assertEqual(dataset_1.schema.to_json_dict(), dataset_2.schema.to_json_dict())
         self.assertRaises(AIFlowException, client.register_dataset, name='dataset',
                           data_format='csv',
-                          description='it is mq data', uri='mysql://',
+                          description='it is not mq data', uri='mysql://',
                           properties=Properties({'a': 'b'}), name_list=['a'], type_list=[DataType.INT32])
 
     def test_list_datasets(self):
@@ -653,9 +655,9 @@ class AIFlowClientTestCases(object):
         self.assertEqual('artifact', artifact_name.name)
 
     def test_double_save_artifact(self):
-        client.register_artifact(name='artifact', artifact_type='json', uri='./artifact.json')
-        self.assertRaises(AIFlowException, client.register_artifact, name='artifact', artifact_type='json',
-                          uri='./artifact.json')
+        artifact_1 = client.register_artifact(name='artifact', artifact_type='json', uri='./artifact.json')
+        artifact_2 = client.register_artifact(name='artifact', artifact_type='json', uri='./artifact.json')
+        self.assertEqual(artifact_1.to_json_dict(), artifact_2.to_json_dict())
         self.assertRaises(AIFlowException, client.register_artifact, name='artifact', artifact_type='json',
                           uri='./artifact.json', description='whatever')
 
@@ -676,9 +678,7 @@ class AIFlowClientTestCases(object):
         self.assertIsNone(client.get_artifact_by_name('artifact_1'))
 
     def test_update_artifact(self):
-        artifact = client.register_artifact(name='artifact', artifact_type='json', uri='./artifact.json')
-        artifact_id = client.get_artifact_by_id(artifact.uuid)
-        self.assertIsNone(artifact_id.update_time)
+        client.register_artifact(name='artifact', artifact_type='json', uri='./artifact.json')
         artifact = client.update_artifact(artifact_name='artifact', artifact_type='csv', uri='../..')
         artifact_id = client.get_artifact_by_id(artifact.uuid)
         self.assertEqual(artifact_id.artifact_type, 'csv')
