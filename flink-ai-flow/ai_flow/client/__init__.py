@@ -122,7 +122,7 @@ def get_model_by_name(model_name) -> Optional[ModelMeta]:
     return get_ai_flow_client().get_model_by_name(model_name)
 
 
-def register_model(model_name, model_desc=None) -> ModelMeta:
+def register_model(model_name: Text, model_desc: Text = None) -> ModelMeta:
     project_config = get_default_project_config()
     project_id = int(project_config.get_project_uuid())
     return get_ai_flow_client().register_model(model_name, project_id, model_desc)
@@ -140,7 +140,8 @@ def get_model_version_relation_by_version(version, model_id) -> Optional[ModelVe
     return get_ai_flow_client().get_model_version_relation_by_version(version, model_id)
 
 
-def register_model_version_relation(version, model_id, project_snapshot_id=None) -> ModelVersionRelationMeta:
+def register_model_version_relation(version: Text, model_id: int,
+                                    project_snapshot_id: int = None) -> ModelVersionRelationMeta:
     return get_ai_flow_client().register_model_version_relation(version, model_id, project_snapshot_id)
 
 
@@ -243,12 +244,12 @@ def delete_artifact_by_name(artifact_name) -> Status:
     return get_ai_flow_client().delete_artifact_by_name(artifact_name)
 
 
-def create_registered_model(model_name, model_desc=None) -> Optional[RegisteredModelDetail]:
+def create_registered_model(model_name: Text, model_desc: Text = None) -> Optional[RegisteredModelDetail]:
     return get_ai_flow_client().create_registered_model(model_name, model_desc)
 
 
-def update_registered_model(model_name, new_name=None, model_desc=None) \
-        -> Optional[RegisteredModelDetail]:
+def update_registered_model(model_name: Text, new_name: Text = None,
+                            model_desc: Text = None) -> Optional[RegisteredModelDetail]:
     return get_ai_flow_client().update_registered_model(model_name, new_name, model_desc)
 
 

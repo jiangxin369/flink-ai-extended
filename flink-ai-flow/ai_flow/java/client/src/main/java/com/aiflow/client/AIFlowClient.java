@@ -440,7 +440,7 @@ public class AIFlowClient {
    * @param modelType Type of AIFlow registered model option.
    * @param versionDesc Description of registered model version.
    * @param modelId Model id corresponded to model version.
-   * @param projectSnapshotId Workflow snapshot id corresponded to model version.
+   * @param projectSnapshotId Project snapshot id corresponded to model version.
    * @return Single ModelVersionRelationMeta object registered in Metadata Store.
    */
   public ModelVersionMeta registerModelVersion(

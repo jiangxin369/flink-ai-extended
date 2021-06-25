@@ -26,23 +26,25 @@ class ProjectSnapshotMeta(Jsonable):
                  project_id: int,
                  uri: Text,
                  signature: Text,
-                 register_time: int = None,
+                 create_time: int = None,
                  uuid: int = None):
         self.project_id = project_id
         self.uri = uri
         self.signature = signature
-        self.register_time = register_time
+        self.create_time = create_time
         self.uuid = uuid
 
     def __str__(self):
         return '<\n' \
                'ProjectSnapshotMeta\n' \
                'uuid:{},\n' \
-               'name:{},\n' \
-               'properties:{},\n' \
+               'project_id:{},\n' \
                'uri:{},\n' \
+               'signature:{},\n' \
+               'create_time:{},\n' \
                '>'.format(self.uuid,
-                          self.name,
-                          self.properties,
-                          self.uri)
+                          self.project_id,
+                          self.uri,
+                          self.signature,
+                          self.create_time)
 

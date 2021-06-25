@@ -38,7 +38,7 @@ class ModelVersionParam(_ModelRepoEntity):
 
     @property
     def model_type(self):
-        """String. Model type feature for the model."""
+        """String. Model type of the model."""
         return self._model_type
 
     @property

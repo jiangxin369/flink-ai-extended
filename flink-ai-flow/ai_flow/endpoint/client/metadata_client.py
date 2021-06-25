@@ -421,10 +421,10 @@ class MetadataClient(BaseClient):
 
     def get_model_version_by_version(self, version, model_id) -> Optional[ModelVersionMeta]:
         """
-        get a specific model version in metadata store by model version name.
+        Get a specific model version in metadata store by model version name.
 
         :param version: User-defined version of registered model
-        :param model_id: the model id corresponded to the model version
+        :param model_id: The model id corresponded to the model version
         :return: A single :py:class:`ai_flow.meta.model_meta.ModelVersionMeta` object if the model version exists,
         Otherwise, returns None if the model version does not exist.
         """
@@ -438,9 +438,9 @@ class MetadataClient(BaseClient):
         """
         register a model version in metadata store.
 
-        :param model:  model id or model meta of registered model corresponded to model version
+        :param model: Model id or model meta of registered model corresponded to model version
         :param model_path: Source path where the AIFlow model is stored.
-        :param project_snapshot_id: id of project snapshot id corresponded to model version
+        :param project_snapshot_id: Id of project snapshot corresponded to model version
         :param model_type: (Optional) Type of AIFlow registered model option.
         :param version_desc: (Optional) Description of registered model version.
         :param current_stage: (Optional) Stage of registered model version
