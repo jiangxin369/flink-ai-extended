@@ -39,6 +39,7 @@ class ModelVersionParam(_ModelRepoEntity):
     @property
     def model_type(self):
         """String. Model type of the model."""
+        return self._model_type
 
     @property
     def version_desc(self):
