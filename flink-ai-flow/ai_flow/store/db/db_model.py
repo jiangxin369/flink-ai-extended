@@ -140,8 +140,6 @@ class SqlModelVersionRelation(base):
     project_snapshot_id = Column(BigInteger, ForeignKey('project_snapshot.uuid', onupdate='cascade'))
     is_deleted = Column(String(256), default='False')
 
-    UniqueConstraint(version, model_id)
-
     model_relation = relationship("SqlModelRelation", backref=backref('model_version_relation', cascade='all'))
     project_snapshot = relationship("SqlProjectSnapshot", backref=backref('project_snapshot', cascade='all'))
 
