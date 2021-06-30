@@ -75,6 +75,7 @@ class SchedulingService(SchedulingServiceServicer):
                     result=ResultProto(status=StatusProto.ERROR,
                                        error_message='{}, {} do not exist!'.format(project_name,
                                                                                    workflow.workflow_name)))
+
             return WorkflowInfoResponse(result=ResultProto(status=StatusProto.OK),
                                         workflow=workflow_to_proto(workflow_info))
         except Exception as err:
