@@ -296,6 +296,72 @@ class AbstractStore(object):
         pass
 
     '''
+        workflow api
+    '''
+
+    def register_workflow(self, name, project_id, properties=None):
+        """
+        Register a workflow in metadata store.
+
+        :param name: the workflow name
+        :param project_id: the id of project which contains the workflow
+        :param properties: the workflow properties
+        """
+        pass
+
+    def get_workflow_by_name(self, project_name, workflow_name):
+        """
+        Get a workflow by specific project name and workflow name
+
+        :param project_name: the name of project which contains the workflow
+        :param workflow_name: the workflow name
+        """
+        pass
+
+    def get_workflow_by_id(self, workflow_id):
+        """
+        Get a workflow by specific uuid
+
+        :param workflow_id: the uuid of workflow
+        """
+        pass
+
+    def list_workflows(self, project_name):
+        """
+        List all workflows of the specific project
+
+        :param project_name: the name of project which contains the workflow
+        """
+        pass
+
+    def delete_workflow_by_name(self, project_name, workflow_name):
+        """
+        Delete the workflow by project and workflow name
+
+        :param project_name: the name of project which contains the workflow
+        :param workflow_name: the workflow name
+        """
+        pass
+
+    def delete_workflow_by_id(self, workflow_id):
+        """
+        Delete the workflow by specific id
+
+        :param workflow_id: the uuid of workflow
+        """
+        pass
+
+    def update_workflow(self, workflow_name, project_name, properties=None):
+        """
+        Update the workflow
+
+        :param workflow_name: the workflow name
+        :param project_name: the name of project which contains the workflow
+        :param properties: (Optional) the properties needs to be updated
+        """
+        pass
+
+    '''
         artifact api
     '''
 
