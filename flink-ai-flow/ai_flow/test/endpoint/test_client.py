@@ -241,7 +241,7 @@ class AIFlowClientTestCases(object):
         self.assertRaises(AIFlowException, client.register_workflow, name='workflow',
                           project_id=project_response.uuid)
 
-    def test_list_workflow(self):
+    def test_list_workflows(self):
         project_response = client.register_project(name='project', uri='www.code.com')
         client.register_workflow(name='workflow1', project_id=project_response.uuid)
         client.register_workflow(name='workflow2', project_id=project_response.uuid)

@@ -536,8 +536,14 @@ class MongoStore(AbstractStore):
         List all workflows of the specific project
 
         :param project_name: the name of project which contains the workflow
+        :param page_size     limitation of listed workflows.
+        :param offset        offset of listed workflows.
         """
-        workflow_result = MongoWorkflow.objects(is_deleted__ne=TRUE).skip(offset).limit(page_size)
+        project = self.get_project_by_name(project_name)
+        if not project:
+            return None
+        workflow_result = MongoWorkflow.objects(project_id=project.uuid, is_deleted__ne=TRUE)\
+            .skip(offset).limit(page_size)
         if len(workflow_result) == 0:
             return None
         workflows = []
@@ -547,11 +553,20 @@ class MongoStore(AbstractStore):
 
     def delete_workflow_by_name(self, project_name, workflow_name) -> Status:
         """
-        Delete the workflow by project and workflow name
+        Delete the workflow by specific project and workflow name
 
         :param project_name: the name of project which contains the workflow
         :param workflow_name: the workflow name
         """
+
+        workflow = self.get_workflow_by_name(project_name=project_name,
+                                             workflow_name=workflow_name)
+        if workflow is None:
+            return Status.ERROR
+        else:
+            return self.delete_workflow_by_id(workflow.uuid)
+
+
         try:
             project = self.get_project_by_name(project_name)
             if not project:
@@ -577,11 +592,20 @@ class MongoStore(AbstractStore):
 
         :param workflow_id: the uuid of workflow
         """
-        workflow = self.get_workflow_by_id(workflow_id)
-        project = self.get_project_by_id(workflow.project_id)
-        if workflow is None or project is None:
-            return Status.ERROR
-        return self.delete_workflow_by_name(project_name=project.uuid, workflow_name=workflow.name)
+        try:
+            workflow = MongoWorkflow.objects(uuid=workflow_id, is_deleted__ne=TRUE).first()
+            if workflow is None:
+                return Status.ERROR
+            deleted_workflow_counts = MongoWorkflow.objects(
+                project_id=workflow.project_id,
+                name__startswith=deleted_character + workflow.name + deleted_character,
+                is_deleted=TRUE).count()
+            workflow.is_deleted = TRUE
+            workflow.name = deleted_character + workflow.name + deleted_character + str(deleted_workflow_counts + 1)
+            workflow.save()
+            return Status.OK
+        except mongoengine.OperationError as e:
+            raise AIFlowException(str(e))
 
     def update_workflow(self, workflow_name, project_name, properties=None) -> Optional[WorkflowMeta]:
         """
@@ -589,7 +613,7 @@ class MongoStore(AbstractStore):
 
         :param workflow_name: the workflow name
         :param project_name: the name of project which contains the workflow
-        :param properties: (Optional) the properties needs to be updated
+        :param properties: (Optional) the properties need to be updated
         """
         try:
             project = self.get_project_by_name(project_name)

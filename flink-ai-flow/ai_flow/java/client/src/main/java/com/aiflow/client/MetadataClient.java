@@ -709,7 +709,7 @@ public class MetadataClient {
      * @return WorkflowMeta object registered in Metadata Store
      */
     public WorkflowMeta getWorkflowByName(String projectName, String workflowName) throws Exception {
-        WorkflowNameRequest request = WorkflowNameRequest.newBuilder().setProjectName(projectName).setWorkflowName(workflowName ).build();
+        WorkflowNameRequest request = WorkflowNameRequest.newBuilder().setProjectName(projectName).setWorkflowName(workflowName).build();
         Response response = metadataServiceStub.getWorkflowByName(request);
         WorkflowMetaProto.Builder builder = WorkflowMetaProto.newBuilder();
         return StringUtils.isEmpty(metadataDetailResponse(response, this.parser, builder)) ?
@@ -747,7 +747,7 @@ public class MetadataClient {
     }
 
     /***
-     * Delete the workflow by project and workflow name
+     * Delete the workflow by specific project and workflow name
      *
      * @param projectName  The name of project which contains the workflow
      * @param workflowName The workflow name

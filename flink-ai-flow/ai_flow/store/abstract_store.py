@@ -331,12 +331,14 @@ class AbstractStore(object):
         List all workflows of the specific project
 
         :param project_name: the name of project which contains the workflow
+        :param page_size     limitation of listed workflows.
+        :param offset        offset of listed workflows.
         """
         pass
 
     def delete_workflow_by_name(self, project_name, workflow_name):
         """
-        Delete the workflow by project and workflow name
+        Delete the workflow by specific project and workflow name
 
         :param project_name: the name of project which contains the workflow
         :param workflow_name: the workflow name
@@ -357,7 +359,7 @@ class AbstractStore(object):
 
         :param workflow_name: the workflow name
         :param project_name: the name of project which contains the workflow
-        :param properties: (Optional) the properties needs to be updated
+        :param properties: (Optional) the properties need to be updated
         """
         pass
 

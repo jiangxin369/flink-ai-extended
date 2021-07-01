@@ -173,7 +173,7 @@ class AbstractTestStore(object):
         self.assertRaises(AIFlowException, self.store.register_workflow, name='workflow',
                           project_id=project_response.uuid)
 
-    def test_list_workflow(self):
+    def test_list_workflows(self):
         project_response = self.store.register_project(name='project', uri='www.code.com')
         self.store.register_workflow(name='workflow1', project_id=project_response.uuid)
         self.store.register_workflow(name='workflow2', project_id=project_response.uuid)

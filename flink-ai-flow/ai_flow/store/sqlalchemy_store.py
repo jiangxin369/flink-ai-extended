@@ -809,6 +809,8 @@ class SqlAlchemyStore(AbstractStore):
         List all workflows of the specific project
 
         :param project_name: the name of project which contains the workflow
+        :param page_size     limitation of listed workflows.
+        :param offset        offset of listed workflows.
         """
 
         with self.ManagedSessionMaker() as session:
@@ -828,25 +830,33 @@ class SqlAlchemyStore(AbstractStore):
 
     def delete_workflow_by_name(self, project_name, workflow_name) -> Status:
         """
-        Delete the workflow by project and workflow name
+        Delete the workflow by specific project and workflow name
 
         :param project_name: the name of project which contains the workflow
         :param workflow_name: the workflow name
         """
+        workflow = self.get_workflow_by_name(project_name=project_name,
+                                             workflow_name=workflow_name)
+        if workflow is None:
+            return Status.ERROR
+        else:
+            return self.delete_workflow_by_id(workflow.uuid)
+
+    def delete_workflow_by_id(self, workflow_id) -> Status:
+        """
+        Delete the workflow by specific id
+
+        :param workflow_id: the uuid of workflow
+        """
         with self.ManagedSessionMaker() as session:
             try:
-                project = self.get_project_by_name(project_name)
-                if not project:
-                    raise AIFlowException("The project name you specific doesn't exists, project: \"{}\""
-                                          .format(project_name))
-                workflow = session.query(SqlWorkflow).filter(SqlWorkflow.name == workflow_name,
-                                                             SqlWorkflow.project_id == project.uuid,
+                workflow = session.query(SqlWorkflow).filter(SqlWorkflow.uuid == workflow_id,
                                                              SqlWorkflow.is_deleted.is_(False)).scalar()
                 if workflow is None:
                     return Status.ERROR
                 deleted_workflow_counts = session.query(SqlWorkflow).filter(
-                    SqlWorkflow.project_id == project.uuid,
-                    SqlWorkflow.name.like(deleted_character + workflow_name + deleted_character + '%'),
+                    SqlWorkflow.project_id == workflow.project_id,
+                    SqlWorkflow.name.like(deleted_character + workflow.name + deleted_character + '%'),
                     SqlWorkflow.is_deleted.is_(True)).count()
                 workflow.is_deleted = True
                 workflow.name = deleted_character + workflow.name + deleted_character + str(deleted_workflow_counts + 1)
@@ -855,25 +865,13 @@ class SqlAlchemyStore(AbstractStore):
             except sqlalchemy.exc.IntegrityError as e:
                 raise AIFlowException(str(e))
 
-    def delete_workflow_by_id(self, workflow_id) -> Status:
-        """
-        Delete the workflow by specific id
-
-        :param workflow_id: the uuid of workflow
-        """
-        workflow = self.get_workflow_by_id(workflow_id)
-        project = self.get_project_by_id(workflow.project_id)
-        if workflow is None or project is None:
-            return Status.ERROR
-        return self.delete_workflow_by_name(project_name=project.name, workflow_name=workflow.name)
-
     def update_workflow(self, workflow_name, project_name, properties=None) -> Optional[WorkflowMeta]:
         """
         Update the workflow
 
         :param workflow_name: the workflow name
         :param project_name: the name of project which contains the workflow
-        :param properties: (Optional) the properties needs to be updated
+        :param properties: (Optional) the properties need to be updated
         """
         with self.ManagedSessionMaker() as session:
             try:

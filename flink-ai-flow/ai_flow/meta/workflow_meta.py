@@ -36,6 +36,7 @@ class WorkflowMeta(Jsonable):
 
         :param name: the workflow name
         :param project_id: the uuid of project which contains this workflow
+        :param properties: the workflow properties
         :param create_time: create time represented as milliseconds since epoch.
         :param update_time: update time represented as milliseconds since epoch.
         :param uuid: uuid in database

@@ -728,6 +728,8 @@ class MetadataClient(BaseClient):
         List all workflows of the specific project
 
         :param project_name: the name of project which contains the workflow
+        :param page_size      Limitation of listed workflows.
+        :param offset        Offset of listed workflows.
         """
         request = metadata_service_pb2.ListWorkflowsRequest(project_name=project_name,
                                                             page_size=page_size,
@@ -737,7 +739,7 @@ class MetadataClient(BaseClient):
 
     def delete_workflow_by_name(self, project_name: Text, workflow_name: Text) -> Status:
         """
-        Delete the workflow by project and workflow name
+        Delete the workflow by specific project and workflow name
 
         :param project_name: the name of project which contains the workflow
         :param workflow_name: the workflow name
@@ -764,7 +766,7 @@ class MetadataClient(BaseClient):
 
         :param workflow_name: the workflow name
         :param project_name: the name of project which contains the workflow
-        :param properties: (Optional) the properties needs to be updated
+        :param properties: (Optional) the properties need to be updated
         """
         request = metadata_service_pb2.UpdateWorkflowRequest(workflow_name=workflow_name,
                                                              project_name=project_name,
