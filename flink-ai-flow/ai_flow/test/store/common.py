@@ -16,14 +16,12 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-import os
 import time
 from unittest import mock
 
 from ai_flow.common.properties import Properties
 from ai_flow.common.status import Status
 from ai_flow.meta.dataset_meta import DataType, DatasetMeta, Schema
-from ai_flow.meta.job_meta import State
 from ai_flow.meta.metric_meta import MetricType
 from ai_flow.model_center.entity.registered_model_detail import RegisteredModelDetail
 from ai_flow.protobuf.message_pb2 import RESOURCE_ALREADY_EXISTS, \

@@ -50,15 +50,6 @@ class ProjectConfig(AIFlowConfiguration):
     def set_project_uuid(self, value):
         self["project_uuid"] = value
 
-    def get_airflow_deploy_path(self):
-        if "airflow_deploy_path" in self:
-            return self["airflow_deploy_path"]
-        else:
-            return None
-
-    def set_airflow_deploy_path(self, path):
-        self["airflow_deploy_path"] = path
-
     def get_notification_service_uri(self):
         if "notification_uri" in self:
             return self["notification_uri"]
@@ -76,15 +67,6 @@ class ProjectConfig(AIFlowConfiguration):
 
     def set_uploaded_project_path(self, uri):
         self["uploaded_project_path"] = uri
-
-    def get_schedule_interval(self):
-        if "schedule_interval" in self:
-            return self["schedule_interval"]
-        else:
-            return "@once"
-
-    def set_schedule_interval(self, schedule_interval):
-        self["schedule_interval"] = schedule_interval
 
     def get_enable_ha(self):
         if "enable_ha" in self:
@@ -128,5 +110,3 @@ class ProjectConfig(AIFlowConfiguration):
     def set_retry_timeout_ms(self, retry_timeout_ms):
         self._set_time_interval_ms("retry_timeout_ms", retry_timeout_ms)
 
-
-_default_project_config = ProjectConfig()

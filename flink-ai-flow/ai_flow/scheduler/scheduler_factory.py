@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 from ai_flow.common.module_load import import_string
-from ai_flow.scheduler.scheduler_interface import AbstractScheduler, SchedulerConfig
+from ai_flow.plugin_interface.scheduler_interface import AbstractScheduler, SchedulerConfig
 
 
 class SchedulerFactory(object):

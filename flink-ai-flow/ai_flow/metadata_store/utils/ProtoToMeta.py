@@ -18,7 +18,6 @@
 #
 from ai_flow.meta.artifact_meta import ArtifactMeta
 from ai_flow.meta.dataset_meta import DatasetMeta, List, DataType, Schema
-from ai_flow.meta.job_meta import State
 from ai_flow.meta.model_meta import ModelMeta, ModelVersionMeta
 from ai_flow.meta.model_relation_meta import ModelRelationMeta, ModelVersionRelationMeta
 from ai_flow.meta.project_meta import ProjectMeta
@@ -140,23 +139,6 @@ class ProtoToMeta:
         for artifact in artifacts:
             artifact_meta_list.append(ProtoToMeta.proto_to_artifact_meta(artifact))
         return artifact_meta_list
-
-    @staticmethod
-    def proto_to_state(state):
-        if state == StateProto.INIT:
-            return State.INIT
-        elif state == StateProto.STARTING:
-            return State.STARTING
-        elif state == StateProto.RUNNING:
-            return State.RUNNING
-        elif state == StateProto.FINISHED:
-            return State.FINISHED
-        elif state == StateProto.FAILED:
-            return State.FAILED
-        elif state == StateProto.KILLING:
-            return State.KILLING
-        elif state == StateProto.KILLED:
-            return State.KILLED
 
     @staticmethod
     def proto_to_model_relation_meta(model_relation_proto: ModelRelationProto) -> ModelRelationMeta:

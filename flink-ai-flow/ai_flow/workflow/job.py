@@ -18,30 +18,40 @@
 #
 from typing import Text
 from ai_flow.graph.node import BaseNode
-from ai_flow.workflow.job_context import JobContext
-from ai_flow.meta.job_meta import State
-from ai_flow.workflow.job_config import BaseJobConfig
+from ai_flow.workflow.job_config import JobConfig
 
 
-class BaseJob(BaseNode):
+class Job(BaseNode):
     """
-    A BaseJob contains the common information of a ai flow job. Users can implement custom jobs by adding other
-    execution information for a specific engine and platform.
+    A Job contains the common information of a ai flow job. Users can implement custom jobs by adding other
+    execution information for a specific job_type.
     """
-    def __init__(self, job_context: JobContext, job_config: BaseJobConfig) -> None:
+    def __init__(self,
+                 job_config: JobConfig) -> None:
         """
-
-        :param job_context: Job runtime context
         :param job_config: Job configuration information, including job name, running environment, etc.
         """
         super().__init__()
-        self.job_context: JobContext = job_context
         self.job_config = job_config
-        self.platform = job_config.platform
-        self.exec_engine = job_config.engine
-        self.status = State.INIT
-        self.start_time = None
-        self.end_time = None
-        self.uuid = None
-        self.job_name: Text = None
+        self._project_uri: Text = None  # project code uri
+        self._resource_dir: Text = None  # job resource dir
 
+    @property
+    def job_name(self):
+        return self.job_config.job_name
+
+    @property
+    def resource_dir(self):
+        return self._resource_dir
+
+    @resource_dir.setter
+    def resource_dir(self, value):
+        self._resource_dir = value
+
+    @property
+    def project_uri(self):
+        return self._project_uri
+
+    @project_uri.setter
+    def project_uri(self, value):
+        self._project_uri = value

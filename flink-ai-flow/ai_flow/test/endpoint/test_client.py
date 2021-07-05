@@ -28,7 +28,6 @@ from notification_service.base_notification import EventWatcher
 from ai_flow.common.properties import Properties
 from ai_flow.common.status import Status
 from ai_flow.meta.dataset_meta import DatasetMeta, DataType, Schema
-from ai_flow.meta.job_meta import State
 from ai_flow.meta.metric_meta import MetricType, MetricMeta, MetricSummary
 from ai_flow.model_center.entity.model_version_stage import ModelVersionStage
 from ai_flow.protobuf.message_pb2 import RESOURCE_ALREADY_EXISTS
@@ -993,7 +992,7 @@ class TestAIFlowClientSqlite(AIFlowClientTestCases, unittest.TestCase):
         print("TestAIFlowClientSqlite setUpClass")
         if os.path.exists(_SQLITE_DB_FILE):
             os.remove(_SQLITE_DB_FILE)
-        cls.server = AIFlowServer(store_uri=_SQLITE_DB_URI, port=_PORT)
+        cls.server = AIFlowServer(store_uri=_SQLITE_DB_URI, port=_PORT, start_scheduler_service=False)
         cls.server.run()
         client = AIFlowClient(server_uri='localhost:' + _PORT)
         client1 = AIFlowClient(server_uri='localhost:' + _PORT)

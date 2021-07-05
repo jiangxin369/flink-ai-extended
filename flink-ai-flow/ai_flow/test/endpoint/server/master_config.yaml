@@ -20,8 +20,8 @@ server_ip: localhost
 server_port: 50051
 db_uri: sqlite:///aiflow.db
 db_type: sql_lite
-start_scheduling_service: False
+start_scheduler_service: True
 scheduler:
-  scheduler_class_name: test.TestScheduler
+  scheduler_class_name: ai_flow.test.application_master.test_master.MockScheduler
   notification_service_uri: localhost:9999
   repository: /tmp/repo

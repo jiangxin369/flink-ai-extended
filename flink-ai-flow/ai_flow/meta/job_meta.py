@@ -35,12 +35,3 @@ class ExecutionMode(str, Enum):
         else:
             raise NotImplementedError
 
-
-class State(str, Enum):
-    INIT = 'INIT'
-    STARTING = 'STARTING'
-    RUNNING = 'RUNNING'
-    FINISHED = 'FINISHED'
-    FAILED = 'FAILED'
-    KILLING = 'KILLING'
-    KILLED = 'KILLED'
