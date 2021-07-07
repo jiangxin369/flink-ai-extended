@@ -15,6 +15,8 @@
 # specific language governing permissions and limitations
 # under the License.
 from abc import ABC, abstractmethod
+
+from ai_flow.common.configuration import AIFlowConfiguration
 from typing import Dict, Text, List, Optional
 from ai_flow.util import json_utils
 from ai_flow.workflow.workflow import Workflow
@@ -209,6 +211,81 @@ class JobExecutionInfo(json_utils.Jsonable):
     def __str__(self) -> str:
         return json_utils.dumps(self)
 
+    def generate_execution_str(self):
+        if self.workflow_execution is None or self.workflow_execution.workflow_info is None:
+            return None
+        return '_'.join([self.workflow_execution.workflow_info.workflow_name,
+                         self.workflow_execution.workflow_execution_id,
+                         self.job_name,
+                         self.job_execution_id])
+
+
+class ExecutionLabel(json_utils.Jsonable):
+    def __init__(self,
+                 uuid: int = None,
+                 name: Text = None,
+                 value: Text = None,
+                 ):
+        self._uuid = uuid
+        self._name = name
+        self._value = value
+
+    @property
+    def uuid(self):
+        return self._uuid
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def value(self):
+        return self._value
+
+
+class SchedulerConfig(AIFlowConfiguration):
+
+    def repository(self):
+        if 'repository' not in self:
+            return '/tmp'
+        else:
+            return self['repository']
+
+    def set_repository(self, value):
+        self['repository'] = value
+
+    def scheduler_class_name(self):
+        if self.get('scheduler_class_name') is not None:
+            return self.get('scheduler_class_name')
+        else:
+            return None
+
+    def set_scheduler_class_name(self, value):
+        self['scheduler_class_name'] = value
+
+    def notification_service_uri(self):
+        return self.get('notification_service_uri', None)
+
+    def set_notification_service_uri(self, value):
+        self['notification_service_uri'] = value
+
+    def properties(self):
+        if 'properties' not in self:
+            return None
+        return self['properties']
+
+    def set_properties(self, value):
+        self['properties'] = value
+
+    def extra_db_uri(self):
+        if self.get('extra_db_uri') is not None:
+            return self.get('extra_db_uri')
+        else:
+            return None
+
+    def set_extra_db_uri(self, value):
+        self['extra_db_uri'] = value
+
 
 class AbstractScheduler(ABC):
     def __init__(self, config: Dict):
@@ -345,3 +422,21 @@ class AbstractScheduler(ABC):
         :return: The job execution information.
         """
         pass
+
+    def get_execution_label(self, name) -> Optional[ExecutionLabel]:
+        """
+        Get the value of specific label.
+        :param name: The name of label
+        :return: The label object
+        """
+        pass
+
+    def upsert_execution_label(self, name, value) -> ExecutionLabel:
+        """
+        Update the value of specific label. Create a new record if not exists.
+        :param name: The name of label
+        :param value: The value of label
+        :return: The label object
+        """
+        pass
+

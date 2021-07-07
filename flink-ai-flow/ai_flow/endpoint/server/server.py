@@ -125,6 +125,12 @@ class AIFlowServer(object):
         real_config.set_scheduler_config(scheduler_service_config.get('scheduler_config'))
         real_config.set_repository(scheduler_service_config.get('repository'))
         real_config.set_scheduler_class_name(scheduler_service_config.get('scheduler_class_name'))
+        if scheduler_service_config.get('scheduler_config').get('extra_db_uri') is None:
+            # Use server database by default.
+            real_config.scheduler_config()['extra_db_uri'] = self.store_uri
+        else:
+            real_config.scheduler_config()['extra_db_uri'] = \
+                scheduler_service_config.get('scheduler_config').get('extra_db_uri')
         self.scheduler_service = SchedulerService(real_config)
         scheduling_service_pb2_grpc.add_SchedulingServiceServicer_to_server(self.scheduler_service,
                                                                             self.server)

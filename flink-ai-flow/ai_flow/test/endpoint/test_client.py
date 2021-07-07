@@ -983,6 +983,14 @@ class AIFlowClientTestCases(object):
         metric_summary_result = client.get_metric_summary(metric_id=1)
         self.assertEqual(1, len(metric_summary_result[2]))
 
+    def test_upsert_execution_label(self):
+        new_label = client.upsert_execution_label('a', 'b')
+        self.assertEqual('b', new_label.value)
+        updated_label = client.upsert_execution_label('a', 'c')
+        self.assertEqual('c', updated_label.value)
+        updated_label = client.get_execution_label('a')
+        self.assertEqual('c', updated_label.value)
+
 
 class TestAIFlowClientSqlite(AIFlowClientTestCases, unittest.TestCase):
 
@@ -992,7 +1000,10 @@ class TestAIFlowClientSqlite(AIFlowClientTestCases, unittest.TestCase):
         print("TestAIFlowClientSqlite setUpClass")
         if os.path.exists(_SQLITE_DB_FILE):
             os.remove(_SQLITE_DB_FILE)
-        cls.server = AIFlowServer(store_uri=_SQLITE_DB_URI, port=_PORT, start_scheduler_service=False)
+
+        # Test scheduling client with airflow scheduler by default
+        config = get_airflow_scheduler_config()
+        cls.server = AIFlowServer(store_uri=_SQLITE_DB_URI, port=_PORT, scheduler_config=config, start_scheduler_service=True)
         cls.server.run()
         client = AIFlowClient(server_uri='localhost:' + _PORT)
         client1 = AIFlowClient(server_uri='localhost:' + _PORT)
@@ -1026,8 +1037,12 @@ class TestAIFlowClientSqliteWithSingleHighAvailableServer(
         print("TestAIFlowClientSqlite setUpClass")
         if os.path.exists(_SQLITE_DB_FILE):
             os.remove(_SQLITE_DB_FILE)
+        # Test scheduling client with airflow scheduler by default
+        config = get_airflow_scheduler_config()
         cls.server = AIFlowServer(store_uri=_SQLITE_DB_URI, port=_PORT, enabled_ha=True,
-                                  ha_server_uri='localhost:' + _PORT)
+                                  ha_server_uri='localhost:' + _PORT,
+                                  start_scheduler_service=True,
+                                  scheduler_config=config)
         cls.server.run()
         config = ProjectConfig()
         config.set_server_ip('localhost')
@@ -1055,6 +1070,14 @@ class TestAIFlowClientSqliteWithSingleHighAvailableServer(
     def tearDown(self) -> None:
         store = _get_store(_SQLITE_DB_URI)
         base.metadata.drop_all(store.db_engine)
+
+
+def get_airflow_scheduler_config():
+    scheduler_class = 'ai_flow_plugins.scheduler_plugins.airflow.airflow_scheduler.AirFlowScheduler'
+    from ai_flow.scheduler.scheduler_service import SchedulerServiceConfig
+    config = SchedulerServiceConfig()
+    config.set_scheduler_class_name(scheduler_class)
+    return config
 
 
 if __name__ == '__main__':

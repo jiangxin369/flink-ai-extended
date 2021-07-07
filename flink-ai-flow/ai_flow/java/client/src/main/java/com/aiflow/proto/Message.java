@@ -33653,6 +33653,901 @@ public final class Message {
 
   }
 
+  public interface ExecutionLabelProtoOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:ai_flow.ExecutionLabelProto)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>int64 uuid = 1;</code>
+     * @return The uuid.
+     */
+    long getUuid();
+
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     * @return Whether the name field is set.
+     */
+    boolean hasName();
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     * @return The name.
+     */
+    com.google.protobuf.StringValue getName();
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     */
+    com.google.protobuf.StringValueOrBuilder getNameOrBuilder();
+
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     * @return Whether the value field is set.
+     */
+    boolean hasValue();
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     * @return The value.
+     */
+    com.google.protobuf.StringValue getValue();
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     */
+    com.google.protobuf.StringValueOrBuilder getValueOrBuilder();
+  }
+  /**
+   * Protobuf type {@code ai_flow.ExecutionLabelProto}
+   */
+  public static final class ExecutionLabelProto extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:ai_flow.ExecutionLabelProto)
+      ExecutionLabelProtoOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use ExecutionLabelProto.newBuilder() to construct.
+    private ExecutionLabelProto(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private ExecutionLabelProto() {
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new ExecutionLabelProto();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ExecutionLabelProto(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 8: {
+
+              uuid_ = input.readInt64();
+              break;
+            }
+            case 18: {
+              com.google.protobuf.StringValue.Builder subBuilder = null;
+              if (name_ != null) {
+                subBuilder = name_.toBuilder();
+              }
+              name_ = input.readMessage(com.google.protobuf.StringValue.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(name_);
+                name_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            case 26: {
+              com.google.protobuf.StringValue.Builder subBuilder = null;
+              if (value_ != null) {
+                subBuilder = value_.toBuilder();
+              }
+              value_ = input.readMessage(com.google.protobuf.StringValue.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(value_);
+                value_ = subBuilder.buildPartial();
+              }
+
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return com.aiflow.proto.Message.internal_static_ai_flow_ExecutionLabelProto_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return com.aiflow.proto.Message.internal_static_ai_flow_ExecutionLabelProto_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              com.aiflow.proto.Message.ExecutionLabelProto.class, com.aiflow.proto.Message.ExecutionLabelProto.Builder.class);
+    }
+
+    public static final int UUID_FIELD_NUMBER = 1;
+    private long uuid_;
+    /**
+     * <code>int64 uuid = 1;</code>
+     * @return The uuid.
+     */
+    @java.lang.Override
+    public long getUuid() {
+      return uuid_;
+    }
+
+    public static final int NAME_FIELD_NUMBER = 2;
+    private com.google.protobuf.StringValue name_;
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     * @return Whether the name field is set.
+     */
+    @java.lang.Override
+    public boolean hasName() {
+      return name_ != null;
+    }
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     * @return The name.
+     */
+    @java.lang.Override
+    public com.google.protobuf.StringValue getName() {
+      return name_ == null ? com.google.protobuf.StringValue.getDefaultInstance() : name_;
+    }
+    /**
+     * <code>.google.protobuf.StringValue name = 2;</code>
+     */
+    @java.lang.Override
+    public com.google.protobuf.StringValueOrBuilder getNameOrBuilder() {
+      return getName();
+    }
+
+    public static final int VALUE_FIELD_NUMBER = 3;
+    private com.google.protobuf.StringValue value_;
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     * @return Whether the value field is set.
+     */
+    @java.lang.Override
+    public boolean hasValue() {
+      return value_ != null;
+    }
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     * @return The value.
+     */
+    @java.lang.Override
+    public com.google.protobuf.StringValue getValue() {
+      return value_ == null ? com.google.protobuf.StringValue.getDefaultInstance() : value_;
+    }
+    /**
+     * <code>.google.protobuf.StringValue value = 3;</code>
+     */
+    @java.lang.Override
+    public com.google.protobuf.StringValueOrBuilder getValueOrBuilder() {
+      return getValue();
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (uuid_ != 0L) {
+        output.writeInt64(1, uuid_);
+      }
+      if (name_ != null) {
+        output.writeMessage(2, getName());
+      }
+      if (value_ != null) {
+        output.writeMessage(3, getValue());
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (uuid_ != 0L) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, uuid_);
+      }
+      if (name_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(2, getName());
+      }
+      if (value_ != null) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, getValue());
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof com.aiflow.proto.Message.ExecutionLabelProto)) {
+        return super.equals(obj);
+      }
+      com.aiflow.proto.Message.ExecutionLabelProto other = (com.aiflow.proto.Message.ExecutionLabelProto) obj;
+
+      if (getUuid()
+          != other.getUuid()) return false;
+      if (hasName() != other.hasName()) return false;
+      if (hasName()) {
+        if (!getName()
+            .equals(other.getName())) return false;
+      }
+      if (hasValue() != other.hasValue()) return false;
+      if (hasValue()) {
+        if (!getValue()
+            .equals(other.getValue())) return false;
+      }
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + UUID_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
+          getUuid());
+      if (hasName()) {
+        hash = (37 * hash) + NAME_FIELD_NUMBER;
+        hash = (53 * hash) + getName().hashCode();
+      }
+      if (hasValue()) {
+        hash = (37 * hash) + VALUE_FIELD_NUMBER;
+        hash = (53 * hash) + getValue().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static com.aiflow.proto.Message.ExecutionLabelProto parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(com.aiflow.proto.Message.ExecutionLabelProto prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code ai_flow.ExecutionLabelProto}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:ai_flow.ExecutionLabelProto)
+        com.aiflow.proto.Message.ExecutionLabelProtoOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return com.aiflow.proto.Message.internal_static_ai_flow_ExecutionLabelProto_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return com.aiflow.proto.Message.internal_static_ai_flow_ExecutionLabelProto_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                com.aiflow.proto.Message.ExecutionLabelProto.class, com.aiflow.proto.Message.ExecutionLabelProto.Builder.class);
+      }
+
+      // Construct using com.aiflow.proto.Message.ExecutionLabelProto.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        uuid_ = 0L;
+
+        if (nameBuilder_ == null) {
+          name_ = null;
+        } else {
+          name_ = null;
+          nameBuilder_ = null;
+        }
+        if (valueBuilder_ == null) {
+          value_ = null;
+        } else {
+          value_ = null;
+          valueBuilder_ = null;
+        }
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return com.aiflow.proto.Message.internal_static_ai_flow_ExecutionLabelProto_descriptor;
+      }
+
+      @java.lang.Override
+      public com.aiflow.proto.Message.ExecutionLabelProto getDefaultInstanceForType() {
+        return com.aiflow.proto.Message.ExecutionLabelProto.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public com.aiflow.proto.Message.ExecutionLabelProto build() {
+        com.aiflow.proto.Message.ExecutionLabelProto result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public com.aiflow.proto.Message.ExecutionLabelProto buildPartial() {
+        com.aiflow.proto.Message.ExecutionLabelProto result = new com.aiflow.proto.Message.ExecutionLabelProto(this);
+        result.uuid_ = uuid_;
+        if (nameBuilder_ == null) {
+          result.name_ = name_;
+        } else {
+          result.name_ = nameBuilder_.build();
+        }
+        if (valueBuilder_ == null) {
+          result.value_ = value_;
+        } else {
+          result.value_ = valueBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof com.aiflow.proto.Message.ExecutionLabelProto) {
+          return mergeFrom((com.aiflow.proto.Message.ExecutionLabelProto)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(com.aiflow.proto.Message.ExecutionLabelProto other) {
+        if (other == com.aiflow.proto.Message.ExecutionLabelProto.getDefaultInstance()) return this;
+        if (other.getUuid() != 0L) {
+          setUuid(other.getUuid());
+        }
+        if (other.hasName()) {
+          mergeName(other.getName());
+        }
+        if (other.hasValue()) {
+          mergeValue(other.getValue());
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.aiflow.proto.Message.ExecutionLabelProto parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (com.aiflow.proto.Message.ExecutionLabelProto) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private long uuid_ ;
+      /**
+       * <code>int64 uuid = 1;</code>
+       * @return The uuid.
+       */
+      @java.lang.Override
+      public long getUuid() {
+        return uuid_;
+      }
+      /**
+       * <code>int64 uuid = 1;</code>
+       * @param value The uuid to set.
+       * @return This builder for chaining.
+       */
+      public Builder setUuid(long value) {
+        
+        uuid_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int64 uuid = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearUuid() {
+        
+        uuid_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.StringValue name_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder> nameBuilder_;
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       * @return Whether the name field is set.
+       */
+      public boolean hasName() {
+        return nameBuilder_ != null || name_ != null;
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       * @return The name.
+       */
+      public com.google.protobuf.StringValue getName() {
+        if (nameBuilder_ == null) {
+          return name_ == null ? com.google.protobuf.StringValue.getDefaultInstance() : name_;
+        } else {
+          return nameBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public Builder setName(com.google.protobuf.StringValue value) {
+        if (nameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          name_ = value;
+          onChanged();
+        } else {
+          nameBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public Builder setName(
+          com.google.protobuf.StringValue.Builder builderForValue) {
+        if (nameBuilder_ == null) {
+          name_ = builderForValue.build();
+          onChanged();
+        } else {
+          nameBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public Builder mergeName(com.google.protobuf.StringValue value) {
+        if (nameBuilder_ == null) {
+          if (name_ != null) {
+            name_ =
+              com.google.protobuf.StringValue.newBuilder(name_).mergeFrom(value).buildPartial();
+          } else {
+            name_ = value;
+          }
+          onChanged();
+        } else {
+          nameBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public Builder clearName() {
+        if (nameBuilder_ == null) {
+          name_ = null;
+          onChanged();
+        } else {
+          name_ = null;
+          nameBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public com.google.protobuf.StringValue.Builder getNameBuilder() {
+        
+        onChanged();
+        return getNameFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      public com.google.protobuf.StringValueOrBuilder getNameOrBuilder() {
+        if (nameBuilder_ != null) {
+          return nameBuilder_.getMessageOrBuilder();
+        } else {
+          return name_ == null ?
+              com.google.protobuf.StringValue.getDefaultInstance() : name_;
+        }
+      }
+      /**
+       * <code>.google.protobuf.StringValue name = 2;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder> 
+          getNameFieldBuilder() {
+        if (nameBuilder_ == null) {
+          nameBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder>(
+                  getName(),
+                  getParentForChildren(),
+                  isClean());
+          name_ = null;
+        }
+        return nameBuilder_;
+      }
+
+      private com.google.protobuf.StringValue value_;
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder> valueBuilder_;
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       * @return Whether the value field is set.
+       */
+      public boolean hasValue() {
+        return valueBuilder_ != null || value_ != null;
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       * @return The value.
+       */
+      public com.google.protobuf.StringValue getValue() {
+        if (valueBuilder_ == null) {
+          return value_ == null ? com.google.protobuf.StringValue.getDefaultInstance() : value_;
+        } else {
+          return valueBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public Builder setValue(com.google.protobuf.StringValue value) {
+        if (valueBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          value_ = value;
+          onChanged();
+        } else {
+          valueBuilder_.setMessage(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public Builder setValue(
+          com.google.protobuf.StringValue.Builder builderForValue) {
+        if (valueBuilder_ == null) {
+          value_ = builderForValue.build();
+          onChanged();
+        } else {
+          valueBuilder_.setMessage(builderForValue.build());
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public Builder mergeValue(com.google.protobuf.StringValue value) {
+        if (valueBuilder_ == null) {
+          if (value_ != null) {
+            value_ =
+              com.google.protobuf.StringValue.newBuilder(value_).mergeFrom(value).buildPartial();
+          } else {
+            value_ = value;
+          }
+          onChanged();
+        } else {
+          valueBuilder_.mergeFrom(value);
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public Builder clearValue() {
+        if (valueBuilder_ == null) {
+          value_ = null;
+          onChanged();
+        } else {
+          value_ = null;
+          valueBuilder_ = null;
+        }
+
+        return this;
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public com.google.protobuf.StringValue.Builder getValueBuilder() {
+        
+        onChanged();
+        return getValueFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      public com.google.protobuf.StringValueOrBuilder getValueOrBuilder() {
+        if (valueBuilder_ != null) {
+          return valueBuilder_.getMessageOrBuilder();
+        } else {
+          return value_ == null ?
+              com.google.protobuf.StringValue.getDefaultInstance() : value_;
+        }
+      }
+      /**
+       * <code>.google.protobuf.StringValue value = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder> 
+          getValueFieldBuilder() {
+        if (valueBuilder_ == null) {
+          valueBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              com.google.protobuf.StringValue, com.google.protobuf.StringValue.Builder, com.google.protobuf.StringValueOrBuilder>(
+                  getValue(),
+                  getParentForChildren(),
+                  isClean());
+          value_ = null;
+        }
+        return valueBuilder_;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:ai_flow.ExecutionLabelProto)
+    }
+
+    // @@protoc_insertion_point(class_scope:ai_flow.ExecutionLabelProto)
+    private static final com.aiflow.proto.Message.ExecutionLabelProto DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new com.aiflow.proto.Message.ExecutionLabelProto();
+    }
+
+    public static com.aiflow.proto.Message.ExecutionLabelProto getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<ExecutionLabelProto>
+        PARSER = new com.google.protobuf.AbstractParser<ExecutionLabelProto>() {
+      @java.lang.Override
+      public ExecutionLabelProto parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ExecutionLabelProto(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<ExecutionLabelProto> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ExecutionLabelProto> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.aiflow.proto.Message.ExecutionLabelProto getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_ai_flow_SchemaProto_descriptor;
   private static final 
@@ -33808,6 +34703,11 @@ public final class Message {
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_ai_flow_MetricSummaryProto_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_ai_flow_ExecutionLabelProto_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_ai_flow_ExecutionLabelProto_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -33967,37 +34867,40 @@ public final class Message {
       "etric_id\030\002 \001(\0132\033.google.protobuf.Int64Va" +
       "lue\0220\n\nmetric_key\030\003 \001(\0132\034.google.protobu" +
       "f.StringValue\0222\n\014metric_value\030\004 \001(\0132\034.go" +
-      "ogle.protobuf.StringValue*\300\003\n\nReturnCode" +
-      "\022\013\n\007SUCCESS\020\000\022\022\n\016INTERNAL_ERROR\020\001\022\033\n\027TEM" +
-      "PORARILY_UNAVAILABLE\020\002\022\014\n\010IO_ERROR\020\003\022\017\n\013" +
-      "BAD_REQUEST\020\004\022\034\n\027INVALID_PARAMETER_VALUE" +
-      "\020\350\007\022\027\n\022ENDPOINT_NOT_FOUND\020\351\007\022\026\n\021MALFORME" +
-      "D_REQUEST\020\352\007\022\022\n\rINVALID_STATE\020\353\007\022\026\n\021PERM" +
-      "ISSION_DENIED\020\354\007\022\025\n\020FEATURE_DISABLED\020\355\007\022" +
-      "\032\n\025CUSTOMER_UNAUTHORIZED\020\356\007\022\033\n\026REQUEST_L" +
-      "IMIT_EXCEEDED\020\357\007\022\034\n\027RESOURCE_ALREADY_EXI" +
-      "STS\020\321\017\022\034\n\027RESOURCE_DOES_NOT_EXIST\020\322\017\022\023\n\016" +
-      "QUOTA_EXCEEDED\020\271\027\022\034\n\027MAX_BLOCK_SIZE_EXCE" +
-      "EDED\020\272\027\022\033\n\026MAX_READ_SIZE_EXCEEDED\020\273\027* \n\013" +
-      "StatusProto\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*\326\001\n\rDataT" +
-      "ypeProto\022\031\n\025DATA_TYPE_UNSPECIFIED\020\000\022\t\n\005I" +
-      "NT32\020\001\022\t\n\005INT64\020\002\022\013\n\007FLOAT32\020\003\022\013\n\007FLOAT6" +
-      "4\020\004\022\n\n\006STRING\020\005\022\016\n\nINT32ARRAY\020\006\022\016\n\nINT64" +
-      "ARRAY\020\007\022\020\n\014FlOAT32ARRAY\020\010\022\020\n\014FLOAT64ARRA" +
-      "Y\020\t\022\017\n\013STRINGARRAY\020\n\022\t\n\005BYTES\020\013\022\016\n\nBYTES" +
-      "ARRAY\020\014*{\n\nStateProto\022\025\n\021STATE_UNSPECIFI" +
-      "ED\020\000\022\010\n\004INIT\020\001\022\014\n\010STARTING\020\002\022\013\n\007RUNNING\020" +
-      "\003\022\014\n\010FINISHED\020\004\022\n\n\006FAILED\020\005\022\013\n\007KILLING\020\006" +
-      "\022\n\n\006KILLED\020\007*F\n\rExecutionMode\022\036\n\032EXECUTI" +
-      "ON_MODE_UNSPECIFIED\020\000\022\t\n\005BATCH\020\001\022\n\n\006STRE" +
-      "AM\020\002*}\n\022ModelVersionStatus\022\030\n\024PENDING_RE" +
-      "GISTRATION\020\000\022\027\n\023FAILED_REGISTRATION\020\001\022\t\n" +
-      "\005READY\020\003\022\024\n\020PENDING_DELETION\020\004\022\023\n\017FAILED" +
-      "_DELETION\020\005*\\\n\021ModelVersionStage\022\r\n\tGENE" +
-      "RATED\020\000\022\r\n\tVALIDATED\020\001\022\014\n\010DEPLOYED\020\002\022\016\n\n" +
-      "DEPRECATED\020\003\022\013\n\007DELETED\020\004*)\n\017MetricTypeP" +
-      "roto\022\013\n\007DATASET\020\000\022\t\n\005MODEL\020\001B\"\n\020com.aifl" +
-      "ow.protoZ\010/ai_flow\210\001\001\220\001\001b\006proto3"
+      "ogle.protobuf.StringValue\"|\n\023ExecutionLa" +
+      "belProto\022\014\n\004uuid\030\001 \001(\003\022*\n\004name\030\002 \001(\0132\034.g" +
+      "oogle.protobuf.StringValue\022+\n\005value\030\003 \001(" +
+      "\0132\034.google.protobuf.StringValue*\300\003\n\nRetu" +
+      "rnCode\022\013\n\007SUCCESS\020\000\022\022\n\016INTERNAL_ERROR\020\001\022" +
+      "\033\n\027TEMPORARILY_UNAVAILABLE\020\002\022\014\n\010IO_ERROR" +
+      "\020\003\022\017\n\013BAD_REQUEST\020\004\022\034\n\027INVALID_PARAMETER" +
+      "_VALUE\020\350\007\022\027\n\022ENDPOINT_NOT_FOUND\020\351\007\022\026\n\021MA" +
+      "LFORMED_REQUEST\020\352\007\022\022\n\rINVALID_STATE\020\353\007\022\026" +
+      "\n\021PERMISSION_DENIED\020\354\007\022\025\n\020FEATURE_DISABL" +
+      "ED\020\355\007\022\032\n\025CUSTOMER_UNAUTHORIZED\020\356\007\022\033\n\026REQ" +
+      "UEST_LIMIT_EXCEEDED\020\357\007\022\034\n\027RESOURCE_ALREA" +
+      "DY_EXISTS\020\321\017\022\034\n\027RESOURCE_DOES_NOT_EXIST\020" +
+      "\322\017\022\023\n\016QUOTA_EXCEEDED\020\271\027\022\034\n\027MAX_BLOCK_SIZ" +
+      "E_EXCEEDED\020\272\027\022\033\n\026MAX_READ_SIZE_EXCEEDED\020" +
+      "\273\027* \n\013StatusProto\022\006\n\002OK\020\000\022\t\n\005ERROR\020\001*\326\001\n" +
+      "\rDataTypeProto\022\031\n\025DATA_TYPE_UNSPECIFIED\020" +
+      "\000\022\t\n\005INT32\020\001\022\t\n\005INT64\020\002\022\013\n\007FLOAT32\020\003\022\013\n\007" +
+      "FLOAT64\020\004\022\n\n\006STRING\020\005\022\016\n\nINT32ARRAY\020\006\022\016\n" +
+      "\nINT64ARRAY\020\007\022\020\n\014FlOAT32ARRAY\020\010\022\020\n\014FLOAT" +
+      "64ARRAY\020\t\022\017\n\013STRINGARRAY\020\n\022\t\n\005BYTES\020\013\022\016\n" +
+      "\nBYTESARRAY\020\014*{\n\nStateProto\022\025\n\021STATE_UNS" +
+      "PECIFIED\020\000\022\010\n\004INIT\020\001\022\014\n\010STARTING\020\002\022\013\n\007RU" +
+      "NNING\020\003\022\014\n\010FINISHED\020\004\022\n\n\006FAILED\020\005\022\013\n\007KIL" +
+      "LING\020\006\022\n\n\006KILLED\020\007*F\n\rExecutionMode\022\036\n\032E" +
+      "XECUTION_MODE_UNSPECIFIED\020\000\022\t\n\005BATCH\020\001\022\n" +
+      "\n\006STREAM\020\002*}\n\022ModelVersionStatus\022\030\n\024PEND" +
+      "ING_REGISTRATION\020\000\022\027\n\023FAILED_REGISTRATIO" +
+      "N\020\001\022\t\n\005READY\020\003\022\024\n\020PENDING_DELETION\020\004\022\023\n\017" +
+      "FAILED_DELETION\020\005*\\\n\021ModelVersionStage\022\r" +
+      "\n\tGENERATED\020\000\022\r\n\tVALIDATED\020\001\022\014\n\010DEPLOYED" +
+      "\020\002\022\016\n\nDEPRECATED\020\003\022\013\n\007DELETED\020\004*)\n\017Metri" +
+      "cTypeProto\022\013\n\007DATASET\020\000\022\t\n\005MODEL\020\001B\"\n\020co" +
+      "m.aiflow.protoZ\010/ai_flow\210\001\001\220\001\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -34190,6 +35093,12 @@ public final class Message {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_ai_flow_MetricSummaryProto_descriptor,
         new java.lang.String[] { "Uuid", "MetricId", "MetricKey", "MetricValue", });
+    internal_static_ai_flow_ExecutionLabelProto_descriptor =
+      getDescriptor().getMessageTypes().get(23);
+    internal_static_ai_flow_ExecutionLabelProto_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_ai_flow_ExecutionLabelProto_descriptor,
+        new java.lang.String[] { "Uuid", "Name", "Value", });
     com.google.protobuf.WrappersProto.getDescriptor();
   }
 

@@ -14,8 +14,9 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import time
 from abc import abstractmethod, ABC
-from typing import Text, Dict
+from typing import Text, Dict, List
 import logging
 from ai_flow.common.registry import BaseRegistry
 from ai_flow.util.json_utils import Jsonable
@@ -43,6 +44,16 @@ class JobHandler(Jsonable):
 
     def wait_until_finish(self):
         """Wait the job execution until it is finished"""
+        while self.is_job_running():
+            # TODO make it configurable
+            time.sleep(5)
+
+    def is_job_running(self):
+        """Check if the job is still running."""
+        pass
+
+    def obtain_job_labels(self) -> Dict[str, str]:
+        """Obtain job labels related to this job"""
         pass
 
     @property

@@ -325,3 +325,9 @@ message MetricSummaryProto {
     google.protobuf.StringValue metric_key = 3;
     google.protobuf.StringValue metric_value = 4;
 }
+
+message ExecutionLabelProto {
+    int64 uuid = 1;
+    google.protobuf.StringValue name = 2;
+    google.protobuf.StringValue value = 3;
+}

@@ -16,10 +16,12 @@
 # under the License.
 from typing import List
 
-from ai_flow.endpoint.server import stringValue, int64Value
-from ai_flow.protobuf.message_pb2 import WorkflowProto, WorkflowExecutionProto, StateProto, JobProto
-from ai_flow.plugin_interface.scheduler_interface import WorkflowInfo, WorkflowExecutionInfo, JobExecutionInfo
+from ai_flow.endpoint.server import int64Value, stringValue
 from ai_flow.workflow.status import Status
+from ai_flow.protobuf.message_pb2 import WorkflowProto, WorkflowExecutionProto, StateProto, JobProto, \
+    ExecutionLabelProto
+from ai_flow.plugin_interface.scheduler_interface import WorkflowInfo, WorkflowExecutionInfo, JobExecutionInfo, \
+    ExecutionLabel
 
 
 def proto_to_state(state):
@@ -173,3 +175,21 @@ def proto_to_job_list(proto_list: List[JobProto]) -> List[JobExecutionInfo]:
     for proto in proto_list:
         result.append(proto_to_job(proto))
     return result
+
+
+def execution_label_to_proto(label: ExecutionLabel) -> ExecutionLabelProto:
+    if label is None:
+        return None
+    else:
+        return ExecutionLabelProto(uuid=label.uuid,
+                                   name=stringValue(label.name),
+                                   value=stringValue(label.value))
+
+
+def proto_to_execution_label(proto: ExecutionLabelProto) -> ExecutionLabel:
+    if proto is None:
+        return None
+    else:
+        return ExecutionLabel(uuid=proto.uuid,
+                              name=proto.name.value,
+                              value=proto.value.value)
