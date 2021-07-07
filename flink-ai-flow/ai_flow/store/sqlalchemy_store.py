@@ -18,6 +18,8 @@
 #
 import logging
 import time
+
+from ai_flow.plugin_interface.scheduler_interface import ExecutionLabel
 from typing import Optional, Text, List, Union
 import sqlalchemy.exc
 import sqlalchemy.orm
@@ -42,7 +44,7 @@ from ai_flow.endpoint.server.high_availability import Member
 from ai_flow.store.abstract_store import AbstractStore
 from ai_flow.store.db.base_model import base
 from ai_flow.store.db.db_model import SqlDataset, SqlModelRelation, SqlModelVersionRelation, SqlProject, \
-    SqlWorkflow, SqlEvent, SqlArtifact, SqlMember, SqlProjectSnapshot
+    SqlWorkflow, SqlEvent, SqlArtifact, SqlMember, SqlProjectSnapshot, SqlExecutionLabel
 from ai_flow.store.db.db_model import SqlMetricMeta, SqlMetricSummary
 from ai_flow.store.db.db_model import SqlRegisteredModel, SqlModelVersion
 from ai_flow.store.db.db_util import extract_db_engine_from_uri, create_sqlalchemy_engine, _get_managed_session_maker
@@ -1721,6 +1723,32 @@ class SqlAlchemyStore(AbstractStore):
                     .delete()
             except Exception as e:
                 raise AIFlowException("Clear dead AIFlow Member Error.") from e
+
+    def upsert_execution_label(self, name, value) -> ExecutionLabel:
+        with self.ManagedSessionMaker() as session:
+            try:
+                execution_label = session.query(SqlExecutionLabel) \
+                    .filter(SqlExecutionLabel.name == name).scalar()
+                if execution_label is None:
+                    execution_label: SqlExecutionLabel = SqlExecutionLabel()
+                    execution_label.name = name
+                    execution_label.value = value
+                    session.add(execution_label)
+                else:
+                    execution_label.value = value
+                    session.flush()
+                return execution_label.to_meta_entity()
+            except Exception as e:
+                raise AIFlowException("Upsert ExecutionLabel Error.") from e
+
+    def get_execution_label(self, name) -> Optional[ExecutionLabel]:
+        with self.ManagedSessionMaker() as session:
+            try:
+                execution_label = session.query(SqlExecutionLabel) \
+                    .filter(SqlExecutionLabel.name == name).scalar()
+                return None if execution_label is None else execution_label.to_meta_entity()
+            except Exception as e:
+                raise AIFlowException("Get ExecutionLabel Error.") from e
 
 
 def _gen_entity_name_prefix(name):

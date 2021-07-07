@@ -119,6 +119,11 @@ class AIFlowServer(object):
             real_config.set_notification_service_uri(nf_uri)
         else:
             real_config.set_notification_service_uri(scheduler_config.get('notification_uri'))
+        if scheduler_config.get('extra_db_uri') is None:
+            # Use server database by default.
+            real_config.set_extra_db_uri(self.store_uri)
+        else:
+            real_config.set_extra_db_uri(scheduler_config.get('extra_db_uri'))
         real_config.set_properties(scheduler_config.get('properties'))
         real_config.set_repository(scheduler_config.get('repository'))
         real_config.set_scheduler_class_name(scheduler_config.get('scheduler_class_name'))

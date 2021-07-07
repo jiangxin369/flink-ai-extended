@@ -16,11 +16,14 @@
 # under the License.
 import os
 from tempfile import NamedTemporaryFile
+
+from ai_flow.store.abstract_store import AbstractStore
+from ai_flow.store.db import db_util
 from typing import Dict, Text, List, Optional
 from ai_flow_plugins.scheduler_plugins.airflow.dag_generator import DAGGenerator
 from ai_flow.project.project_description import ProjectDesc
 from ai_flow.plugin_interface.scheduler_interface import AbstractScheduler, SchedulerConfig, \
-    WorkflowInfo, JobExecutionInfo, WorkflowExecutionInfo
+    WorkflowInfo, JobExecutionInfo, WorkflowExecutionInfo, ExecutionLabel
 from ai_flow.workflow.workflow import Workflow
 from ai_flow.workflow import state
 from airflow.executors.scheduling_action import SchedulingAction
@@ -42,6 +45,7 @@ class AirFlowScheduler(AbstractScheduler):
         super().__init__(config)
         self.dag_generator = DAGGenerator()
         self._airflow_client = None
+        self.extra_store: AbstractStore = db_util.get_db_store(config.extra_db_uri())
 
     @classmethod
     def airflow_dag_id(cls, namespace, workflow_name):
@@ -349,3 +353,9 @@ class AirFlowScheduler(AbstractScheduler):
                                                                   state=self.airflow_state_to_state(dag_run.state)))
                     result.append(job)
                 return result
+
+    def get_execution_label(self, name) -> Optional[ExecutionLabel]:
+        return self.extra_store.get_execution_label(name)
+
+    def upsert_execution_label(self, name, value) -> ExecutionLabel:
+        return self.extra_store.upsert_execution_label(name, value)

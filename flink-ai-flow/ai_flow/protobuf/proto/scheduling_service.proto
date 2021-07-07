@@ -49,6 +49,15 @@ message ScheduleJobRequest {
     string execution_id = 3;
 }
 
+message ExecutionLabelRequest {
+    string name = 1;
+    string value = 2;
+}
+
+message SchedulingNameRequest {
+    string name = 1;
+}
+
 message WorkflowInfoResponse {
     ResultProto result = 1;
     WorkflowProto workflow = 2;
@@ -77,6 +86,11 @@ message JobInfoResponse {
 message ListJobInfoResponse {
     ResultProto result = 1;
     repeated JobProto job_list = 2;
+}
+
+message ExecutionLabelResponse {
+    ResultProto result = 1;
+    ExecutionLabelProto execution_label = 2;
 }
 
 service SchedulingService {
@@ -196,4 +210,19 @@ service SchedulingService {
         body: "*"
         };
     };
+
+    // Execution label api
+    rpc getExecutionLabel(SchedulingNameRequest) returns (ExecutionLabelResponse) {
+        option (google.api.http) = {
+        post: "/aiflow/scheduling/execution_label/get"
+        body: "*"
+        };
+    }
+
+    rpc upsertExecutionLabel(ExecutionLabelRequest) returns (ExecutionLabelResponse) {
+        option (google.api.http) = {
+        post: "/aiflow/scheduling/execution_label/get"
+        body: "*"
+        };
+    }
 }

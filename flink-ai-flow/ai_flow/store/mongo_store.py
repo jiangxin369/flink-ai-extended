@@ -20,6 +20,7 @@ import logging
 import time
 
 from ai_flow.meta.workflow_meta import WorkflowMeta
+from ai_flow.plugin_interface.scheduler_interface import ExecutionLabel
 from ai_flow.store import MONGO_DB_ALIAS_META_SERVICE
 from typing import Optional, Text, List, Union
 
@@ -44,7 +45,8 @@ from ai_flow.store.abstract_store import AbstractStore
 from ai_flow.store.db.db_model import (MongoProject, MongoDataset, MongoModelVersion,
                                        MongoArtifact, MongoRegisteredModel, MongoModelRelation,
                                        MongoMetricSummary, MongoMetricMeta,
-                                       MongoModelVersionRelation, MongoMember, MongoProjectSnapshot, MongoWorkflow)
+                                       MongoModelVersionRelation, MongoMember, MongoProjectSnapshot, MongoWorkflow,
+                                       MongoExecutionLabel)
 from ai_flow.store.db.db_util import parse_mongo_uri
 
 if not hasattr(time, 'time_ns'):
@@ -1629,6 +1631,30 @@ class MongoStore(AbstractStore):
                     member.delete()
         except Exception as e:
             raise AIFlowException("Clear dead AIFlow Member Error.") from e
+
+    def upsert_execution_label(self, name, value) -> ExecutionLabel:
+        try:
+            label = MongoExecutionLabel.objects(name=name)
+            if label is None:
+                label = MongoExecutionLabel()
+                label.name = name
+                label.value = value
+                label.save()
+            else:
+                label.value = value
+                label.save()
+            return label.to_meta_entity()
+        except Exception as e:
+            raise AIFlowException("Update execution_label Error.") from e
+
+    def get_execution_label(self, name) -> Optional[ExecutionLabel]:
+        try:
+            label_result = MongoExecutionLabel.objects(name=name)
+            if len(label_result) == 0:
+                return None
+            return label_result[0].to_meta_entity()
+        except Exception as e:
+            raise AIFlowException("Get execution_label Error.") from e
 
 
 def _compare_dataset_fields(data_format, description, uri,

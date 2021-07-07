@@ -31,12 +31,13 @@ from ai_flow.protobuf.scheduling_service_pb2 import \
      ListWorkflowExecutionResponse,
      ScheduleJobRequest,
      JobInfoResponse,
-     ListJobInfoResponse)
+     ListJobInfoResponse, ExecutionLabelRequest, ExecutionLabelResponse, SchedulingNameRequest)
 from ai_flow.scheduler.scheduler_factory import SchedulerFactory
 from ai_flow.plugin_interface.scheduler_interface import AbstractScheduler, SchedulerConfig
 from ai_flow.workflow.workflow import Workflow
 from ai_flow.endpoint.server.workflow_proto_utils import workflow_to_proto, workflow_list_to_proto, \
-    workflow_execution_to_proto, workflow_execution_list_to_proto, job_to_proto, job_list_to_proto
+    workflow_execution_to_proto, workflow_execution_list_to_proto, job_to_proto, job_list_to_proto, \
+    execution_label_to_proto
 
 
 class SchedulerService(SchedulingServiceServicer):
@@ -277,3 +278,28 @@ class SchedulerService(SchedulingServiceServicer):
         except Exception as err:
             return ListJobInfoResponse(result=ResultProto(status=StatusProto.ERROR,
                                                           error_message=traceback.format_exc()))
+
+    def getExecutionLabel(self, request, context):
+        try:
+            rq: SchedulingNameRequest = request
+            label = self._scheduler.get_execution_label(rq.name)
+            if label is None:
+                return ExecutionLabelResponse(result=ResultProto(status=StatusProto.ERROR,
+                                                                 error_message='{} do not exist!'.format(rq.name)))
+            else:
+                return ExecutionLabelResponse(result=ResultProto(status=StatusProto.OK),
+                                              execution_label=execution_label_to_proto(label))
+        except Exception as err:
+            return ExecutionLabelResponse(result=ResultProto(status=StatusProto.ERROR,
+                                                             error_message=traceback.format_exc()))
+
+    def upsertExecutionLabel(self, request, context):
+        try:
+            rq: ExecutionLabelRequest = request
+            label = self._scheduler.upsert_execution_label(name=rq.name,
+                                                           value=rq.value)
+            return ExecutionLabelResponse(result=ResultProto(status=StatusProto.OK),
+                                          execution_label=execution_label_to_proto(label))
+        except Exception as err:
+            return ExecutionLabelResponse(result=ResultProto(status=StatusProto.ERROR,
+                                                             error_message=traceback.format_exc()))

@@ -16,6 +16,7 @@
 # specific language governing permissions and limitations
 # under the License.
 #
+from ai_flow.plugin_interface.scheduler_interface import ExecutionLabel
 from notification_service.base_notification import BaseEvent
 from sqlalchemy import (
     Column, String, ForeignKey, Integer, PrimaryKeyConstraint, BigInteger, UniqueConstraint, Text, Boolean)
@@ -329,6 +330,22 @@ class SqlMember(base):
     def __repr__(self):
         return '<SqlMember ({}, {}, {}, {}, {})>'.format(
             self.id, self.version, self.server_uri, self.update_time, self.uuid)
+
+
+class SqlExecutionLabel(base, Base):
+    """
+    SQL Model of execution label.
+    """
+    __tablename__ = 'execution_label'
+    name = Column(String(2048), unique=True, nullable=False)
+    value = Column(String(2048), nullable=False)
+
+    def __repr__(self):
+        return '<SqlExecutionLabel ({}, {}, {})>'.format(
+            self.name, self.value, self.uuid)
+
+    def to_meta_entity(self):
+        return ExecutionLabel(self.uuid, self.name, self.value)
 
 
 class MongoDataset(Document):
@@ -661,3 +678,20 @@ class MongoMember(Document):
     def __repr__(self):
         return '<Document Member ({}, {}, {}, {}, {})>'.format(
             self.id, self.version, self.server_uri, self.update_time, self.uuid)
+
+
+class MongoExecutionLabel(Document):
+    """
+    Document of execution label.
+    """
+
+    uuid = SequenceField(db_alias=MONGO_DB_ALIAS_META_SERVICE)
+    name = StringField(max_length=2048, required=True, unique=True)
+    value = StringField(max_length=2048, required=True)
+
+    def __repr__(self):
+        return '<Document ExecutionLabel ({}, {}, {})>'.format(
+            self.name, self.value, self.uuid)
+
+    def to_meta_entity(self):
+        return ExecutionLabel(self.uuid, self.name, self.value)

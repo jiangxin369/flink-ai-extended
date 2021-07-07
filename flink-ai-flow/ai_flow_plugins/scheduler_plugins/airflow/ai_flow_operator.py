@@ -14,14 +14,19 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import time
+
+from ai_flow.util.json_utils import dumps
 from typing import Any, Text
 import os
 from airflow.models.baseoperator import BaseOperator
 from airflow.utils.decorators import apply_defaults
 from ai_flow.common.module_load import import_string
+from ai_flow.endpoint.client.scheduler_client import SchedulerClient
 from ai_flow.plugin_interface.blob_manager_interface import BlobManagerFactory
 from ai_flow.plugin_interface.job_plugin_interface import BaseJobController, JobHandler, JobExecutionContext
-from ai_flow.plugin_interface.scheduler_interface import JobExecutionInfo, WorkflowExecutionInfo, WorkflowInfo
+from ai_flow.plugin_interface.scheduler_interface import JobExecutionInfo, WorkflowExecutionInfo, WorkflowInfo, \
+    ExecutionLabel
 from ai_flow.project.project_description import get_project_description_from
 from ai_flow.workflow.job import Job
 from ai_flow.workflow.workflow import Workflow, WorkflowPropertyKeys
@@ -89,7 +94,18 @@ class AIFlowOperator(BaseOperator):
     def execute(self, context: Any):
         self.log.info("context:" + str(context))
         self.job_handler: JobHandler = self.job_controller.submit_job(self.job, self.job_context)
-        self.job_handler.wait_finished()
+        server_uri = self.job_context.project_config.get_server_uri()
+        scheduler_client = SchedulerClient(server_uri)
+        job_execution_info = self.job_context.job_execution_info
+        execution_str = job_execution_info.generate_execution_str()
+        old_labels = None
+        while self.job_handler.is_job_running():
+            labels = dumps(self.job_handler.obtain_job_label())
+            if labels != old_labels:
+                scheduler_client.upsert_execution_label(name=execution_str, label_value=labels)
+                old_labels = labels
+            # TODO make sleep time configurable
+            time.sleep(3)
         result = self.job_handler.get_result()
         self.job_controller.cleanup_job(self.job_handler, self.job_context)
         return result

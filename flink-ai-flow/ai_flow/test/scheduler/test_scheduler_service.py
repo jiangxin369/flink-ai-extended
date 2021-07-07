@@ -116,6 +116,17 @@ class TestSchedulerService(unittest.TestCase):
     #         workflow = client.submit_workflow_to_scheduler(namespace='namespace', workflow_name='test_workflow')
     #         print(workflow)
 
+    def test_generate_job_execution_str(self):
+        workflow_info = WorkflowInfo(namespace='project', workflow_name='workflow_name')
+        workflow_execution_info = WorkflowExecutionInfo(workflow_execution_id='workflow_execution_id',
+                                                        workflow_info=workflow_info)
+        job_execution_info = JobExecutionInfo(job_name='job_name',
+                                              state=State.RUNNING,
+                                              workflow_execution=workflow_execution_info,
+                                              job_execution_id='job_execution_id')
+        self.assertEqual('workflow_name_workflow_execution_id_job_name_job_execution_id',
+                         job_execution_info.generate_execution_str())
+
     def test_delete_none_workflow(self):
         with mock.patch(SCHEDULER_CLASS) as mockScheduler:
             instance = mockScheduler.return_value

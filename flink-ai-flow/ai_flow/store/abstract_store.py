@@ -681,3 +681,22 @@ class AbstractStore(object):
     @abstractmethod
     def clear_dead_members(self, ttl_ms):
         pass
+
+    """Execution label api"""
+    @abstractmethod
+    def upsert_execution_label(self, name, value):
+        """
+        Upsert execution label
+        :param name: label name
+        :param value: label value
+        """
+        pass
+
+    @abstractmethod
+    def get_execution_label(self, name):
+        """
+        Get the value of specific label
+        :param name: label name
+        :return: label value
+        """
+        pass

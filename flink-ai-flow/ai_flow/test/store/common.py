@@ -657,3 +657,11 @@ class AbstractTestStore(object):
         metric_summary_list = self.store.get_metric_summary(metric_id=1)
         self.assertEqual(1, len(metric_summary_list))
         self.assertEqual('value_2', metric_summary_list[0].metric_value)
+
+    def test_upsert_execution_label(self):
+        new_label = self.store.upsert_execution_label('a', 'b')
+        self.assertEqual('b', new_label.value)
+        updated_label = self.store.upsert_execution_label('a', 'c')
+        self.assertEqual('c', updated_label.value)
+        updated_label = self.store.get_execution_label('a')
+        self.assertEqual('c', updated_label.value)

@@ -14,12 +14,15 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+from ai_flow.endpoint.server.workflow_proto_utils import proto_to_execution_label
+from ai_flow.plugin_interface.scheduler_interface import ExecutionLabel
 from typing import Text, List, Dict
 
 import grpc
 from ai_flow.protobuf import scheduling_service_pb2_grpc
 from ai_flow.protobuf import scheduling_service_pb2
-from ai_flow.protobuf.message_pb2 import WorkflowProto, WorkflowExecutionProto, JobProto, StatusProto
+from ai_flow.protobuf.message_pb2 import WorkflowProto, WorkflowExecutionProto, JobProto, StatusProto, \
+    ExecutionLabelProto
 
 from ai_flow.endpoint.client.base_client import BaseClient
 
@@ -289,3 +292,30 @@ class SchedulerClient(BaseClient):
             raise Exception(response.result.error_message)
         return response.job_list
 
+    def get_execution_label(self, label_name: Text) -> ExecutionLabel:
+        """
+        Get the execution label in database by name
+        :param label_name: name of label
+        :return: ExecutionLabel object
+        """
+        request = scheduling_service_pb2.SchedulingNameRequest()
+        request.name = label_name
+        response = self.scheduling_stub.getExecutionLabel(request)
+        if response.result.status != StatusProto.OK:
+            raise Exception(response.result.error_message)
+        return proto_to_execution_label(response.execution_label)
+
+    def upsert_execution_label(self, label_name: Text, label_value: Text) -> ExecutionLabel:
+        """
+        Update the label by name with new value, if not exists, add a new record in database
+        :param label_name: name of label
+        :param label_value: value to be update
+        :return: ExecutionLabel object
+        """
+        request = scheduling_service_pb2.ExecutionLabelRequest()
+        request.name = label_name
+        request.value = label_value
+        response = self.scheduling_stub.upsertExecutionLabel(request)
+        if response.result.status != StatusProto.OK:
+            raise Exception(response.result.error_message)
+        return proto_to_execution_label(response.execution_label)

@@ -14,12 +14,13 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+import time
 from abc import abstractmethod, ABC
-from typing import Text, Dict
+from typing import Text, Dict, List
 import logging
 from ai_flow.common.registry import BaseRegistry
 from ai_flow.util.json_utils import Jsonable
-from ai_flow.plugin_interface.scheduler_interface import JobExecutionInfo
+from ai_flow.plugin_interface.scheduler_interface import JobExecutionInfo, ExecutionLabel
 from ai_flow.project.project_config import ProjectConfig
 from ai_flow.runtime.job_runtime_env import JobRuntimeEnv
 from ai_flow.workflow.workflow_config import WorkflowConfig
@@ -36,13 +37,23 @@ class JobHandler(Jsonable):
         self.job: Job = job
         self.job_execution: JobExecutionInfo = job_execution
 
-    def get_result(self)->object:
+    def get_result(self) -> object:
         """If the job execution has a result, then return it."""
+        pass
+
+    def is_job_running(self):
+        """Check if the job is still running."""
+        pass
+
+    def obtain_job_labels(self) -> Dict[str, str]:
+        """Obtain job labels related to this job"""
         pass
 
     def wait_finished(self):
         """Wait the job execution until it is finished"""
-        pass
+        while self.is_job_running():
+            # TODO make it configurable
+            time.sleep(5)
 
     @property
     def log(self) -> logging.Logger:
