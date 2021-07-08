@@ -1,0 +1,4 @@
+task_1:
+  job_type: baichuan
+  properties:
+    job_id: 123456
