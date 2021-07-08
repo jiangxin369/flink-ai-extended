@@ -337,7 +337,7 @@ class SqlExecutionLabel(base, Base):
     SQL Model of execution label.
     """
     __tablename__ = 'execution_label'
-    name = Column(String(2048), unique=True, nullable=False)
+    name = Column(String(512), unique=True, nullable=False)
     value = Column(String(2048), nullable=False)
 
     def __repr__(self):

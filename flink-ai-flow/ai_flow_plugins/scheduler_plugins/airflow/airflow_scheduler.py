@@ -42,7 +42,7 @@ class AirFlowScheduler(AbstractScheduler):
         super().__init__(config)
         self.dag_generator = DAGGenerator()
         self._airflow_client = None
-        self.extra_store: AbstractStore = db_util.get_db_store(config.extra_db_uri())
+        self.extra_store: AbstractStore = db_util.get_db_store(config['extra_db_uri'])
 
     @classmethod
     def airflow_dag_id(cls, namespace, workflow_name):

@@ -100,15 +100,15 @@ class AIFlowOperator(BaseOperator):
     def execute(self, context: Any):
         self.log.info("context:" + str(context))
         self.job_handler: JobHandler = self.job_controller.submit_job(self.job, self.job_runtime_env)
-        server_uri = self.job_context.project_config.get_server_uri()
+        server_uri = self.job_runtime_env.project_config.get_server_uri()
         scheduler_client = SchedulerClient(server_uri)
-        job_execution_info = self.job_context.job_execution_info
+        job_execution_info = self.job_runtime_env.job_execution_info
         execution_str = job_execution_info.generate_execution_str()
         old_labels = None
         while self.job_handler.is_job_running():
-            labels = dumps(self.job_handler.obtain_job_label())
+            labels = dumps(self.job_handler.obtain_job_labels())
             if labels != old_labels:
-                scheduler_client.upsert_execution_label(name=execution_str, label_value=labels)
+                scheduler_client.upsert_execution_label(label_name=execution_str, label_value=labels)
                 old_labels = labels
             # TODO make sleep time configurable
             time.sleep(3)
