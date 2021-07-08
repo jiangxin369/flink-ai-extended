@@ -24,6 +24,7 @@ from ai_flow.plugin_interface.job_plugin_interface import AbstractJobPluginFacto
     JobController
 from ai_flow.plugin_interface.scheduler_interface import JobExecutionInfo
 from ai_flow.workflow.job import Job
+from ai_flow_plugins.job_plugins.baichuan.baichuan_client import BaichuanClient
 
 
 class BaichuanJob(Job):
@@ -33,6 +34,9 @@ class BaichuanJob(Job):
     def baichuan_job_id(self):
         return self.job_config.properties.get('job_id')
 
+    def baichuan_base_url(self) -> str:
+        return str(self.job_config.properties.get('baichuan_base_url'))
+
 
 class BaichuanHandler(JobHandler):
 
@@ -41,7 +45,7 @@ class BaichuanHandler(JobHandler):
         super().__init__(job=job, job_execution=job_execution)
         self.job = job
         self.stopped = False
-        self.query_cnt = 0
+        self.baichuan_client = BaichuanClient(job.baichuan_base_url())
 
     def get_result(self) -> object:
         return str(self.job.baichuan_job_id()) + " is finished"
@@ -54,10 +58,9 @@ class BaichuanHandler(JobHandler):
 
     def is_finished(self) -> bool:
         # query baichuan
-        logging.info("Checking if %s is finished", self.job.baichuan_job_id())
-        self.query_cnt += 1
-        if self.query_cnt > 100 or self.stopped:
-            return True
+        job_id = self.job.baichuan_job_id()
+        logging.info("Current status of %d is %s", job_id,
+                     self.baichuan_client.get_latest_job_attempt_status(job_id))
         return False
 
     def stop_job(self):

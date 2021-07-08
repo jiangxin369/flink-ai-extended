@@ -28,3 +28,6 @@ class BaichuanJobConfig(JobConfig):
     @property
     def baichuan_job_id(self):
         return self.properties.get('job_id')
+
+    def baichuan_base_url(self):
+        return self.properties.get('baichuan_base_url')
