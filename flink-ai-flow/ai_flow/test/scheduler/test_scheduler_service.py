@@ -114,10 +114,10 @@ class TestSchedulerService(unittest.TestCase):
         workflow_execution_info = WorkflowExecutionInfo(workflow_execution_id='workflow_execution_id',
                                                         workflow_info=workflow_info)
         job_execution_info = JobExecutionInfo(job_name='job_name',
-                                              state='running',
+                                              status='running',
                                               workflow_execution=workflow_execution_info,
                                               job_execution_id='job_execution_id')
-        self.assertEqual('workflow_name_workflow_execution_id_job_name_job_execution_id',
+        self.assertEqual('project_workflow_name_workflow_execution_id_job_name_job_execution_id',
                          job_execution_info.generate_execution_str())
 
     def test_delete_none_workflow(self):

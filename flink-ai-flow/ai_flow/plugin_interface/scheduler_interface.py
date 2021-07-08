@@ -214,7 +214,8 @@ class JobExecutionInfo(json_utils.Jsonable):
     def generate_execution_str(self):
         if self.workflow_execution is None or self.workflow_execution.workflow_info is None:
             return None
-        return '_'.join([self.workflow_execution.workflow_info.workflow_name,
+        return '_'.join([self.workflow_execution.workflow_info.namespace,
+                         self.workflow_execution.workflow_info.workflow_name,
                          self.workflow_execution.workflow_execution_id,
                          self.job_name,
                          self.job_execution_id])
