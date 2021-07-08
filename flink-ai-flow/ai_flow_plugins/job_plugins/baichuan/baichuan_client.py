@@ -45,4 +45,7 @@ class BaichuanClient:
     def get_job_attempt_status(self, attempt_id) -> str:
         url = self.GET_ATTEMPT_STATUS_URL_TEMPLATE.format(self.baichuan_base_url, attempt_id)
         r = requests.get(url).json()
-        return r['data']['job_status'] + ": " + r['data']['reason']
+        reason_ = r['data']['reason']
+        if reason_ is None:
+            return r['data']['job_status']
+        return r['data']['job_status'] + ": " + reason_

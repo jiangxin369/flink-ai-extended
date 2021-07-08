@@ -16,7 +16,7 @@
 # under the License.
 import time
 import logging
-from typing import Text
+from typing import Text, Dict
 
 from ai_flow.translator.translator import JobGenerator
 from ai_flow.ai_graph.ai_graph import AISubGraph
@@ -50,18 +50,15 @@ class BaichuanHandler(JobHandler):
     def get_result(self) -> object:
         return str(self.job.baichuan_job_id()) + " is finished"
 
-    def wait_until_finish(self):
-        while True:
-            if self.is_finished():
-                break
-            time.sleep(1)
+    def is_job_running(self) -> bool:
+        # never ends
+        return True
 
-    def is_finished(self) -> bool:
-        # query baichuan
+    def obtain_job_labels(self) -> Dict[str, str]:
         job_id = self.job.baichuan_job_id()
-        logging.info("Current status of %d is %s", job_id,
-                     self.baichuan_client.get_latest_job_attempt_status(job_id))
-        return False
+        job_status = self.baichuan_client.get_latest_job_attempt_status(job_id)
+        logging.info("Current status of %d is %s", job_id, job_status)
+        return {"job_status": job_status}
 
     def stop_job(self):
         self.stopped = True
